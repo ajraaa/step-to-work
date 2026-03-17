@@ -1,0 +1,153 @@
+{
+  "personalInfo": {
+    "fullName": "Ahmad Rasyid Azzraraffi",
+    "jobTitle": "Frontend Developer",
+    "email": "azzra@example.com",
+    "phone": "+62 812-3456-7890",
+    "location": "Jakarta, Indonesia",
+    "linkedin": "https://linkedin.com/in/azzraraffi",
+    "github": "https://github.com/azzra",
+    "portfolio": "https://azzra.dev",
+    "summary": "Frontend Developer dengan 2+ tahun pengalaman dalam membangun aplikasi web modern menggunakan React, Next.js, dan TypeScript. Terampil dalam mengoptimalkan performa UI/UX dan menerapkan best practices dalam pengembangan frontend. Berpengalaman bekerja dalam tim Agile dan berkontribusi pada proyek open-source."
+  },
+
+  "workExperience": [
+    {
+      "jobTitle": "Frontend Developer",
+      "company": "PT Teknologi Nusantara",
+      "location": "Jakarta, Indonesia",
+      "startDate": "2024-06",
+      "endDate": null,
+      "isCurrentJob": true,
+      "responsibilities": [
+        "Mengembangkan dan memelihara 5+ aplikasi web menggunakan React dan Next.js, meningkatkan performa load time sebesar 40%",
+        "Mengimplementasikan design system berbasis komponen yang mengurangi waktu development fitur baru sebesar 30%",
+        "Berkolaborasi dengan tim UI/UX dan backend untuk mengintegrasikan REST API dan GraphQL",
+        "Menulis unit test dan integration test menggunakan Jest dan React Testing Library dengan code coverage 85%"
+      ]
+    },
+    {
+      "jobTitle": "Junior Frontend Developer",
+      "company": "PT Digital Kreasi Indonesia",
+      "location": "Bandung, Indonesia",
+      "startDate": "2022-08",
+      "endDate": "2024-05",
+      "isCurrentJob": false,
+      "responsibilities": [
+        "Membangun landing page dan dashboard admin responsif menggunakan React dan Tailwind CSS",
+        "Mengoptimalkan SEO pada 3 proyek klien yang meningkatkan organic traffic sebesar 25%",
+        "Melakukan code review dan mentoring untuk 2 developer intern",
+        "Mengintegrasikan payment gateway dan third-party API ke dalam aplikasi e-commerce"
+      ]
+    }
+  ],
+
+  "education": [
+    {
+      "degree": "S1 Teknik Informatika",
+      "institution": "Universitas Indonesia",
+      "location": "Depok, Indonesia",
+      "startDate": "2018-08",
+      "endDate": "2022-07",
+      "gpa": "3.75",
+      "maxGpa": "4.00",
+      "relevantCoursework": [
+        "Struktur Data & Algoritma",
+        "Pemrograman Web",
+        "Basis Data",
+        "Rekayasa Perangkat Lunak",
+        "Interaksi Manusia & Komputer"
+      ]
+    }
+  ],
+
+  "skills": {
+    "programmingLanguages": ["JavaScript", "TypeScript", "HTML", "CSS", "Python"],
+    "frameworksAndLibraries": ["React", "Next.js", "Astro", "Vue.js", "Node.js", "Express.js", "Tailwind CSS"],
+    "tools": ["Git", "GitHub", "VS Code", "Figma", "Docker", "Postman", "Jira"],
+    "databases": ["PostgreSQL", "MongoDB", "Firebase"],
+    "testing": ["Jest", "React Testing Library", "Cypress"],
+    "others": ["REST API", "GraphQL", "CI/CD", "Agile/Scrum", "Responsive Design", "Web Performance Optimization"]
+  },
+
+  "certifications": [
+    {
+      "name": "Meta Front-End Developer Professional Certificate",
+      "issuer": "Meta (Coursera)",
+      "issueDate": "2023-09",
+      "credentialUrl": "https://coursera.org/verify/professional-cert/XXXXXXXX"
+    },
+    {
+      "name": "AWS Certified Cloud Practitioner",
+      "issuer": "Amazon Web Services",
+      "issueDate": "2024-01",
+      "expiryDate": "2027-01",
+      "credentialUrl": "https://aws.amazon.com/verification"
+    }
+  ],
+
+  "projects": [
+    {
+      "name": "E-Commerce Dashboard",
+      "description": "Dashboard analytics untuk platform e-commerce dengan visualisasi data penjualan real-time",
+      "techStack": ["Next.js", "TypeScript", "Recharts", "Tailwind CSS", "PostgreSQL"],
+      "highlights": [
+        "Menangani 10.000+ data transaksi dengan lazy loading dan virtual scrolling",
+        "Mengimplementasikan filter dan export laporan ke PDF/Excel"
+      ],
+      "url": "https://github.com/azzra/ecommerce-dashboard"
+    },
+    {
+      "name": "Task Management App",
+      "description": "Aplikasi manajemen tugas kolaboratif dengan fitur real-time menggunakan WebSocket",
+      "techStack": ["React", "Node.js", "Socket.io", "MongoDB", "Docker"],
+      "highlights": [
+        "Real-time collaboration untuk 50+ pengguna secara bersamaan",
+        "Drag-and-drop Kanban board dengan animasi smooth"
+      ],
+      "url": "https://github.com/azzra/task-manager"
+    }
+  ],
+
+  "languages": [
+    {
+      "language": "Bahasa Indonesia",
+      "proficiency": "Native"
+    },
+    {
+      "language": "English",
+      "proficiency": "Professional Working Proficiency"
+    }
+  ],
+
+  "organizationExperience": [
+    {
+      "role": "Ketua Divisi IT",
+      "organization": "Himpunan Mahasiswa Teknik Informatika",
+      "startDate": "2020-01",
+      "endDate": "2021-12",
+      "description": "Memimpin tim 10 orang dalam pengembangan website organisasi dan menyelenggarakan 3 workshop pemrograman dengan total 200+ peserta"
+    }
+  ],
+
+  "volunteerExperience": [
+    {
+      "role": "Mentor Pemrograman",
+      "organization": "Coding for Indonesia",
+      "startDate": "2023-03",
+      "endDate": "2023-12",
+      "description": "Membimbing 15 peserta bootcamp dalam mempelajari dasar-dasar web development (HTML, CSS, JavaScript)"
+    }
+  ],
+
+  "references": [
+    {
+      "name": "Budi Santoso",
+      "jobTitle": "Engineering Manager",
+      "company": "PT Teknologi Nusantara",
+      "email": "budi.santoso@example.com",
+      "phone": "+62 813-0000-0000",
+      "relationship": "Direct Supervisor"
+    }
+  ]
+}
