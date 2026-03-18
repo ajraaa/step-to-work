@@ -1,0 +1,135 @@
+---
+// PersonalInfoForm.astro
+---
+
+<div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+  <h2 class="text-xl font-semibold mb-6 text-gray-800">Informasi Pribadi</h2>
+  
+  <form class="space-y-5">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+      <!-- Full Name -->
+      <div class="space-y-1.5 cursor-pointer">
+        <label for="fullName" class="block text-sm font-medium text-gray-700 cursor-pointer">Nama Lengkap</label>
+        <input 
+          type="text" 
+          id="fullName" 
+          name="fullName" 
+          placeholder="Ahmad Rasyid Azzraraffi" 
+          class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none" 
+          required 
+        />
+      </div>
+
+      <!-- Job Title -->
+      <div class="space-y-1.5 cursor-pointer">
+        <label for="jobTitle" class="block text-sm font-medium text-gray-700 cursor-pointer">Posisi Pekerjaan</label>
+        <input 
+          type="text" 
+          id="jobTitle" 
+          name="jobTitle" 
+          placeholder="Frontend Developer" 
+          class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none" 
+          required 
+        />
+      </div>
+
+      <!-- Email -->
+      <div class="space-y-1.5 cursor-pointer">
+        <label for="email" class="block text-sm font-medium text-gray-700 cursor-pointer">Email</label>
+        <input 
+          type="email" 
+          id="email" 
+          name="email" 
+          placeholder="azzra@example.com" 
+          class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none" 
+          required 
+        />
+      </div>
+
+      <!-- Phone -->
+      <div class="space-y-1.5 cursor-pointer">
+        <label for="phone" class="block text-sm font-medium text-gray-700 cursor-pointer">Telepon</label>
+        <input 
+          type="tel" 
+          id="phone" 
+          name="phone" 
+          placeholder="+62 812-3456-7890" 
+          class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none" 
+          required 
+        />
+      </div>
+
+      <!-- Location -->
+      <div class="space-y-1.5 cursor-pointer md:col-span-2">
+        <label for="location" class="block text-sm font-medium text-gray-700 cursor-pointer">Lokasi</label>
+        <input 
+          type="text" 
+          id="location" 
+          name="location" 
+          placeholder="Jakarta, Indonesia" 
+          class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none" 
+          required 
+        />
+      </div>
+
+      <!-- LinkedIn -->
+      <div class="space-y-1.5 cursor-pointer">
+        <label for="linkedin" class="block text-sm font-medium text-gray-700 cursor-pointer">LinkedIn URL</label>
+        <input 
+          type="url" 
+          id="linkedin" 
+          name="linkedin" 
+          placeholder="https://linkedin.com/in/azzraraffi" 
+          class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none" 
+        />
+      </div>
+
+      <!-- GitHub -->
+      <div class="space-y-1.5 cursor-pointer">
+        <label for="github" class="block text-sm font-medium text-gray-700 cursor-pointer">GitHub URL</label>
+        <input 
+          type="url" 
+          id="github" 
+          name="github" 
+          placeholder="https://github.com/azzra" 
+          class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none" 
+        />
+      </div>
+
+      <!-- Portfolio -->
+      <div class="space-y-1.5 cursor-pointer md:col-span-2">
+        <label for="portfolio" class="block text-sm font-medium text-gray-700 cursor-pointer">Portfolio URL</label>
+        <input 
+          type="url" 
+          id="portfolio" 
+          name="portfolio" 
+          placeholder="https://azzra.dev" 
+          class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none" 
+        />
+      </div>
+    </div>
+
+    <!-- Summary -->
+    <div class="space-y-1.5 cursor-pointer">
+      <label for="summary" class="block text-sm font-medium text-gray-700 cursor-pointer">Ringkasan Profesional (Summary)</label>
+      <textarea 
+        id="summary" 
+        name="summary" 
+        rows="4" 
+        placeholder="Frontend Developer dengan 2+ tahun pengalaman dalam membangun aplikasi web modern..." 
+        class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none resize-y" 
+        required
+      ></textarea>
+    </div>
+
+    <!-- Submit Button -->
+    <div class="pt-4 flex justify-end">
+      <button 
+        type="submit" 
+        class="bg-blue-600 text-white font-medium px-6 py-2.5 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-500/30 transition-all active:scale-[0.98]"
+      >
+        Simpan Informasi Pribadi
+      </button>
+    </div>
+  </form>
+</div>
