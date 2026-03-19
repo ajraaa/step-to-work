@@ -1,0 +1,135 @@
+---
+// WorkExperienceForm.astro
+---
+
+<div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+  <div class="flex justify-between items-center mb-6">
+    <h2 class="text-xl font-semibold text-gray-800">Pengalaman Kerja</h2>
+  </div>
+  
+  <form class="space-y-5">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+      <!-- Job Title -->
+      <div class="space-y-1.5 cursor-pointer">
+        <label for="workJobTitle" class="block text-sm font-medium text-gray-700 cursor-pointer">Posisi Pekerjaan</label>
+        <input 
+          type="text" 
+          id="workJobTitle" 
+          name="jobTitle" 
+          placeholder="Frontend Developer" 
+          class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none" 
+          required 
+        />
+      </div>
+
+      <!-- Company -->
+      <div class="space-y-1.5 cursor-pointer">
+        <label for="company" class="block text-sm font-medium text-gray-700 cursor-pointer">Nama Perusahaan</label>
+        <input 
+          type="text" 
+          id="company" 
+          name="company" 
+          placeholder="PT Teknologi Nusantara" 
+          class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none" 
+          required 
+        />
+      </div>
+
+      <!-- Location -->
+      <div class="space-y-1.5 cursor-pointer md:col-span-2">
+        <label for="workLocation" class="block text-sm font-medium text-gray-700 cursor-pointer">Lokasi</label>
+        <input 
+          type="text" 
+          id="workLocation" 
+          name="location" 
+          placeholder="Jakarta, Indonesia" 
+          class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none" 
+          required 
+        />
+      </div>
+
+      <!-- Start Date -->
+      <div class="space-y-1.5 cursor-pointer">
+        <label for="startDate" class="block text-sm font-medium text-gray-700 cursor-pointer">Bulan Mulai</label>
+        <input 
+          type="month" 
+          id="startDate" 
+          name="startDate" 
+          class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none" 
+          required 
+        />
+      </div>
+
+      <!-- End Date -->
+      <div class="space-y-1.5 cursor-pointer">
+        <label for="endDate" class="block text-sm font-medium text-gray-700 cursor-pointer">Bulan Selesai</label>
+        <input 
+          type="month" 
+          id="endDate" 
+          name="endDate" 
+          class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none disabled:opacity-50 disabled:bg-gray-100 disabled:cursor-not-allowed" 
+          required
+        />
+      </div>
+
+      <!-- Is Current Job -->
+      <div class="flex items-center space-x-3 md:col-span-2 mt-1">
+        <input 
+          type="checkbox" 
+          id="isCurrentJob" 
+          name="isCurrentJob" 
+          class="w-5 h-5 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500/20 focus:ring-2 cursor-pointer transition-all" 
+        />
+        <label for="isCurrentJob" class="text-sm font-medium text-gray-700 cursor-pointer">
+          Saya masih bekerja di posisi ini
+        </label>
+      </div>
+    </div>
+
+    <!-- Responsibilities -->
+    <div class="space-y-1.5 cursor-pointer">
+      <label for="responsibilities" class="block text-sm font-medium text-gray-700 cursor-pointer">Tanggung Jawab & Pencapaian</label>
+      <p class="text-xs text-gray-500 mb-2">Pisahkan setiap poin dengan baris baru (Enter).</p>
+      <textarea 
+        id="responsibilities" 
+        name="responsibilities" 
+        rows="5" 
+        placeholder="- Mengembangkan dan memelihara aplikasi web...&#10;- Mengimplementasikan design system..." 
+        class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none resize-y leading-relaxed" 
+        required
+      ></textarea>
+    </div>
+
+    <!-- Submit Button -->
+    <div class="pt-4 flex justify-end">
+      <button 
+        type="submit" 
+        class="bg-blue-600 text-white font-medium px-6 py-2.5 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-500/30 transition-all active:scale-[0.98]"
+      >
+        Tambah Pengalaman Kerja
+      </button>
+    </div>
+  </form>
+</div>
+
+<script>
+  // Script untuk menangani toggle status "isCurrentJob" (Pekerjaan Saat Ini)
+  const isCurrentJobCheckbox = document.getElementById('isCurrentJob') as HTMLInputElement | null;
+  const endDateInput = document.getElementById('endDate') as HTMLInputElement | null;
+
+  if (isCurrentJobCheckbox && endDateInput) {
+    isCurrentJobCheckbox.addEventListener('change', (e) => {
+      const isChecked = (e.target as HTMLInputElement).checked;
+      
+      // Jika dicentang, nonaktifkan field End Date dan hilangkan status required
+      endDateInput.disabled = isChecked;
+      
+      if (isChecked) {
+        endDateInput.value = ''; // Kosongkan nilainya
+        endDateInput.removeAttribute('required');
+      } else {
+        endDateInput.setAttribute('required', 'true');
+      }
+    });
+  }
+</script>

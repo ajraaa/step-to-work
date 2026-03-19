@@ -1,0 +1,99 @@
+---
+// SkillsForm.astro
+---
+
+<div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+  <div class="flex justify-between items-center mb-6">
+    <h2 class="text-xl font-semibold text-gray-800">Keahlian (Skills)</h2>
+  </div>
+  
+  <form class="space-y-5">
+    <p class="text-sm text-gray-500 mb-4 bg-blue-50 p-3 rounded-lg border border-blue-100 text-blue-700">
+      Pisahkan setiap skill dengan koma (,). Biarkan kosong jika tidak ada.
+    </p>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+      <!-- Programming Languages -->
+      <div class="space-y-1.5 cursor-pointer">
+        <label for="programmingLanguages" class="block text-sm font-medium text-gray-700 cursor-pointer">Bahasa Pemrograman</label>
+        <input 
+          type="text" 
+          id="programmingLanguages" 
+          name="programmingLanguages" 
+          placeholder="JavaScript, TypeScript, HTML, CSS" 
+          class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none" 
+        />
+      </div>
+
+      <!-- Frameworks And Libraries -->
+      <div class="space-y-1.5 cursor-pointer">
+        <label for="frameworksAndLibraries" class="block text-sm font-medium text-gray-700 cursor-pointer">Framework & Library</label>
+        <input 
+          type="text" 
+          id="frameworksAndLibraries" 
+          name="frameworksAndLibraries" 
+          placeholder="React, Next.js, Tailwind CSS" 
+          class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none" 
+        />
+      </div>
+
+      <!-- Tools -->
+      <div class="space-y-1.5 cursor-pointer">
+        <label for="tools" class="block text-sm font-medium text-gray-700 cursor-pointer">Tools (Alat)</label>
+        <input 
+          type="text" 
+          id="tools" 
+          name="tools" 
+          placeholder="Git, VS Code, Figma, Docker" 
+          class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none" 
+        />
+      </div>
+
+      <!-- Databases -->
+      <div class="space-y-1.5 cursor-pointer">
+        <label for="databases" class="block text-sm font-medium text-gray-700 cursor-pointer">Database</label>
+        <input 
+          type="text" 
+          id="databases" 
+          name="databases" 
+          placeholder="PostgreSQL, MongoDB, Firebase" 
+          class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none" 
+        />
+      </div>
+
+      <!-- Testing -->
+      <div class="space-y-1.5 cursor-pointer">
+        <label for="testing" class="block text-sm font-medium text-gray-700 cursor-pointer">Testing</label>
+        <input 
+          type="text" 
+          id="testing" 
+          name="testing" 
+          placeholder="Jest, React Testing Library, Cypress" 
+          class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none" 
+        />
+      </div>
+
+      <!-- Others -->
+      <div class="space-y-1.5 cursor-pointer">
+        <label for="others" class="block text-sm font-medium text-gray-700 cursor-pointer">Lainnya</label>
+        <input 
+          type="text" 
+          id="others" 
+          name="others" 
+          placeholder="REST API, GraphQL, CI/CD, Agile/Scrum" 
+          class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none" 
+        />
+      </div>
+    </div>
+
+    <!-- Submit Button -->
+    <div class="pt-4 flex justify-end">
+      <button 
+        type="submit" 
+        class="bg-blue-600 text-white font-medium px-6 py-2.5 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-500/30 transition-all active:scale-[0.98]"
+      >
+        Simpan Keahlian
+      </button>
+    </div>
+  </form>
+</div>

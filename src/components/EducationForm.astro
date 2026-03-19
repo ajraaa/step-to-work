@@ -1,0 +1,125 @@
+---
+// EducationForm.astro
+---
+
+<div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+  <div class="flex justify-between items-center mb-6">
+    <h2 class="text-xl font-semibold text-gray-800">Pendidikan</h2>
+  </div>
+  
+  <form class="space-y-5">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+      <!-- Degree -->
+      <div class="space-y-1.5 cursor-pointer">
+        <label for="degree" class="block text-sm font-medium text-gray-700 cursor-pointer">Gelar / Jurusan</label>
+        <input 
+          type="text" 
+          id="degree" 
+          name="degree" 
+          placeholder="S1 Teknik Informatika" 
+          class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none" 
+          required 
+        />
+      </div>
+
+      <!-- Institution -->
+      <div class="space-y-1.5 cursor-pointer">
+        <label for="institution" class="block text-sm font-medium text-gray-700 cursor-pointer">Institusi Pendidikan</label>
+        <input 
+          type="text" 
+          id="institution" 
+          name="institution" 
+          placeholder="Universitas Indonesia" 
+          class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none" 
+          required 
+        />
+      </div>
+
+      <!-- Location -->
+      <div class="space-y-1.5 cursor-pointer md:col-span-2">
+        <label for="eduLocation" class="block text-sm font-medium text-gray-700 cursor-pointer">Lokasi</label>
+        <input 
+          type="text" 
+          id="eduLocation" 
+          name="location" 
+          placeholder="Depok, Indonesia" 
+          class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none" 
+          required 
+        />
+      </div>
+
+      <!-- Start Date -->
+      <div class="space-y-1.5 cursor-pointer">
+        <label for="eduStartDate" class="block text-sm font-medium text-gray-700 cursor-pointer">Bulan Mulai</label>
+        <input 
+          type="month" 
+          id="eduStartDate" 
+          name="startDate" 
+          class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none" 
+          required 
+        />
+      </div>
+
+      <!-- End Date -->
+      <div class="space-y-1.5 cursor-pointer">
+        <label for="eduEndDate" class="block text-sm font-medium text-gray-700 cursor-pointer">Bulan Selesai / Estimasi</label>
+        <input 
+          type="month" 
+          id="eduEndDate" 
+          name="endDate" 
+          class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none" 
+          required
+        />
+      </div>
+
+      <!-- GPA -->
+      <div class="space-y-1.5 cursor-pointer">
+        <label for="gpa" class="block text-sm font-medium text-gray-700 cursor-pointer">IPK / Nilai (Opsional)</label>
+        <input 
+          type="number" 
+          step="0.01" 
+          id="gpa" 
+          name="gpa" 
+          placeholder="3.75" 
+          class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none" 
+        />
+      </div>
+
+      <!-- Max GPA -->
+      <div class="space-y-1.5 cursor-pointer">
+        <label for="maxGpa" class="block text-sm font-medium text-gray-700 cursor-pointer">IPK Maksimal (Opsional)</label>
+        <input 
+          type="number" 
+          step="0.01" 
+          id="maxGpa" 
+          name="maxGpa" 
+          placeholder="4.00" 
+          class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none" 
+        />
+      </div>
+    </div>
+
+    <!-- Relevant Coursework -->
+    <div class="space-y-1.5 cursor-pointer">
+      <label for="relevantCoursework" class="block text-sm font-medium text-gray-700 cursor-pointer">Mata Kuliah Relevan (Opsional)</label>
+      <p class="text-xs text-gray-500 mb-2">Pisahkan setiap mata kuliah dengan koma (,).</p>
+      <textarea 
+        id="relevantCoursework" 
+        name="relevantCoursework" 
+        rows="3" 
+        placeholder="Struktur Data & Algoritma, Pemrograman Web, Basis Data..." 
+        class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none resize-y leading-relaxed" 
+      ></textarea>
+    </div>
+
+    <!-- Submit Button -->
+    <div class="pt-4 flex justify-end">
+      <button 
+        type="submit" 
+        class="bg-blue-600 text-white font-medium px-6 py-2.5 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-500/30 transition-all active:scale-[0.98]"
+      >
+        Tambah Pendidikan
+      </button>
+    </div>
+  </form>
+</div>

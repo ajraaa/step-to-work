@@ -1,0 +1,54 @@
+---
+// LanguagesForm.astro
+---
+
+<div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+  <div class="flex justify-between items-center mb-6">
+    <h2 class="text-xl font-semibold text-gray-800">Bahasa</h2>
+  </div>
+  
+  <form class="space-y-5">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+      <!-- Language -->
+      <div class="space-y-1.5 cursor-pointer">
+        <label for="language" class="block text-sm font-medium text-gray-700 cursor-pointer">Bahasa</label>
+        <input 
+          type="text" 
+          id="language" 
+          name="language" 
+          placeholder="English, Bahasa Indonesia" 
+          class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none" 
+          required 
+        />
+      </div>
+
+      <!-- Proficiency -->
+      <div class="space-y-1.5 cursor-pointer">
+        <label for="proficiency" class="block text-sm font-medium text-gray-700 cursor-pointer">Tingkat Kemahiran</label>
+        <select 
+          id="proficiency" 
+          name="proficiency" 
+          class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none appearance-none" 
+          required
+        >
+          <option value="" disabled selected>Pilih tingkat kemahiran</option>
+          <option value="Native">Native / Bilingual</option>
+          <option value="Full Professional Proficiency">Full Professional Proficiency</option>
+          <option value="Professional Working Proficiency">Professional Working Proficiency</option>
+          <option value="Limited Working Proficiency">Limited Working Proficiency</option>
+          <option value="Elementary Proficiency">Elementary Proficiency</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Submit Button -->
+    <div class="pt-4 flex justify-end">
+      <button 
+        type="submit" 
+        class="bg-blue-600 text-white font-medium px-6 py-2.5 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-500/30 transition-all active:scale-[0.98]"
+      >
+        Tambah Bahasa
+      </button>
+    </div>
+  </form>
+</div>

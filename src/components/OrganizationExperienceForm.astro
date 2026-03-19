@@ -1,0 +1,87 @@
+---
+// OrganizationExperienceForm.astro
+---
+
+<div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+  <div class="flex justify-between items-center mb-6">
+    <h2 class="text-xl font-semibold text-gray-800">Pengalaman Organisasi</h2>
+  </div>
+  
+  <form class="space-y-5">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+      <!-- Role -->
+      <div class="space-y-1.5 cursor-pointer">
+        <label for="orgRole" class="block text-sm font-medium text-gray-700 cursor-pointer">Peran / Jabatan</label>
+        <input 
+          type="text" 
+          id="orgRole" 
+          name="role" 
+          placeholder="Ketua Divisi IT" 
+          class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none" 
+          required 
+        />
+      </div>
+
+      <!-- Organization Name -->
+      <div class="space-y-1.5 cursor-pointer">
+        <label for="orgName" class="block text-sm font-medium text-gray-700 cursor-pointer">Nama Organisasi</label>
+        <input 
+          type="text" 
+          id="orgName" 
+          name="organization" 
+          placeholder="Himpunan Mahasiswa Teknik Informatika" 
+          class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none" 
+          required 
+        />
+      </div>
+
+      <!-- Start Date -->
+      <div class="space-y-1.5 cursor-pointer">
+        <label for="orgStartDate" class="block text-sm font-medium text-gray-700 cursor-pointer">Bulan Mulai</label>
+        <input 
+          type="month" 
+          id="orgStartDate" 
+          name="startDate" 
+          class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none" 
+          required 
+        />
+      </div>
+
+      <!-- End Date -->
+      <div class="space-y-1.5 cursor-pointer">
+        <label for="orgEndDate" class="block text-sm font-medium text-gray-700 cursor-pointer">Bulan Selesai</label>
+        <input 
+          type="month" 
+          id="orgEndDate" 
+          name="endDate" 
+          class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none" 
+          required 
+        />
+      </div>
+    </div>
+
+    <!-- Description -->
+    <div class="space-y-1.5 cursor-pointer">
+      <label for="orgDesc" class="block text-sm font-medium text-gray-700 cursor-pointer">Deskripsi / Pencapaian</label>
+      <p class="text-xs text-gray-500 mb-1">Berikan ringkasan tugas, wewenang, atau pencapaian Anda selama menjabat.</p>
+      <textarea 
+        id="orgDesc" 
+        name="description" 
+        rows="4" 
+        placeholder="Memimpin tim 10 orang dalam pengembangan website organisasi dan menyelenggarakan 3 workshop..." 
+        class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none resize-y leading-relaxed" 
+        required
+      ></textarea>
+    </div>
+
+    <!-- Submit Button -->
+    <div class="pt-4 flex justify-end">
+      <button 
+        type="submit" 
+        class="bg-blue-600 text-white font-medium px-6 py-2.5 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-500/30 transition-all active:scale-[0.98]"
+      >
+        Tambah Pengalaman Organisasi
+      </button>
+    </div>
+  </form>
+</div>

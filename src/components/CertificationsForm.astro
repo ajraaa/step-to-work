@@ -1,0 +1,84 @@
+---
+// CertificationsForm.astro
+---
+
+<div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+  <div class="flex justify-between items-center mb-6">
+    <h2 class="text-xl font-semibold text-gray-800">Sertifikasi</h2>
+  </div>
+  
+  <form class="space-y-5">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+      <!-- Certification Name -->
+      <div class="space-y-1.5 cursor-pointer md:col-span-2">
+        <label for="certName" class="block text-sm font-medium text-gray-700 cursor-pointer">Nama Sertifikasi</label>
+        <input 
+          type="text" 
+          id="certName" 
+          name="name" 
+          placeholder="Meta Front-End Developer Professional Certificate" 
+          class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none" 
+          required 
+        />
+      </div>
+
+      <!-- Issuer -->
+      <div class="space-y-1.5 cursor-pointer md:col-span-2">
+        <label for="issuer" class="block text-sm font-medium text-gray-700 cursor-pointer">Penerbit (Issuer)</label>
+        <input 
+          type="text" 
+          id="issuer" 
+          name="issuer" 
+          placeholder="Meta (Coursera)" 
+          class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none" 
+          required 
+        />
+      </div>
+
+      <!-- Issue Date -->
+      <div class="space-y-1.5 cursor-pointer">
+        <label for="issueDate" class="block text-sm font-medium text-gray-700 cursor-pointer">Bulan Terbit</label>
+        <input 
+          type="month" 
+          id="issueDate" 
+          name="issueDate" 
+          class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none" 
+          required 
+        />
+      </div>
+
+      <!-- Expiry Date -->
+      <div class="space-y-1.5 cursor-pointer">
+        <label for="certExpiryDate" class="block text-sm font-medium text-gray-700 cursor-pointer">Bulan Kedaluwarsa (Opsional)</label>
+        <input 
+          type="month" 
+          id="certExpiryDate" 
+          name="expiryDate" 
+          class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none" 
+        />
+      </div>
+
+      <!-- Credential URL -->
+      <div class="space-y-1.5 cursor-pointer md:col-span-2">
+        <label for="credentialUrl" class="block text-sm font-medium text-gray-700 cursor-pointer">URL Kredensial (Opsional)</label>
+        <input 
+          type="url" 
+          id="credentialUrl" 
+          name="credentialUrl" 
+          placeholder="https://coursera.org/verify/professional-cert/..." 
+          class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none" 
+        />
+      </div>
+    </div>
+
+    <!-- Submit Button -->
+    <div class="pt-4 flex justify-end">
+      <button 
+        type="submit" 
+        class="bg-blue-600 text-white font-medium px-6 py-2.5 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-500/30 transition-all active:scale-[0.98]"
+      >
+        Tambah Sertifikasi
+      </button>
+    </div>
+  </form>
+</div>
