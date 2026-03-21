@@ -5,7 +5,7 @@
 <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
   <h2 class="text-xl font-semibold mb-6 text-gray-800">Informasi Pribadi</h2>
   
-  <form class="space-y-5">
+  <form id="personalInfoForm" class="space-y-5">
     <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
       <!-- Full Name -->
       <div class="space-y-1.5 cursor-pointer">
@@ -133,3 +133,38 @@
     </div>
   </form>
 </div>
+
+<script>
+  import { cvStore, updatePersonalInfo } from '../../stores/cvStores';
+  import type { PersonalInfo } from '../../stores/cvStores';
+
+  const form = document.getElementById('personalInfoForm');
+  if (form) {
+    const inputs = form.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>('input, textarea');
+
+    // Menerima update dari cvStore / localStorage
+    cvStore.subscribe((data) => {
+      const personalInfo = data.personalInfo;
+      inputs.forEach((input) => {
+        const name = input.name as keyof PersonalInfo;
+        // Pastikan nilai store tidak di-overwrite dengan kosong saat first render
+        if (personalInfo[name] !== undefined && input.value !== personalInfo[name]) {
+          input.value = personalInfo[name];
+        }
+      });
+    });
+
+    // Mengirim inputan user ke store secara real-time
+    inputs.forEach((input) => {
+      input.addEventListener('input', (e) => {
+        const target = e.target as HTMLInputElement | HTMLTextAreaElement;
+        updatePersonalInfo({ [target.name]: target.value });
+      });
+    });
+
+    // Karena data otomatis tersimpan di store, prevent default reload page form submit
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+    });
+  }
+</script>
