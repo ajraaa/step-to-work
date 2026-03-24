@@ -7,7 +7,7 @@
     <h2 class="text-xl font-semibold text-gray-800">Proyek</h2>
   </div>
   
-  <form class="space-y-5">
+  <form id="projectsForm" class="space-y-5">
     <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
       <!-- Project Name -->
       <div class="space-y-1.5 cursor-pointer">
@@ -87,3 +87,27 @@
     </div>
   </form>
 </div>
+
+<script>
+  import { addToSection } from '../../stores/cvStores';
+  import type { Project } from '../../stores/cvStores';
+
+  const form = document.getElementById('projectsForm');
+  if (form) {
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const fd = new FormData(form as HTMLFormElement);
+
+      const item: Project = {
+        name: (fd.get('name') as string) || '',
+        description: (fd.get('description') as string) || '',
+        techStack: ((fd.get('techStack') as string) || '').split(',').map(s => s.trim()).filter(Boolean),
+        highlights: ((fd.get('highlights') as string) || '').split('\n').map(l => l.replace(/^[-•]\s*/, '').trim()).filter(Boolean),
+        url: (fd.get('url') as string) || '',
+      };
+
+      addToSection('projects', item);
+      (form as HTMLFormElement).reset();
+    });
+  }
+</script>

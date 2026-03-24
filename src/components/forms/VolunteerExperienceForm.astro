@@ -7,7 +7,7 @@
     <h2 class="text-xl font-semibold text-gray-800">Pengalaman Sukarelawan (Volunteer)</h2>
   </div>
   
-  <form class="space-y-5">
+  <form id="volunteerForm" class="space-y-5">
     <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
       <!-- Role -->
       <div class="space-y-1.5 cursor-pointer">
@@ -84,3 +84,27 @@
     </div>
   </form>
 </div>
+
+<script>
+  import { addToSection } from '../../stores/cvStores';
+  import type { VolunteerExperience } from '../../stores/cvStores';
+
+  const form = document.getElementById('volunteerForm');
+  if (form) {
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const fd = new FormData(form as HTMLFormElement);
+
+      const item: VolunteerExperience = {
+        role: (fd.get('role') as string) || '',
+        organization: (fd.get('organization') as string) || '',
+        startDate: (fd.get('startDate') as string) || '',
+        endDate: (fd.get('endDate') as string) || '',
+        description: (fd.get('description') as string) || '',
+      };
+
+      addToSection('volunteerExperience', item);
+      (form as HTMLFormElement).reset();
+    });
+  }
+</script>

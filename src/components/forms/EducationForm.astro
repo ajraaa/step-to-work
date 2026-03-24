@@ -7,7 +7,7 @@
     <h2 class="text-xl font-semibold text-gray-800">Pendidikan</h2>
   </div>
   
-  <form class="space-y-5">
+  <form id="educationForm" class="space-y-5">
     <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
       <!-- Degree -->
       <div class="space-y-1.5 cursor-pointer">
@@ -123,3 +123,34 @@
     </div>
   </form>
 </div>
+
+<script>
+  import { addToSection } from '../../stores/cvStores';
+  import type { Education } from '../../stores/cvStores';
+
+  const form = document.getElementById('educationForm');
+  if (form) {
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const fd = new FormData(form as HTMLFormElement);
+      const courseworkRaw = (fd.get('relevantCoursework') as string) || '';
+
+      const item: Education = {
+        degree: (fd.get('degree') as string) || '',
+        institution: (fd.get('institution') as string) || '',
+        location: (fd.get('location') as string) || '',
+        startDate: (fd.get('startDate') as string) || '',
+        endDate: (fd.get('endDate') as string) || '',
+        gpa: (fd.get('gpa') as string) || '',
+        maxGpa: (fd.get('maxGpa') as string) || '',
+        relevantCoursework: courseworkRaw
+          .split(',')
+          .map(s => s.trim())
+          .filter(Boolean),
+      };
+
+      addToSection('education', item);
+      (form as HTMLFormElement).reset();
+    });
+  }
+</script>

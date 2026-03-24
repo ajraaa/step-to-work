@@ -7,7 +7,7 @@
     <h2 class="text-xl font-semibold text-gray-800">Referensi</h2>
   </div>
   
-  <form class="space-y-5">
+  <form id="referencesForm" class="space-y-5">
     <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
       <!-- Name -->
       <div class="space-y-1.5 cursor-pointer">
@@ -99,3 +99,28 @@
     </div>
   </form>
 </div>
+
+<script>
+  import { addToSection } from '../../stores/cvStores';
+  import type { Reference } from '../../stores/cvStores';
+
+  const form = document.getElementById('referencesForm');
+  if (form) {
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const fd = new FormData(form as HTMLFormElement);
+
+      const item: Reference = {
+        name: (fd.get('name') as string) || '',
+        jobTitle: (fd.get('jobTitle') as string) || '',
+        company: (fd.get('company') as string) || '',
+        email: (fd.get('email') as string) || '',
+        phone: (fd.get('phone') as string) || '',
+        relationship: (fd.get('relationship') as string) || '',
+      };
+
+      addToSection('references', item);
+      (form as HTMLFormElement).reset();
+    });
+  }
+</script>

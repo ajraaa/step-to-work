@@ -7,7 +7,7 @@
     <h2 class="text-xl font-semibold text-gray-800">Pengalaman Kerja</h2>
   </div>
   
-  <form class="space-y-5">
+  <form id="workExperienceForm" class="space-y-5">
     <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
       <!-- Job Title -->
       <div class="space-y-1.5 cursor-pointer">
@@ -113,23 +113,48 @@
 </div>
 
 <script>
-  // Script untuk menangani toggle status "isCurrentJob" (Pekerjaan Saat Ini)
+  import { addToSection } from '../../stores/cvStores';
+  import type { WorkExperience } from '../../stores/cvStores';
+
   const isCurrentJobCheckbox = document.getElementById('isCurrentJob') as HTMLInputElement | null;
   const endDateInput = document.getElementById('endDate') as HTMLInputElement | null;
 
   if (isCurrentJobCheckbox && endDateInput) {
     isCurrentJobCheckbox.addEventListener('change', (e) => {
       const isChecked = (e.target as HTMLInputElement).checked;
-      
-      // Jika dicentang, nonaktifkan field End Date dan hilangkan status required
       endDateInput.disabled = isChecked;
-      
       if (isChecked) {
-        endDateInput.value = ''; // Kosongkan nilainya
+        endDateInput.value = '';
         endDateInput.removeAttribute('required');
       } else {
         endDateInput.setAttribute('required', 'true');
       }
+    });
+  }
+
+  const form = document.getElementById('workExperienceForm');
+  if (form) {
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const fd = new FormData(form as HTMLFormElement);
+      const isCurrentJob = (form.querySelector('#isCurrentJob') as HTMLInputElement)?.checked || false;
+      const responsibilitiesRaw = (fd.get('responsibilities') as string) || '';
+
+      const item: WorkExperience = {
+        jobTitle: (fd.get('jobTitle') as string) || '',
+        company: (fd.get('company') as string) || '',
+        location: (fd.get('location') as string) || '',
+        startDate: (fd.get('startDate') as string) || '',
+        endDate: isCurrentJob ? null : (fd.get('endDate') as string) || '',
+        isCurrentJob,
+        responsibilities: responsibilitiesRaw
+          .split('\n')
+          .map(l => l.replace(/^[-•]\s*/, '').trim())
+          .filter(Boolean),
+      };
+
+      addToSection('workExperience', item);
+      (form as HTMLFormElement).reset();
     });
   }
 </script>

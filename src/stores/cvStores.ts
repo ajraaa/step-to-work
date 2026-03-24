@@ -161,3 +161,41 @@ export function updateCVSection<K extends keyof CVData>(
     [section]: data
   });
 }
+
+// Helper untuk menambahkan item ke array section
+type ArraySections = {
+  [K in keyof CVData]: CVData[K] extends unknown[] ? K : never
+}[keyof CVData];
+
+export function addToSection<K extends ArraySections>(
+  section: K,
+  item: CVData[K] extends (infer U)[] ? U : never
+) {
+  const current = cvStore.get();
+  const arr = current[section] as unknown[];
+  cvStore.set({
+    ...current,
+    [section]: [...arr, item]
+  });
+}
+
+export function removeFromSection<K extends ArraySections>(
+  section: K,
+  index: number
+) {
+  const current = cvStore.get();
+  const arr = current[section] as unknown[];
+  cvStore.set({
+    ...current,
+    [section]: arr.filter((_, i) => i !== index)
+  });
+}
+
+// Helper untuk mengupdate skills (karena skills bukan array, melainkan objek)
+export function updateSkills(data: Partial<Skills>) {
+  const current = cvStore.get();
+  cvStore.set({
+    ...current,
+    skills: { ...current.skills, ...data }
+  });
+}

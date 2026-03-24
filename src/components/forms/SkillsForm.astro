@@ -7,7 +7,7 @@
     <h2 class="text-xl font-semibold text-gray-800">Keahlian (Skills)</h2>
   </div>
   
-  <form class="space-y-5">
+  <form id="skillsForm" class="space-y-5">
     <p class="text-sm text-gray-500 mb-4 bg-blue-50 p-3 rounded-lg border border-blue-100 text-blue-700">
       Pisahkan setiap skill dengan koma (,). Biarkan kosong jika tidak ada.
     </p>
@@ -97,3 +97,45 @@
     </div>
   </form>
 </div>
+
+<script>
+  import { cvStore, updateSkills } from '../../stores/cvStores';
+  import type { Skills } from '../../stores/cvStores';
+
+  const form = document.getElementById('skillsForm');
+  if (form) {
+    const parseCSV = (val: string) => val.split(',').map(s => s.trim()).filter(Boolean);
+
+    // Isi form dari store saat halaman dimuat
+    cvStore.subscribe((data) => {
+      const s = data.skills;
+      const fields: (keyof Skills)[] = [
+        'programmingLanguages', 'frameworksAndLibraries', 'tools',
+        'databases', 'testing', 'others'
+      ];
+      fields.forEach(field => {
+        const input = form.querySelector(`[name="${field}"]`) as HTMLInputElement | null;
+        if (input && s[field]?.length > 0) {
+          const storeVal = s[field].join(', ');
+          if (input.value !== storeVal) {
+            input.value = storeVal;
+          }
+        }
+      });
+    });
+
+    // Simpan ke store saat input berubah (real-time)
+    const inputs = form.querySelectorAll<HTMLInputElement>('input');
+    inputs.forEach(input => {
+      input.addEventListener('input', () => {
+        updateSkills({
+          [input.name]: parseCSV(input.value)
+        });
+      });
+    });
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+    });
+  }
+</script>

@@ -7,7 +7,7 @@
     <h2 class="text-xl font-semibold text-gray-800">Sertifikasi</h2>
   </div>
   
-  <form class="space-y-5">
+  <form id="certificationsForm" class="space-y-5">
     <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
       <!-- Certification Name -->
       <div class="space-y-1.5 cursor-pointer md:col-span-2">
@@ -82,3 +82,27 @@
     </div>
   </form>
 </div>
+
+<script>
+  import { addToSection } from '../../stores/cvStores';
+  import type { Certification } from '../../stores/cvStores';
+
+  const form = document.getElementById('certificationsForm');
+  if (form) {
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const fd = new FormData(form as HTMLFormElement);
+
+      const item: Certification = {
+        name: (fd.get('name') as string) || '',
+        issuer: (fd.get('issuer') as string) || '',
+        issueDate: (fd.get('issueDate') as string) || '',
+        expiryDate: (fd.get('expiryDate') as string) || undefined,
+        credentialUrl: (fd.get('credentialUrl') as string) || '',
+      };
+
+      addToSection('certifications', item);
+      (form as HTMLFormElement).reset();
+    });
+  }
+</script>

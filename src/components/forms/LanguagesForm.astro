@@ -7,7 +7,7 @@
     <h2 class="text-xl font-semibold text-gray-800">Bahasa</h2>
   </div>
   
-  <form class="space-y-5">
+  <form id="languagesForm" class="space-y-5">
     <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
       <!-- Language -->
       <div class="space-y-1.5 cursor-pointer">
@@ -52,3 +52,24 @@
     </div>
   </form>
 </div>
+
+<script>
+  import { addToSection } from '../../stores/cvStores';
+  import type { Language } from '../../stores/cvStores';
+
+  const form = document.getElementById('languagesForm');
+  if (form) {
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const fd = new FormData(form as HTMLFormElement);
+
+      const item: Language = {
+        language: (fd.get('language') as string) || '',
+        proficiency: (fd.get('proficiency') as string) || '',
+      };
+
+      addToSection('languages', item);
+      (form as HTMLFormElement).reset();
+    });
+  }
+</script>
