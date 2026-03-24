@@ -1,5 +1,5 @@
 ---
-import PersonalInfoForm from '../components/forms/PersonalInfoForm.astro';
+import FormContainer from '../components/FormContainer.astro';
 import CVPreview from '../components/preview/CVPreview.astro';
 import Layout from '../layouts/Layout.astro';
 ---
@@ -25,12 +25,10 @@ import Layout from '../layouts/Layout.astro';
 		<div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
 			<!-- Left: Form Panel -->
 			<section>
-				<div class="lg:sticky lg:top-24">
-					<div class="mb-5">
-						<h2 class="text-xs font-semibold text-gray-400 uppercase tracking-widest">Editor</h2>
-					</div>
-					<PersonalInfoForm />
+				<div class="mb-5">
+					<h2 class="text-xs font-semibold text-gray-400 uppercase tracking-widest">Editor</h2>
 				</div>
+				<FormContainer />
 			</section>
 
 			<!-- Right: Preview Panel -->

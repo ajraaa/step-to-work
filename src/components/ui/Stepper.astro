@@ -1,0 +1,123 @@
+---
+// src/components/ui/Stepper.astro
+const steps = [
+  { label: 'Pribadi', shortLabel: 'Pribadi' },
+  { label: 'Pengalaman', shortLabel: 'Kerja' },
+  { label: 'Pendidikan', shortLabel: 'Didik' },
+  { label: 'Keahlian', shortLabel: 'Skill' },
+  { label: 'Sertifikasi', shortLabel: 'Sertif' },
+  { label: 'Proyek', shortLabel: 'Proyek' },
+  { label: 'Bahasa', shortLabel: 'Bahasa' },
+  { label: 'Organisasi', shortLabel: 'Orga' },
+  { label: 'Sukarelawan', shortLabel: 'Volun' },
+  { label: 'Referensi', shortLabel: 'Ref' },
+];
+---
+
+<div id="stepper" class="w-full mb-6">
+  <div class="flex items-center justify-between relative">
+    <!-- Progress line background -->
+    <div class="absolute top-4 left-4 right-4 h-0.5 bg-gray-200 z-0"></div>
+    <!-- Progress line active -->
+    <div id="stepper-progress-line" class="absolute top-4 left-4 h-0.5 bg-blue-600 z-0 transition-all duration-300" style="width: 0%"></div>
+
+    {steps.map((step, i) => (
+      <button
+        type="button"
+        data-step-index={i}
+        class:list={[
+          'stepper-step relative z-10 flex flex-col items-center gap-1.5 cursor-pointer group bg-transparent border-none p-0 outline-none',
+          i === 0 ? 'is-active' : '',
+        ]}
+      >
+        <div
+          class:list={[
+            'step-circle w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-all duration-300 border-2',
+            i === 0
+              ? 'bg-blue-600 border-blue-600 text-white shadow-md shadow-blue-200'
+              : 'bg-white border-gray-300 text-gray-400 group-hover:border-blue-400 group-hover:text-blue-400',
+          ]}
+        >
+          <span class="step-number">{i + 1}</span>
+          <!-- Checkmark for completed -->
+          <svg class="step-check hidden h-3.5 w-3.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+          </svg>
+        </div>
+        <span
+          class:list={[
+            'step-label text-[10px] font-medium transition-colors duration-300 max-w-[60px] text-center leading-tight',
+            i === 0 ? 'text-blue-600' : 'text-gray-400 group-hover:text-blue-400',
+          ]}
+        >
+          {step.label}
+        </span>
+      </button>
+    ))}
+  </div>
+</div>
+
+<script>
+  function initStepper() {
+    const stepperEl = document.getElementById('stepper');
+    const progressLine = document.getElementById('stepper-progress-line');
+    const stepButtons = document.querySelectorAll('.stepper-step');
+    const totalSteps = stepButtons.length;
+
+    function updateStepper(activeIndex: number) {
+      stepButtons.forEach((btn, i) => {
+        const circle = btn.querySelector('.step-circle') as HTMLElement;
+        const label = btn.querySelector('.step-label') as HTMLElement;
+        const numberEl = btn.querySelector('.step-number') as HTMLElement;
+        const checkEl = btn.querySelector('.step-check') as HTMLElement;
+
+        // Reset classes
+        circle.className = 'step-circle w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-all duration-300 border-2';
+        label.className = 'step-label text-[10px] font-medium transition-colors duration-300 max-w-[60px] text-center leading-tight';
+
+        if (i < activeIndex) {
+          // Completed
+          circle.classList.add('bg-blue-600', 'border-blue-600', 'text-white');
+          label.classList.add('text-blue-600');
+          numberEl.classList.add('hidden');
+          checkEl.classList.remove('hidden');
+        } else if (i === activeIndex) {
+          // Active
+          circle.classList.add('bg-blue-600', 'border-blue-600', 'text-white', 'shadow-md', 'shadow-blue-200', 'scale-110');
+          label.classList.add('text-blue-600', 'font-semibold');
+          numberEl.classList.remove('hidden');
+          checkEl.classList.add('hidden');
+        } else {
+          // Upcoming
+          circle.classList.add('bg-white', 'border-gray-300', 'text-gray-400', 'group-hover:border-blue-400', 'group-hover:text-blue-400');
+          label.classList.add('text-gray-400', 'group-hover:text-blue-400');
+          numberEl.classList.remove('hidden');
+          checkEl.classList.add('hidden');
+        }
+      });
+
+      // Update progress line
+      if (progressLine && totalSteps > 1) {
+        const percentage = (activeIndex / (totalSteps - 1)) * 100;
+        progressLine.style.width = `${percentage}%`;
+      }
+    }
+
+    // Listen for step clicks — dispatch event for FormContainer to handle
+    stepButtons.forEach((btn, i) => {
+      btn.addEventListener('click', () => {
+        document.dispatchEvent(new CustomEvent('stepper:goto', { detail: { step: i } }));
+      });
+    });
+
+    // Listen for step change events from FormContainer
+    document.addEventListener('form:stepchange', ((e: CustomEvent) => {
+      updateStepper(e.detail.step);
+    }) as EventListener);
+
+    // Initialize
+    updateStepper(0);
+  }
+
+  initStepper();
+</script>

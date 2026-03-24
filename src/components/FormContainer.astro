@@ -1,0 +1,144 @@
+---
+// src/components/FormContainer.astro
+import Stepper from './ui/Stepper.astro';
+import PersonalInfoForm from './forms/PersonalInfoForm.astro';
+import WorkExperienceForm from './forms/WorkExperienceForm.astro';
+import EducationForm from './forms/EducationForm.astro';
+import SkillsForm from './forms/SkillsForm.astro';
+import CertificationsForm from './forms/CertificationsForm.astro';
+import ProjectsForm from './forms/ProjectsForm.astro';
+import LanguagesForm from './forms/LanguagesForm.astro';
+import OrganizationExperienceForm from './forms/OrganizationExperienceForm.astro';
+import VolunteerExperienceForm from './forms/VolunteerExperienceForm.astro';
+import ReferencesForm from './forms/ReferencesForm.astro';
+---
+
+<div id="form-container">
+  <!-- Stepper -->
+  <Stepper />
+
+  <!-- Form Panels -->
+  <div id="form-panels" class="relative">
+    <div class="form-panel" data-panel="0">
+      <PersonalInfoForm />
+    </div>
+    <div class="form-panel hidden" data-panel="1">
+      <WorkExperienceForm />
+    </div>
+    <div class="form-panel hidden" data-panel="2">
+      <EducationForm />
+    </div>
+    <div class="form-panel hidden" data-panel="3">
+      <SkillsForm />
+    </div>
+    <div class="form-panel hidden" data-panel="4">
+      <CertificationsForm />
+    </div>
+    <div class="form-panel hidden" data-panel="5">
+      <ProjectsForm />
+    </div>
+    <div class="form-panel hidden" data-panel="6">
+      <LanguagesForm />
+    </div>
+    <div class="form-panel hidden" data-panel="7">
+      <OrganizationExperienceForm />
+    </div>
+    <div class="form-panel hidden" data-panel="8">
+      <VolunteerExperienceForm />
+    </div>
+    <div class="form-panel hidden" data-panel="9">
+      <ReferencesForm />
+    </div>
+  </div>
+
+  <!-- Navigation Buttons -->
+  <div class="flex items-center justify-between mt-6 pt-4 border-t border-gray-100">
+    <button
+      id="btn-back"
+      type="button"
+      class="invisible flex items-center gap-2 px-5 py-2.5 text-sm font-medium text-gray-600 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 hover:border-gray-300 transition-all active:scale-[0.98]"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+      </svg>
+      Kembali
+    </button>
+
+    <!-- Step counter -->
+    <span id="step-counter" class="text-xs text-gray-400 font-medium">1 / 10</span>
+
+    <button
+      id="btn-next"
+      type="button"
+      class="flex items-center gap-2 px-5 py-2.5 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-500/30 transition-all active:scale-[0.98]"
+    >
+      Lanjut
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+      </svg>
+    </button>
+  </div>
+</div>
+
+<script>
+  const TOTAL_STEPS = 10;
+  let currentStep = 0;
+
+  const panels = document.querySelectorAll<HTMLElement>('.form-panel');
+  const btnBack = document.getElementById('btn-back');
+  const btnNext = document.getElementById('btn-next');
+  const stepCounter = document.getElementById('step-counter');
+
+  function goToStep(step: number) {
+    if (step < 0 || step >= TOTAL_STEPS) return;
+    currentStep = step;
+
+    // Show/hide panels
+    panels.forEach((panel, i) => {
+      panel.classList.toggle('hidden', i !== currentStep);
+    });
+
+    // Update back button visibility
+    if (btnBack) {
+      btnBack.classList.toggle('invisible', currentStep === 0);
+    }
+
+    // Update next button text
+    if (btnNext) {
+      const isLastStep = currentStep === TOTAL_STEPS - 1;
+      btnNext.innerHTML = isLastStep
+        ? 'Selesai <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>'
+        : 'Lanjut <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" /></svg>';
+    }
+
+    // Update step counter
+    if (stepCounter) {
+      stepCounter.textContent = `${currentStep + 1} / ${TOTAL_STEPS}`;
+    }
+
+    // Notify stepper
+    document.dispatchEvent(new CustomEvent('form:stepchange', { detail: { step: currentStep } }));
+
+    // Scroll form container into view
+    const container = document.getElementById('form-container');
+    if (container) {
+      container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
+
+  // Button handlers
+  btnBack?.addEventListener('click', () => goToStep(currentStep - 1));
+  btnNext?.addEventListener('click', () => {
+    if (currentStep < TOTAL_STEPS - 1) {
+      goToStep(currentStep + 1);
+    }
+  });
+
+  // Listen for stepper click navigation
+  document.addEventListener('stepper:goto', ((e: CustomEvent) => {
+    goToStep(e.detail.step);
+  }) as EventListener);
+
+  // Initialize
+  goToStep(0);
+</script>
