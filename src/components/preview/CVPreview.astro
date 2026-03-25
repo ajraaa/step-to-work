@@ -79,6 +79,7 @@
 
 <script>
   import { cvStore } from '../../stores/cvStores';
+  import { cvStyleStore } from '../../stores/cvStores';
   import type { CVData } from '../../stores/cvStores';
 
   // Helper: format "2024-06" → "Jun 2024"
@@ -274,4 +275,12 @@
 
   // Subscribe and render on every change
   cvStore.subscribe(render);
+
+  // Subscribe to style changes (font, etc.)
+  cvStyleStore.subscribe(style => {
+    const preview = document.getElementById('cv-preview');
+    if (preview) {
+      preview.style.fontFamily = style.fontFamily;
+    }
+  });
 </script>

@@ -199,3 +199,36 @@ export function updateSkills(data: Partial<Skills>) {
     skills: { ...current.skills, ...data }
   });
 }
+
+// ===== CV Style Customization =====
+export type CVStyle = {
+  fontFamily: string;
+};
+
+export const FONT_OPTIONS: { label: string; value: string }[] = [
+  { label: 'Times New Roman', value: "'Times New Roman', Georgia, serif" },
+  { label: 'Arial', value: "Arial, Helvetica, sans-serif" },
+  { label: 'Helvetica', value: "Helvetica, Arial, sans-serif" },
+  { label: 'Calibri', value: "Calibri, 'Segoe UI', sans-serif" },
+  { label: 'Georgia', value: "Georgia, 'Times New Roman', serif" },
+  { label: 'Garamond', value: "Garamond, 'Times New Roman', serif" },
+  { label: 'Cambria', value: "Cambria, Georgia, serif" },
+];
+
+const defaultCVStyle: CVStyle = {
+  fontFamily: FONT_OPTIONS[0].value,
+};
+
+export const cvStyleStore = persistentAtom<CVStyle>(
+  'cv-style',
+  defaultCVStyle,
+  {
+    encode: JSON.stringify,
+    decode: JSON.parse,
+  }
+);
+
+export function updateCVStyle(data: Partial<CVStyle>) {
+  const current = cvStyleStore.get();
+  cvStyleStore.set({ ...current, ...data });
+}

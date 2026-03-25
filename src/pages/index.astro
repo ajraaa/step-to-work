@@ -36,12 +36,18 @@ import Layout from '../layouts/Layout.astro';
 				<div class="lg:sticky lg:top-24">
 					<div class="mb-5 flex items-center justify-between">
 						<h2 class="text-xs font-semibold text-gray-400 uppercase tracking-widest">Preview</h2>
-						<div class="flex items-center gap-1.5 text-xs text-emerald-600 font-medium">
-							<span class="relative flex h-2 w-2">
-								<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-								<span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-							</span>
-							Live
+						<div class="flex items-center gap-3">
+							<!-- Font Selector -->
+							<select id="font-selector" class="text-xs border border-gray-300 rounded-md px-2 py-1 bg-white text-gray-600 focus:outline-none focus:ring-1 focus:ring-blue-400 focus:border-blue-400 cursor-pointer transition-colors hover:border-gray-400">
+							</select>
+							<!-- Live Indicator -->
+							<div class="flex items-center gap-1.5 text-xs text-emerald-600 font-medium">
+								<span class="relative flex h-2 w-2">
+									<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+									<span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+								</span>
+								Live
+							</div>
 						</div>
 					</div>
 					<CVPreview />
@@ -50,3 +56,33 @@ import Layout from '../layouts/Layout.astro';
 		</div>
 	</main>
 </Layout>
+
+<script>
+	import { cvStyleStore, FONT_OPTIONS, updateCVStyle } from '../stores/cvStores';
+
+	const select = document.getElementById('font-selector') as HTMLSelectElement;
+	if (select) {
+		// Populate options
+		FONT_OPTIONS.forEach(opt => {
+			const option = document.createElement('option');
+			option.value = opt.value;
+			option.textContent = opt.label;
+			select.appendChild(option);
+		});
+
+		// Set initial value from store
+		select.value = cvStyleStore.get().fontFamily;
+
+		// On change → update store
+		select.addEventListener('change', () => {
+			updateCVStyle({ fontFamily: select.value });
+		});
+
+		// Sync if store changes externally
+		cvStyleStore.subscribe(style => {
+			if (select.value !== style.fontFamily) {
+				select.value = style.fontFamily;
+			}
+		});
+	}
+</script>
