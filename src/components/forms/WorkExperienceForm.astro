@@ -6,69 +6,86 @@
   <div class="flex justify-between items-center mb-6">
     <h2 class="text-xl font-semibold text-gray-800">Pengalaman Kerja</h2>
   </div>
-  
-  <form id="workExperienceForm" class="space-y-5">
+
+  <div id="workEntries" class="space-y-6"></div>
+
+  <!-- Tombol Tambah -->
+  <div class="pt-4">
+    <button 
+      type="button" 
+      id="addWorkBtn"
+      class="w-full border-2 border-dashed border-gray-300 text-gray-500 font-medium px-6 py-3 rounded-lg hover:border-blue-400 hover:text-blue-600 focus:outline-none focus:ring-4 focus:ring-blue-500/20 transition-all active:scale-[0.99] cursor-pointer"
+    >
+      + Tambah Pengalaman Kerja
+    </button>
+  </div>
+</div>
+
+<!-- Template tersembunyi untuk satu entry -->
+<template id="workEntryTemplate">
+  <div class="work-entry border border-gray-200 rounded-lg p-5 relative group" data-index="">
+    <!-- Tombol Hapus -->
+    <button 
+      type="button" 
+      class="delete-entry-btn absolute top-3 right-3 text-gray-300 hover:text-red-500 transition-colors cursor-pointer"
+      title="Hapus pengalaman ini"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+      </svg>
+    </button>
+
     <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
       <!-- Job Title -->
       <div class="space-y-1.5 cursor-pointer">
-        <label for="workJobTitle" class="block text-sm font-medium text-gray-700 cursor-pointer">Posisi Pekerjaan</label>
+        <label class="block text-sm font-medium text-gray-700 cursor-pointer">Posisi Pekerjaan</label>
         <input 
           type="text" 
-          id="workJobTitle" 
-          name="jobTitle" 
+          data-field="jobTitle" 
           placeholder="Frontend Developer" 
-          class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none" 
-          required 
+          class="work-input w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none" 
         />
       </div>
 
       <!-- Company -->
       <div class="space-y-1.5 cursor-pointer">
-        <label for="company" class="block text-sm font-medium text-gray-700 cursor-pointer">Nama Perusahaan</label>
+        <label class="block text-sm font-medium text-gray-700 cursor-pointer">Nama Perusahaan</label>
         <input 
           type="text" 
-          id="company" 
-          name="company" 
+          data-field="company" 
           placeholder="PT Teknologi Nusantara" 
-          class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none" 
-          required 
+          class="work-input w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none" 
         />
       </div>
 
       <!-- Location -->
       <div class="space-y-1.5 cursor-pointer md:col-span-2">
-        <label for="workLocation" class="block text-sm font-medium text-gray-700 cursor-pointer">Lokasi</label>
+        <label class="block text-sm font-medium text-gray-700 cursor-pointer">Lokasi</label>
         <input 
           type="text" 
-          id="workLocation" 
-          name="location" 
+          data-field="location" 
           placeholder="Jakarta, Indonesia" 
-          class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none" 
-          required 
+          class="work-input w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none" 
         />
       </div>
 
       <!-- Start Date -->
       <div class="space-y-1.5 cursor-pointer">
-        <label for="startDate" class="block text-sm font-medium text-gray-700 cursor-pointer">Bulan Mulai</label>
+        <label class="block text-sm font-medium text-gray-700 cursor-pointer">Bulan Mulai</label>
         <input 
           type="month" 
-          id="startDate" 
-          name="startDate" 
-          class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none" 
-          required 
+          data-field="startDate" 
+          class="work-input w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none" 
         />
       </div>
 
       <!-- End Date -->
       <div class="space-y-1.5 cursor-pointer">
-        <label for="endDate" class="block text-sm font-medium text-gray-700 cursor-pointer">Bulan Selesai</label>
+        <label class="block text-sm font-medium text-gray-700 cursor-pointer">Bulan Selesai</label>
         <input 
           type="month" 
-          id="endDate" 
-          name="endDate" 
-          class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none disabled:opacity-50 disabled:bg-gray-100 disabled:cursor-not-allowed" 
-          required
+          data-field="endDate" 
+          class="work-input end-date-input w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none disabled:opacity-50 disabled:bg-gray-100 disabled:cursor-not-allowed" 
         />
       </div>
 
@@ -76,85 +93,148 @@
       <div class="flex items-center space-x-3 md:col-span-2 mt-1">
         <input 
           type="checkbox" 
-          id="isCurrentJob" 
-          name="isCurrentJob" 
-          class="w-5 h-5 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500/20 focus:ring-2 cursor-pointer transition-all" 
+          data-field="isCurrentJob" 
+          class="work-input current-job-cb w-5 h-5 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500/20 focus:ring-2 cursor-pointer transition-all" 
         />
-        <label for="isCurrentJob" class="text-sm font-medium text-gray-700 cursor-pointer">
+        <label class="text-sm font-medium text-gray-700 cursor-pointer">
           Saya masih bekerja di posisi ini
         </label>
       </div>
     </div>
 
     <!-- Responsibilities -->
-    <div class="space-y-1.5 cursor-pointer">
-      <label for="responsibilities" class="block text-sm font-medium text-gray-700 cursor-pointer">Tanggung Jawab & Pencapaian</label>
+    <div class="space-y-1.5 cursor-pointer mt-5">
+      <label class="block text-sm font-medium text-gray-700 cursor-pointer">Tanggung Jawab & Pencapaian</label>
       <p class="text-xs text-gray-500 mb-2">Pisahkan setiap poin dengan baris baru (Enter).</p>
       <textarea 
-        id="responsibilities" 
-        name="responsibilities" 
-        rows="5" 
+        data-field="responsibilities" 
+        rows="4" 
         placeholder="- Mengembangkan dan memelihara aplikasi web...&#10;- Mengimplementasikan design system..." 
-        class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none resize-y leading-relaxed" 
-        required
+        class="work-input w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none resize-y leading-relaxed" 
       ></textarea>
     </div>
-
-    <!-- Submit Button -->
-    <div class="pt-4 flex justify-end">
-      <button 
-        type="submit" 
-        class="bg-blue-600 text-white font-medium px-6 py-2.5 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-500/30 transition-all active:scale-[0.98]"
-      >
-        Tambah Pengalaman Kerja
-      </button>
-    </div>
-  </form>
-</div>
+  </div>
+</template>
 
 <script>
-  import { addToSection } from '../../stores/cvStores';
+  import { cvStore, updateCVSection } from '../../stores/cvStores';
   import type { WorkExperience } from '../../stores/cvStores';
 
-  const isCurrentJobCheckbox = document.getElementById('isCurrentJob') as HTMLInputElement | null;
-  const endDateInput = document.getElementById('endDate') as HTMLInputElement | null;
+  const container = document.getElementById('workEntries')!;
+  const addBtn = document.getElementById('addWorkBtn')!;
+  const template = document.getElementById('workEntryTemplate') as HTMLTemplateElement;
 
-  if (isCurrentJobCheckbox && endDateInput) {
-    isCurrentJobCheckbox.addEventListener('change', (e) => {
-      const isChecked = (e.target as HTMLInputElement).checked;
-      endDateInput.disabled = isChecked;
-      if (isChecked) {
-        endDateInput.value = '';
-        endDateInput.removeAttribute('required');
-      } else {
-        endDateInput.setAttribute('required', 'true');
-      }
-    });
-  }
+  let isUpdatingFromStore = false;
 
-  const form = document.getElementById('workExperienceForm');
-  if (form) {
-    form.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const fd = new FormData(form as HTMLFormElement);
-      const isCurrentJob = (form.querySelector('#isCurrentJob') as HTMLInputElement)?.checked || false;
-      const responsibilitiesRaw = (fd.get('responsibilities') as string) || '';
+  // ---- Membaca seluruh entry dari DOM lalu sinkronkan ke store ----
+  function syncToStore() {
+    if (isUpdatingFromStore) return;
 
-      const item: WorkExperience = {
-        jobTitle: (fd.get('jobTitle') as string) || '',
-        company: (fd.get('company') as string) || '',
-        location: (fd.get('location') as string) || '',
-        startDate: (fd.get('startDate') as string) || '',
-        endDate: isCurrentJob ? null : (fd.get('endDate') as string) || '',
+    const entries = container.querySelectorAll('.work-entry');
+    const items: WorkExperience[] = [];
+
+    entries.forEach((entry) => {
+      const get = (field: string) => {
+        const el = entry.querySelector(`[data-field="${field}"]`) as HTMLInputElement | HTMLTextAreaElement | null;
+        return el?.value || '';
+      };
+      const isCurrentJob = (entry.querySelector('[data-field="isCurrentJob"]') as HTMLInputElement)?.checked || false;
+      const responsibilitiesRaw = get('responsibilities');
+
+      items.push({
+        jobTitle: get('jobTitle'),
+        company: get('company'),
+        location: get('location'),
+        startDate: get('startDate'),
+        endDate: isCurrentJob ? null : get('endDate'),
         isCurrentJob,
         responsibilities: responsibilitiesRaw
           .split('\n')
           .map(l => l.replace(/^[-•]\s*/, '').trim())
           .filter(Boolean),
-      };
-
-      addToSection('workExperience', item);
-      (form as HTMLFormElement).reset();
+      });
     });
+
+    updateCVSection('workExperience', items);
   }
+
+  // ---- Membuat satu entry baru dari template ----
+  function createEntry(data?: WorkExperience): HTMLElement {
+    const clone = template.content.cloneNode(true) as DocumentFragment;
+    const entryEl = clone.querySelector('.work-entry') as HTMLElement;
+
+    // Jika ada data, isi field-field
+    if (data) {
+      const set = (field: string, value: string) => {
+        const el = entryEl.querySelector(`[data-field="${field}"]`) as HTMLInputElement | HTMLTextAreaElement | null;
+        if (el) el.value = value;
+      };
+      set('jobTitle', data.jobTitle);
+      set('company', data.company);
+      set('location', data.location);
+      set('startDate', data.startDate);
+      set('endDate', data.endDate || '');
+
+      const cb = entryEl.querySelector('[data-field="isCurrentJob"]') as HTMLInputElement;
+      if (cb) cb.checked = data.isCurrentJob;
+
+      const endDateInput = entryEl.querySelector('.end-date-input') as HTMLInputElement;
+      if (endDateInput && data.isCurrentJob) {
+        endDateInput.disabled = true;
+      }
+
+      if (data.responsibilities.length > 0) {
+        set('responsibilities', data.responsibilities.map(r => `- ${r}`).join('\n'));
+      }
+    }
+
+    // Event: hapus entry
+    const deleteBtn = entryEl.querySelector('.delete-entry-btn')!;
+    deleteBtn.addEventListener('click', () => {
+      entryEl.remove();
+      syncToStore();
+    });
+
+    // Event: checkbox "masih bekerja" → disable/enable end date
+    const cb = entryEl.querySelector('.current-job-cb') as HTMLInputElement;
+    const endDate = entryEl.querySelector('.end-date-input') as HTMLInputElement;
+    cb.addEventListener('change', () => {
+      endDate.disabled = cb.checked;
+      if (cb.checked) endDate.value = '';
+      syncToStore();
+    });
+
+    // Event: semua input → sync real-time
+    entryEl.querySelectorAll('.work-input').forEach(input => {
+      input.addEventListener('input', syncToStore);
+      input.addEventListener('change', syncToStore); // untuk checkbox & month input
+    });
+
+    return entryEl;
+  }
+
+  // ---- Render dari store saat pertama kali load ----
+  function renderFromStore(data: WorkExperience[]) {
+    isUpdatingFromStore = true;
+    container.innerHTML = '';
+
+    if (data.length === 0) {
+      // Tampilkan satu entry kosong secara default
+      container.appendChild(createEntry());
+    } else {
+      data.forEach(item => {
+        container.appendChild(createEntry(item));
+      });
+    }
+    isUpdatingFromStore = false;
+  }
+
+  // ---- Inisialisasi: render dari data store yang sudah ada ----
+  const initialData = cvStore.get();
+  renderFromStore(initialData.workExperience);
+
+  // ---- Tombol tambah ----
+  addBtn.addEventListener('click', () => {
+    container.appendChild(createEntry());
+  });
 </script>

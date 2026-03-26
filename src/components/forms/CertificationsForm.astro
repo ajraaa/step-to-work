@@ -6,103 +6,75 @@
   <div class="flex justify-between items-center mb-6">
     <h2 class="text-xl font-semibold text-gray-800">Sertifikasi</h2>
   </div>
-  
-  <form id="certificationsForm" class="space-y-5">
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-      <!-- Certification Name -->
-      <div class="space-y-1.5 cursor-pointer md:col-span-2">
-        <label for="certName" class="block text-sm font-medium text-gray-700 cursor-pointer">Nama Sertifikasi</label>
-        <input 
-          type="text" 
-          id="certName" 
-          name="name" 
-          placeholder="Meta Front-End Developer Professional Certificate" 
-          class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none" 
-          required 
-        />
-      </div>
 
-      <!-- Issuer -->
-      <div class="space-y-1.5 cursor-pointer md:col-span-2">
-        <label for="issuer" class="block text-sm font-medium text-gray-700 cursor-pointer">Penerbit (Issuer)</label>
-        <input 
-          type="text" 
-          id="issuer" 
-          name="issuer" 
-          placeholder="Meta (Coursera)" 
-          class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none" 
-          required 
-        />
-      </div>
+  <div id="certEntries" class="space-y-6"></div>
 
-      <!-- Issue Date -->
-      <div class="space-y-1.5 cursor-pointer">
-        <label for="issueDate" class="block text-sm font-medium text-gray-700 cursor-pointer">Bulan Terbit</label>
-        <input 
-          type="month" 
-          id="issueDate" 
-          name="issueDate" 
-          class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none" 
-          required 
-        />
-      </div>
-
-      <!-- Expiry Date -->
-      <div class="space-y-1.5 cursor-pointer">
-        <label for="certExpiryDate" class="block text-sm font-medium text-gray-700 cursor-pointer">Bulan Kedaluwarsa (Opsional)</label>
-        <input 
-          type="month" 
-          id="certExpiryDate" 
-          name="expiryDate" 
-          class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none" 
-        />
-      </div>
-
-      <!-- Credential URL -->
-      <div class="space-y-1.5 cursor-pointer md:col-span-2">
-        <label for="credentialUrl" class="block text-sm font-medium text-gray-700 cursor-pointer">URL Kredensial (Opsional)</label>
-        <input 
-          type="url" 
-          id="credentialUrl" 
-          name="credentialUrl" 
-          placeholder="https://coursera.org/verify/professional-cert/..." 
-          class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none" 
-        />
-      </div>
-    </div>
-
-    <!-- Submit Button -->
-    <div class="pt-4 flex justify-end">
-      <button 
-        type="submit" 
-        class="bg-blue-600 text-white font-medium px-6 py-2.5 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-500/30 transition-all active:scale-[0.98]"
-      >
-        Tambah Sertifikasi
-      </button>
-    </div>
-  </form>
+  <div class="pt-4">
+    <button type="button" id="addCertBtn" class="w-full border-2 border-dashed border-gray-300 text-gray-500 font-medium px-6 py-3 rounded-lg hover:border-blue-400 hover:text-blue-600 focus:outline-none focus:ring-4 focus:ring-blue-500/20 transition-all active:scale-[0.99] cursor-pointer">
+      + Tambah Sertifikasi
+    </button>
+  </div>
 </div>
 
+<template id="certEntryTemplate">
+  <div class="cert-entry border border-gray-200 rounded-lg p-5 relative group">
+    <button type="button" class="delete-entry-btn absolute top-3 right-3 text-gray-300 hover:text-red-500 transition-colors cursor-pointer" title="Hapus sertifikasi ini">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+    </button>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+      <div class="space-y-1.5 md:col-span-2"><label class="block text-sm font-medium text-gray-700">Nama Sertifikasi</label><input type="text" data-field="name" placeholder="Meta Front-End Developer Professional Certificate" class="cert-input w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none" /></div>
+      <div class="space-y-1.5 md:col-span-2"><label class="block text-sm font-medium text-gray-700">Penerbit (Issuer)</label><input type="text" data-field="issuer" placeholder="Meta (Coursera)" class="cert-input w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none" /></div>
+      <div class="space-y-1.5"><label class="block text-sm font-medium text-gray-700">Bulan Terbit</label><input type="month" data-field="issueDate" class="cert-input w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none" /></div>
+      <div class="space-y-1.5"><label class="block text-sm font-medium text-gray-700">Bulan Kedaluwarsa (Opsional)</label><input type="month" data-field="expiryDate" class="cert-input w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none" /></div>
+      <div class="space-y-1.5 md:col-span-2"><label class="block text-sm font-medium text-gray-700">URL Kredensial (Opsional)</label><input type="url" data-field="credentialUrl" placeholder="https://coursera.org/verify/professional-cert/..." class="cert-input w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none" /></div>
+    </div>
+  </div>
+</template>
+
 <script>
-  import { addToSection } from '../../stores/cvStores';
+  import { cvStore, updateCVSection } from '../../stores/cvStores';
   import type { Certification } from '../../stores/cvStores';
 
-  const form = document.getElementById('certificationsForm');
-  if (form) {
-    form.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const fd = new FormData(form as HTMLFormElement);
+  const container = document.getElementById('certEntries')!;
+  const addBtn = document.getElementById('addCertBtn')!;
+  const template = document.getElementById('certEntryTemplate') as HTMLTemplateElement;
+  let isUpdatingFromStore = false;
 
-      const item: Certification = {
-        name: (fd.get('name') as string) || '',
-        issuer: (fd.get('issuer') as string) || '',
-        issueDate: (fd.get('issueDate') as string) || '',
-        expiryDate: (fd.get('expiryDate') as string) || undefined,
-        credentialUrl: (fd.get('credentialUrl') as string) || '',
-      };
-
-      addToSection('certifications', item);
-      (form as HTMLFormElement).reset();
+  function syncToStore() {
+    if (isUpdatingFromStore) return;
+    const entries = container.querySelectorAll('.cert-entry');
+    const items: Certification[] = [];
+    entries.forEach(entry => {
+      const get = (f: string) => (entry.querySelector(`[data-field="${f}"]`) as HTMLInputElement)?.value || '';
+      items.push({
+        name: get('name'), issuer: get('issuer'), issueDate: get('issueDate'),
+        expiryDate: get('expiryDate') || undefined, credentialUrl: get('credentialUrl'),
+      });
     });
+    updateCVSection('certifications', items);
   }
+
+  function createEntry(data?: Certification): HTMLElement {
+    const clone = template.content.cloneNode(true) as DocumentFragment;
+    const el = clone.querySelector('.cert-entry') as HTMLElement;
+    if (data) {
+      const set = (f: string, v: string) => { const i = el.querySelector(`[data-field="${f}"]`) as HTMLInputElement; if (i) i.value = v; };
+      set('name', data.name); set('issuer', data.issuer); set('issueDate', data.issueDate);
+      set('expiryDate', data.expiryDate || ''); set('credentialUrl', data.credentialUrl);
+    }
+    el.querySelector('.delete-entry-btn')!.addEventListener('click', () => { el.remove(); syncToStore(); });
+    el.querySelectorAll('.cert-input').forEach(i => { i.addEventListener('input', syncToStore); i.addEventListener('change', syncToStore); });
+    return el;
+  }
+
+  function renderFromStore(data: Certification[]) {
+    isUpdatingFromStore = true; container.innerHTML = '';
+    if (data.length === 0) container.appendChild(createEntry());
+    else data.forEach(item => container.appendChild(createEntry(item)));
+    isUpdatingFromStore = false;
+  }
+
+  renderFromStore(cvStore.get().certifications);
+  addBtn.addEventListener('click', () => container.appendChild(createEntry()));
 </script>

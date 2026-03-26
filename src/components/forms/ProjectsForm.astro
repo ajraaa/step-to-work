@@ -6,108 +6,77 @@
   <div class="flex justify-between items-center mb-6">
     <h2 class="text-xl font-semibold text-gray-800">Proyek</h2>
   </div>
-  
-  <form id="projectsForm" class="space-y-5">
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-      <!-- Project Name -->
-      <div class="space-y-1.5 cursor-pointer">
-        <label for="projectName" class="block text-sm font-medium text-gray-700 cursor-pointer">Nama Proyek</label>
-        <input 
-          type="text" 
-          id="projectName" 
-          name="name" 
-          placeholder="E-Commerce Dashboard" 
-          class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none" 
-          required 
-        />
-      </div>
 
-      <!-- Project URL -->
-      <div class="space-y-1.5 cursor-pointer">
-        <label for="projectUrl" class="block text-sm font-medium text-gray-700 cursor-pointer">URL Proyek (Opsional)</label>
-        <input 
-          type="url" 
-          id="projectUrl" 
-          name="url" 
-          placeholder="https://github.com/azzra/ecommerce-dashboard" 
-          class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none" 
-        />
-      </div>
+  <div id="projEntries" class="space-y-6"></div>
 
-      <!-- Description -->
-      <div class="space-y-1.5 cursor-pointer md:col-span-2">
-        <label for="projectDesc" class="block text-sm font-medium text-gray-700 cursor-pointer">Deskripsi Singkat</label>
-        <textarea 
-          id="projectDesc" 
-          name="description" 
-          rows="2" 
-          placeholder="Dashboard analytics untuk platform e-commerce dengan visualisasi data penjualan real-time..." 
-          class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none resize-y leading-relaxed" 
-          required
-        ></textarea>
-      </div>
-
-      <!-- Tech Stack -->
-      <div class="space-y-1.5 cursor-pointer md:col-span-2">
-        <label for="techStack" class="block text-sm font-medium text-gray-700 cursor-pointer">Tech Stack</label>
-        <p class="text-xs text-gray-500 mb-1">Pisahkan dengan koma (,).</p>
-        <input 
-          type="text" 
-          id="techStack" 
-          name="techStack" 
-          placeholder="Next.js, TypeScript, Recharts, Tailwind CSS" 
-          class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none" 
-          required 
-        />
-      </div>
-
-      <!-- Highlights -->
-      <div class="space-y-1.5 cursor-pointer md:col-span-2">
-        <label for="highlights" class="block text-sm font-medium text-gray-700 cursor-pointer">Pencapaian / Fitur Utama (Highlights)</label>
-        <p class="text-xs text-gray-500 mb-1">Pisahkan setiap poin dengan baris baru (Enter).</p>
-        <textarea 
-          id="highlights" 
-          name="highlights" 
-          rows="4" 
-          placeholder="- Menangani 10.000+ data transaksi dengan lazy loading...&#10;- Mengimplementasikan filter dan export laporan..." 
-          class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none resize-y leading-relaxed" 
-          required
-        ></textarea>
-      </div>
-    </div>
-
-    <!-- Submit Button -->
-    <div class="pt-4 flex justify-end">
-      <button 
-        type="submit" 
-        class="bg-blue-600 text-white font-medium px-6 py-2.5 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-500/30 transition-all active:scale-[0.98]"
-      >
-        Tambah Proyek
-      </button>
-    </div>
-  </form>
+  <div class="pt-4">
+    <button type="button" id="addProjBtn" class="w-full border-2 border-dashed border-gray-300 text-gray-500 font-medium px-6 py-3 rounded-lg hover:border-blue-400 hover:text-blue-600 focus:outline-none focus:ring-4 focus:ring-blue-500/20 transition-all active:scale-[0.99] cursor-pointer">
+      + Tambah Proyek
+    </button>
+  </div>
 </div>
 
+<template id="projEntryTemplate">
+  <div class="proj-entry border border-gray-200 rounded-lg p-5 relative group">
+    <button type="button" class="delete-entry-btn absolute top-3 right-3 text-gray-300 hover:text-red-500 transition-colors cursor-pointer" title="Hapus proyek ini">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+    </button>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+      <div class="space-y-1.5"><label class="block text-sm font-medium text-gray-700">Nama Proyek</label><input type="text" data-field="name" placeholder="E-Commerce Dashboard" class="proj-input w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none" /></div>
+      <div class="space-y-1.5"><label class="block text-sm font-medium text-gray-700">URL Proyek (Opsional)</label><input type="url" data-field="url" placeholder="https://github.com/azzra/project" class="proj-input w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none" /></div>
+      <div class="space-y-1.5 md:col-span-2"><label class="block text-sm font-medium text-gray-700">Deskripsi Singkat</label><textarea data-field="description" rows="2" placeholder="Dashboard analytics untuk platform e-commerce..." class="proj-input w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none resize-y leading-relaxed"></textarea></div>
+      <div class="space-y-1.5 md:col-span-2"><label class="block text-sm font-medium text-gray-700">Tech Stack</label><p class="text-xs text-gray-500 mb-1">Pisahkan dengan koma (,).</p><input type="text" data-field="techStack" placeholder="Next.js, TypeScript, Recharts, Tailwind CSS" class="proj-input w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none" /></div>
+      <div class="space-y-1.5 md:col-span-2"><label class="block text-sm font-medium text-gray-700">Pencapaian / Fitur Utama (Highlights)</label><p class="text-xs text-gray-500 mb-1">Pisahkan setiap poin dengan baris baru (Enter).</p><textarea data-field="highlights" rows="4" placeholder="- Menangani 10.000+ data transaksi...&#10;- Mengimplementasikan filter dan export..." class="proj-input w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none resize-y leading-relaxed"></textarea></div>
+    </div>
+  </div>
+</template>
+
 <script>
-  import { addToSection } from '../../stores/cvStores';
+  import { cvStore, updateCVSection } from '../../stores/cvStores';
   import type { Project } from '../../stores/cvStores';
 
-  const form = document.getElementById('projectsForm');
-  if (form) {
-    form.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const fd = new FormData(form as HTMLFormElement);
+  const container = document.getElementById('projEntries')!;
+  const addBtn = document.getElementById('addProjBtn')!;
+  const template = document.getElementById('projEntryTemplate') as HTMLTemplateElement;
+  let isUpdatingFromStore = false;
 
-      const item: Project = {
-        name: (fd.get('name') as string) || '',
-        description: (fd.get('description') as string) || '',
-        techStack: ((fd.get('techStack') as string) || '').split(',').map(s => s.trim()).filter(Boolean),
-        highlights: ((fd.get('highlights') as string) || '').split('\n').map(l => l.replace(/^[-•]\s*/, '').trim()).filter(Boolean),
-        url: (fd.get('url') as string) || '',
-      };
-
-      addToSection('projects', item);
-      (form as HTMLFormElement).reset();
+  function syncToStore() {
+    if (isUpdatingFromStore) return;
+    const entries = container.querySelectorAll('.proj-entry');
+    const items: Project[] = [];
+    entries.forEach(entry => {
+      const get = (f: string) => (entry.querySelector(`[data-field="${f}"]`) as HTMLInputElement | HTMLTextAreaElement)?.value || '';
+      items.push({
+        name: get('name'), description: get('description'), url: get('url'),
+        techStack: get('techStack').split(',').map(s => s.trim()).filter(Boolean),
+        highlights: get('highlights').split('\n').map(l => l.replace(/^[-•]\s*/, '').trim()).filter(Boolean),
+      });
     });
+    updateCVSection('projects', items);
   }
+
+  function createEntry(data?: Project): HTMLElement {
+    const clone = template.content.cloneNode(true) as DocumentFragment;
+    const el = clone.querySelector('.proj-entry') as HTMLElement;
+    if (data) {
+      const set = (f: string, v: string) => { const i = el.querySelector(`[data-field="${f}"]`) as HTMLInputElement | HTMLTextAreaElement; if (i) i.value = v; };
+      set('name', data.name); set('description', data.description); set('url', data.url);
+      set('techStack', data.techStack.join(', '));
+      if (data.highlights.length) set('highlights', data.highlights.map(h => `- ${h}`).join('\n'));
+    }
+    el.querySelector('.delete-entry-btn')!.addEventListener('click', () => { el.remove(); syncToStore(); });
+    el.querySelectorAll('.proj-input').forEach(i => { i.addEventListener('input', syncToStore); i.addEventListener('change', syncToStore); });
+    return el;
+  }
+
+  function renderFromStore(data: Project[]) {
+    isUpdatingFromStore = true; container.innerHTML = '';
+    if (data.length === 0) container.appendChild(createEntry());
+    else data.forEach(item => container.appendChild(createEntry(item)));
+    isUpdatingFromStore = false;
+  }
+
+  renderFromStore(cvStore.get().projects);
+  addBtn.addEventListener('click', () => container.appendChild(createEntry()));
 </script>

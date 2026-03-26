@@ -6,151 +6,93 @@
   <div class="flex justify-between items-center mb-6">
     <h2 class="text-xl font-semibold text-gray-800">Pendidikan</h2>
   </div>
-  
-  <form id="educationForm" class="space-y-5">
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-      <!-- Degree -->
-      <div class="space-y-1.5 cursor-pointer">
-        <label for="degree" class="block text-sm font-medium text-gray-700 cursor-pointer">Gelar / Jurusan</label>
-        <input 
-          type="text" 
-          id="degree" 
-          name="degree" 
-          placeholder="S1 Teknik Informatika" 
-          class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none" 
-          required 
-        />
-      </div>
 
-      <!-- Institution -->
-      <div class="space-y-1.5 cursor-pointer">
-        <label for="institution" class="block text-sm font-medium text-gray-700 cursor-pointer">Institusi Pendidikan</label>
-        <input 
-          type="text" 
-          id="institution" 
-          name="institution" 
-          placeholder="Universitas Indonesia" 
-          class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none" 
-          required 
-        />
-      </div>
+  <div id="eduEntries" class="space-y-6"></div>
 
-      <!-- Location -->
-      <div class="space-y-1.5 cursor-pointer md:col-span-2">
-        <label for="eduLocation" class="block text-sm font-medium text-gray-700 cursor-pointer">Lokasi</label>
-        <input 
-          type="text" 
-          id="eduLocation" 
-          name="location" 
-          placeholder="Depok, Indonesia" 
-          class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none" 
-          required 
-        />
-      </div>
-
-      <!-- Start Date -->
-      <div class="space-y-1.5 cursor-pointer">
-        <label for="eduStartDate" class="block text-sm font-medium text-gray-700 cursor-pointer">Bulan Mulai</label>
-        <input 
-          type="month" 
-          id="eduStartDate" 
-          name="startDate" 
-          class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none" 
-          required 
-        />
-      </div>
-
-      <!-- End Date -->
-      <div class="space-y-1.5 cursor-pointer">
-        <label for="eduEndDate" class="block text-sm font-medium text-gray-700 cursor-pointer">Bulan Selesai / Estimasi</label>
-        <input 
-          type="month" 
-          id="eduEndDate" 
-          name="endDate" 
-          class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none" 
-          required
-        />
-      </div>
-
-      <!-- GPA -->
-      <div class="space-y-1.5 cursor-pointer">
-        <label for="gpa" class="block text-sm font-medium text-gray-700 cursor-pointer">IPK / Nilai (Opsional)</label>
-        <input 
-          type="number" 
-          step="0.01" 
-          id="gpa" 
-          name="gpa" 
-          placeholder="3.75" 
-          class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none" 
-        />
-      </div>
-
-      <!-- Max GPA -->
-      <div class="space-y-1.5 cursor-pointer">
-        <label for="maxGpa" class="block text-sm font-medium text-gray-700 cursor-pointer">IPK Maksimal (Opsional)</label>
-        <input 
-          type="number" 
-          step="0.01" 
-          id="maxGpa" 
-          name="maxGpa" 
-          placeholder="4.00" 
-          class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none" 
-        />
-      </div>
-    </div>
-
-    <!-- Relevant Coursework -->
-    <div class="space-y-1.5 cursor-pointer">
-      <label for="relevantCoursework" class="block text-sm font-medium text-gray-700 cursor-pointer">Mata Kuliah Relevan (Opsional)</label>
-      <p class="text-xs text-gray-500 mb-2">Pisahkan setiap mata kuliah dengan koma (,).</p>
-      <textarea 
-        id="relevantCoursework" 
-        name="relevantCoursework" 
-        rows="3" 
-        placeholder="Struktur Data & Algoritma, Pemrograman Web, Basis Data..." 
-        class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none resize-y leading-relaxed" 
-      ></textarea>
-    </div>
-
-    <!-- Submit Button -->
-    <div class="pt-4 flex justify-end">
-      <button 
-        type="submit" 
-        class="bg-blue-600 text-white font-medium px-6 py-2.5 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-500/30 transition-all active:scale-[0.98]"
-      >
-        Tambah Pendidikan
-      </button>
-    </div>
-  </form>
+  <div class="pt-4">
+    <button 
+      type="button" 
+      id="addEduBtn"
+      class="w-full border-2 border-dashed border-gray-300 text-gray-500 font-medium px-6 py-3 rounded-lg hover:border-blue-400 hover:text-blue-600 focus:outline-none focus:ring-4 focus:ring-blue-500/20 transition-all active:scale-[0.99] cursor-pointer"
+    >
+      + Tambah Pendidikan
+    </button>
+  </div>
 </div>
 
+<template id="eduEntryTemplate">
+  <div class="edu-entry border border-gray-200 rounded-lg p-5 relative group">
+    <button type="button" class="delete-entry-btn absolute top-3 right-3 text-gray-300 hover:text-red-500 transition-colors cursor-pointer" title="Hapus pendidikan ini">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+    </button>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+      <div class="space-y-1.5"><label class="block text-sm font-medium text-gray-700">Gelar / Jurusan</label><input type="text" data-field="degree" placeholder="S1 Teknik Informatika" class="edu-input w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none" /></div>
+      <div class="space-y-1.5"><label class="block text-sm font-medium text-gray-700">Institusi Pendidikan</label><input type="text" data-field="institution" placeholder="Universitas Indonesia" class="edu-input w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none" /></div>
+      <div class="space-y-1.5 md:col-span-2"><label class="block text-sm font-medium text-gray-700">Lokasi</label><input type="text" data-field="location" placeholder="Depok, Indonesia" class="edu-input w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none" /></div>
+      <div class="space-y-1.5"><label class="block text-sm font-medium text-gray-700">Bulan Mulai</label><input type="month" data-field="startDate" class="edu-input w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none" /></div>
+      <div class="space-y-1.5"><label class="block text-sm font-medium text-gray-700">Bulan Selesai / Estimasi</label><input type="month" data-field="endDate" class="edu-input w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none" /></div>
+      <div class="space-y-1.5"><label class="block text-sm font-medium text-gray-700">IPK / Nilai (Opsional)</label><input type="number" step="0.01" data-field="gpa" placeholder="3.75" class="edu-input w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none" /></div>
+      <div class="space-y-1.5"><label class="block text-sm font-medium text-gray-700">IPK Maksimal (Opsional)</label><input type="number" step="0.01" data-field="maxGpa" placeholder="4.00" class="edu-input w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none" /></div>
+    </div>
+
+    <div class="space-y-1.5 mt-5">
+      <label class="block text-sm font-medium text-gray-700">Mata Kuliah Relevan (Opsional)</label>
+      <p class="text-xs text-gray-500 mb-2">Pisahkan setiap mata kuliah dengan koma (,).</p>
+      <textarea data-field="relevantCoursework" rows="3" placeholder="Struktur Data & Algoritma, Pemrograman Web, Basis Data..." class="edu-input w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none resize-y leading-relaxed"></textarea>
+    </div>
+  </div>
+</template>
+
 <script>
-  import { addToSection } from '../../stores/cvStores';
+  import { cvStore, updateCVSection } from '../../stores/cvStores';
   import type { Education } from '../../stores/cvStores';
 
-  const form = document.getElementById('educationForm');
-  if (form) {
-    form.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const fd = new FormData(form as HTMLFormElement);
-      const courseworkRaw = (fd.get('relevantCoursework') as string) || '';
+  const container = document.getElementById('eduEntries')!;
+  const addBtn = document.getElementById('addEduBtn')!;
+  const template = document.getElementById('eduEntryTemplate') as HTMLTemplateElement;
+  let isUpdatingFromStore = false;
 
-      const item: Education = {
-        degree: (fd.get('degree') as string) || '',
-        institution: (fd.get('institution') as string) || '',
-        location: (fd.get('location') as string) || '',
-        startDate: (fd.get('startDate') as string) || '',
-        endDate: (fd.get('endDate') as string) || '',
-        gpa: (fd.get('gpa') as string) || '',
-        maxGpa: (fd.get('maxGpa') as string) || '',
-        relevantCoursework: courseworkRaw
-          .split(',')
-          .map(s => s.trim())
-          .filter(Boolean),
-      };
-
-      addToSection('education', item);
-      (form as HTMLFormElement).reset();
+  function syncToStore() {
+    if (isUpdatingFromStore) return;
+    const entries = container.querySelectorAll('.edu-entry');
+    const items: Education[] = [];
+    entries.forEach(entry => {
+      const get = (f: string) => (entry.querySelector(`[data-field="${f}"]`) as HTMLInputElement | HTMLTextAreaElement)?.value || '';
+      const courseworkRaw = get('relevantCoursework');
+      items.push({
+        degree: get('degree'), institution: get('institution'), location: get('location'),
+        startDate: get('startDate'), endDate: get('endDate'),
+        gpa: get('gpa'), maxGpa: get('maxGpa'),
+        relevantCoursework: courseworkRaw.split(',').map(s => s.trim()).filter(Boolean),
+      });
     });
+    updateCVSection('education', items);
   }
+
+  function createEntry(data?: Education): HTMLElement {
+    const clone = template.content.cloneNode(true) as DocumentFragment;
+    const el = clone.querySelector('.edu-entry') as HTMLElement;
+    if (data) {
+      const set = (f: string, v: string) => { const i = el.querySelector(`[data-field="${f}"]`) as HTMLInputElement | HTMLTextAreaElement; if (i) i.value = v; };
+      set('degree', data.degree); set('institution', data.institution); set('location', data.location);
+      set('startDate', data.startDate); set('endDate', data.endDate);
+      set('gpa', data.gpa); set('maxGpa', data.maxGpa);
+      if (data.relevantCoursework.length) set('relevantCoursework', data.relevantCoursework.join(', '));
+    }
+    el.querySelector('.delete-entry-btn')!.addEventListener('click', () => { el.remove(); syncToStore(); });
+    el.querySelectorAll('.edu-input').forEach(i => { i.addEventListener('input', syncToStore); i.addEventListener('change', syncToStore); });
+    return el;
+  }
+
+  function renderFromStore(data: Education[]) {
+    isUpdatingFromStore = true;
+    container.innerHTML = '';
+    if (data.length === 0) container.appendChild(createEntry());
+    else data.forEach(item => container.appendChild(createEntry(item)));
+    isUpdatingFromStore = false;
+  }
+
+  renderFromStore(cvStore.get().education);
+  addBtn.addEventListener('click', () => container.appendChild(createEntry()));
 </script>

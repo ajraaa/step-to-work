@@ -6,121 +6,73 @@
   <div class="flex justify-between items-center mb-6">
     <h2 class="text-xl font-semibold text-gray-800">Referensi</h2>
   </div>
-  
-  <form id="referencesForm" class="space-y-5">
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-      <!-- Name -->
-      <div class="space-y-1.5 cursor-pointer">
-        <label for="refName" class="block text-sm font-medium text-gray-700 cursor-pointer">Nama Lengkap</label>
-        <input 
-          type="text" 
-          id="refName" 
-          name="name" 
-          placeholder="Budi Santoso" 
-          class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none" 
-          required 
-        />
-      </div>
 
-      <!-- Job Title -->
-      <div class="space-y-1.5 cursor-pointer">
-        <label for="refJobTitle" class="block text-sm font-medium text-gray-700 cursor-pointer">Posisi / Jabatan</label>
-        <input 
-          type="text" 
-          id="refJobTitle" 
-          name="jobTitle" 
-          placeholder="Engineering Manager" 
-          class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none" 
-          required 
-        />
-      </div>
+  <div id="refEntries" class="space-y-6"></div>
 
-      <!-- Company -->
-      <div class="space-y-1.5 cursor-pointer">
-        <label for="refCompany" class="block text-sm font-medium text-gray-700 cursor-pointer">Perusahaan / Institusi</label>
-        <input 
-          type="text" 
-          id="refCompany" 
-          name="company" 
-          placeholder="PT Teknologi Nusantara" 
-          class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none" 
-          required 
-        />
-      </div>
-
-      <!-- Relationship -->
-      <div class="space-y-1.5 cursor-pointer">
-        <label for="refRelationship" class="block text-sm font-medium text-gray-700 cursor-pointer">Hubungan</label>
-        <input 
-          type="text" 
-          id="refRelationship" 
-          name="relationship" 
-          placeholder="Direct Supervisor, Co-worker, dsb." 
-          class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none" 
-          required 
-        />
-      </div>
-
-      <!-- Email -->
-      <div class="space-y-1.5 cursor-pointer">
-        <label for="refEmail" class="block text-sm font-medium text-gray-700 cursor-pointer">Email</label>
-        <input 
-          type="email" 
-          id="refEmail" 
-          name="email" 
-          placeholder="budi.santoso@example.com" 
-          class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none" 
-          required 
-        />
-      </div>
-
-      <!-- Phone -->
-      <div class="space-y-1.5 cursor-pointer">
-        <label for="refPhone" class="block text-sm font-medium text-gray-700 cursor-pointer">Telepon</label>
-        <input 
-          type="tel" 
-          id="refPhone" 
-          name="phone" 
-          placeholder="+62 813-0000-0000" 
-          class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none" 
-          required 
-        />
-      </div>
-    </div>
-
-    <!-- Submit Button -->
-    <div class="pt-4 flex justify-end">
-      <button 
-        type="submit" 
-        class="bg-blue-600 text-white font-medium px-6 py-2.5 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-500/30 transition-all active:scale-[0.98]"
-      >
-        Tambah Referensi
-      </button>
-    </div>
-  </form>
+  <div class="pt-4">
+    <button type="button" id="addRefBtn" class="w-full border-2 border-dashed border-gray-300 text-gray-500 font-medium px-6 py-3 rounded-lg hover:border-blue-400 hover:text-blue-600 focus:outline-none focus:ring-4 focus:ring-blue-500/20 transition-all active:scale-[0.99] cursor-pointer">
+      + Tambah Referensi
+    </button>
+  </div>
 </div>
 
+<template id="refEntryTemplate">
+  <div class="ref-entry border border-gray-200 rounded-lg p-5 relative group">
+    <button type="button" class="delete-entry-btn absolute top-3 right-3 text-gray-300 hover:text-red-500 transition-colors cursor-pointer" title="Hapus referensi ini">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+    </button>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+      <div class="space-y-1.5"><label class="block text-sm font-medium text-gray-700">Nama Lengkap</label><input type="text" data-field="name" placeholder="Budi Santoso" class="ref-input w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none" /></div>
+      <div class="space-y-1.5"><label class="block text-sm font-medium text-gray-700">Posisi / Jabatan</label><input type="text" data-field="jobTitle" placeholder="Engineering Manager" class="ref-input w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none" /></div>
+      <div class="space-y-1.5"><label class="block text-sm font-medium text-gray-700">Perusahaan / Institusi</label><input type="text" data-field="company" placeholder="PT Teknologi Nusantara" class="ref-input w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none" /></div>
+      <div class="space-y-1.5"><label class="block text-sm font-medium text-gray-700">Hubungan</label><input type="text" data-field="relationship" placeholder="Direct Supervisor" class="ref-input w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none" /></div>
+      <div class="space-y-1.5"><label class="block text-sm font-medium text-gray-700">Email</label><input type="email" data-field="email" placeholder="budi.santoso@example.com" class="ref-input w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none" /></div>
+      <div class="space-y-1.5"><label class="block text-sm font-medium text-gray-700">Telepon</label><input type="tel" data-field="phone" placeholder="+62 813-0000-0000" class="ref-input w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none" /></div>
+    </div>
+  </div>
+</template>
+
 <script>
-  import { addToSection } from '../../stores/cvStores';
+  import { cvStore, updateCVSection } from '../../stores/cvStores';
   import type { Reference } from '../../stores/cvStores';
 
-  const form = document.getElementById('referencesForm');
-  if (form) {
-    form.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const fd = new FormData(form as HTMLFormElement);
+  const container = document.getElementById('refEntries')!;
+  const addBtn = document.getElementById('addRefBtn')!;
+  const template = document.getElementById('refEntryTemplate') as HTMLTemplateElement;
+  let isUpdatingFromStore = false;
 
-      const item: Reference = {
-        name: (fd.get('name') as string) || '',
-        jobTitle: (fd.get('jobTitle') as string) || '',
-        company: (fd.get('company') as string) || '',
-        email: (fd.get('email') as string) || '',
-        phone: (fd.get('phone') as string) || '',
-        relationship: (fd.get('relationship') as string) || '',
-      };
-
-      addToSection('references', item);
-      (form as HTMLFormElement).reset();
+  function syncToStore() {
+    if (isUpdatingFromStore) return;
+    const entries = container.querySelectorAll('.ref-entry');
+    const items: Reference[] = [];
+    entries.forEach(entry => {
+      const get = (f: string) => (entry.querySelector(`[data-field="${f}"]`) as HTMLInputElement)?.value || '';
+      items.push({ name: get('name'), jobTitle: get('jobTitle'), company: get('company'), email: get('email'), phone: get('phone'), relationship: get('relationship') });
     });
+    updateCVSection('references', items);
   }
+
+  function createEntry(data?: Reference): HTMLElement {
+    const clone = template.content.cloneNode(true) as DocumentFragment;
+    const el = clone.querySelector('.ref-entry') as HTMLElement;
+    if (data) {
+      const set = (f: string, v: string) => { const i = el.querySelector(`[data-field="${f}"]`) as HTMLInputElement; if (i) i.value = v; };
+      set('name', data.name); set('jobTitle', data.jobTitle); set('company', data.company);
+      set('email', data.email); set('phone', data.phone); set('relationship', data.relationship);
+    }
+    el.querySelector('.delete-entry-btn')!.addEventListener('click', () => { el.remove(); syncToStore(); });
+    el.querySelectorAll('.ref-input').forEach(i => { i.addEventListener('input', syncToStore); i.addEventListener('change', syncToStore); });
+    return el;
+  }
+
+  function renderFromStore(data: Reference[]) {
+    isUpdatingFromStore = true; container.innerHTML = '';
+    if (data.length === 0) container.appendChild(createEntry());
+    else data.forEach(item => container.appendChild(createEntry(item)));
+    isUpdatingFromStore = false;
+  }
+
+  renderFromStore(cvStore.get().references);
+  addBtn.addEventListener('click', () => container.appendChild(createEntry()));
 </script>

@@ -6,106 +6,76 @@
   <div class="flex justify-between items-center mb-6">
     <h2 class="text-xl font-semibold text-gray-800">Pengalaman Organisasi</h2>
   </div>
-  
-  <form id="organizationForm" class="space-y-5">
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-      <!-- Role -->
-      <div class="space-y-1.5 cursor-pointer">
-        <label for="orgRole" class="block text-sm font-medium text-gray-700 cursor-pointer">Peran / Jabatan</label>
-        <input 
-          type="text" 
-          id="orgRole" 
-          name="role" 
-          placeholder="Ketua Divisi IT" 
-          class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none" 
-          required 
-        />
-      </div>
 
-      <!-- Organization Name -->
-      <div class="space-y-1.5 cursor-pointer">
-        <label for="orgName" class="block text-sm font-medium text-gray-700 cursor-pointer">Nama Organisasi</label>
-        <input 
-          type="text" 
-          id="orgName" 
-          name="organization" 
-          placeholder="Himpunan Mahasiswa Teknik Informatika" 
-          class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none" 
-          required 
-        />
-      </div>
+  <div id="orgEntries" class="space-y-6"></div>
 
-      <!-- Start Date -->
-      <div class="space-y-1.5 cursor-pointer">
-        <label for="orgStartDate" class="block text-sm font-medium text-gray-700 cursor-pointer">Bulan Mulai</label>
-        <input 
-          type="month" 
-          id="orgStartDate" 
-          name="startDate" 
-          class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none" 
-          required 
-        />
-      </div>
-
-      <!-- End Date -->
-      <div class="space-y-1.5 cursor-pointer">
-        <label for="orgEndDate" class="block text-sm font-medium text-gray-700 cursor-pointer">Bulan Selesai</label>
-        <input 
-          type="month" 
-          id="orgEndDate" 
-          name="endDate" 
-          class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none" 
-          required 
-        />
-      </div>
-    </div>
-
-    <!-- Description -->
-    <div class="space-y-1.5 cursor-pointer">
-      <label for="orgDesc" class="block text-sm font-medium text-gray-700 cursor-pointer">Deskripsi / Pencapaian</label>
-      <p class="text-xs text-gray-500 mb-1">Berikan ringkasan tugas, wewenang, atau pencapaian Anda selama menjabat.</p>
-      <textarea 
-        id="orgDesc" 
-        name="description" 
-        rows="4" 
-        placeholder="Memimpin tim 10 orang dalam pengembangan website organisasi dan menyelenggarakan 3 workshop..." 
-        class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none resize-y leading-relaxed" 
-        required
-      ></textarea>
-    </div>
-
-    <!-- Submit Button -->
-    <div class="pt-4 flex justify-end">
-      <button 
-        type="submit" 
-        class="bg-blue-600 text-white font-medium px-6 py-2.5 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-500/30 transition-all active:scale-[0.98]"
-      >
-        Tambah Pengalaman Organisasi
-      </button>
-    </div>
-  </form>
+  <div class="pt-4">
+    <button type="button" id="addOrgBtn" class="w-full border-2 border-dashed border-gray-300 text-gray-500 font-medium px-6 py-3 rounded-lg hover:border-blue-400 hover:text-blue-600 focus:outline-none focus:ring-4 focus:ring-blue-500/20 transition-all active:scale-[0.99] cursor-pointer">
+      + Tambah Pengalaman Organisasi
+    </button>
+  </div>
 </div>
 
+<template id="orgEntryTemplate">
+  <div class="org-entry border border-gray-200 rounded-lg p-5 relative group">
+    <button type="button" class="delete-entry-btn absolute top-3 right-3 text-gray-300 hover:text-red-500 transition-colors cursor-pointer" title="Hapus pengalaman ini">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+    </button>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+      <div class="space-y-1.5"><label class="block text-sm font-medium text-gray-700">Peran / Jabatan</label><input type="text" data-field="role" placeholder="Ketua Divisi IT" class="org-input w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none" /></div>
+      <div class="space-y-1.5"><label class="block text-sm font-medium text-gray-700">Nama Organisasi</label><input type="text" data-field="organization" placeholder="Himpunan Mahasiswa Teknik Informatika" class="org-input w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none" /></div>
+      <div class="space-y-1.5"><label class="block text-sm font-medium text-gray-700">Bulan Mulai</label><input type="month" data-field="startDate" class="org-input w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none" /></div>
+      <div class="space-y-1.5"><label class="block text-sm font-medium text-gray-700">Bulan Selesai</label><input type="month" data-field="endDate" class="org-input w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none" /></div>
+    </div>
+
+    <div class="space-y-1.5 mt-5">
+      <label class="block text-sm font-medium text-gray-700">Deskripsi / Pencapaian</label>
+      <p class="text-xs text-gray-500 mb-1">Berikan ringkasan tugas, wewenang, atau pencapaian Anda selama menjabat.</p>
+      <textarea data-field="description" rows="4" placeholder="Memimpin tim 10 orang dalam pengembangan website organisasi..." class="org-input w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none resize-y leading-relaxed"></textarea>
+    </div>
+  </div>
+</template>
+
 <script>
-  import { addToSection } from '../../stores/cvStores';
+  import { cvStore, updateCVSection } from '../../stores/cvStores';
   import type { OrganizationExperience } from '../../stores/cvStores';
 
-  const form = document.getElementById('organizationForm');
-  if (form) {
-    form.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const fd = new FormData(form as HTMLFormElement);
+  const container = document.getElementById('orgEntries')!;
+  const addBtn = document.getElementById('addOrgBtn')!;
+  const template = document.getElementById('orgEntryTemplate') as HTMLTemplateElement;
+  let isUpdatingFromStore = false;
 
-      const item: OrganizationExperience = {
-        role: (fd.get('role') as string) || '',
-        organization: (fd.get('organization') as string) || '',
-        startDate: (fd.get('startDate') as string) || '',
-        endDate: (fd.get('endDate') as string) || '',
-        description: (fd.get('description') as string) || '',
-      };
-
-      addToSection('organizationExperience', item);
-      (form as HTMLFormElement).reset();
+  function syncToStore() {
+    if (isUpdatingFromStore) return;
+    const entries = container.querySelectorAll('.org-entry');
+    const items: OrganizationExperience[] = [];
+    entries.forEach(entry => {
+      const get = (f: string) => (entry.querySelector(`[data-field="${f}"]`) as HTMLInputElement | HTMLTextAreaElement)?.value || '';
+      items.push({ role: get('role'), organization: get('organization'), startDate: get('startDate'), endDate: get('endDate'), description: get('description') });
     });
+    updateCVSection('organizationExperience', items);
   }
+
+  function createEntry(data?: OrganizationExperience): HTMLElement {
+    const clone = template.content.cloneNode(true) as DocumentFragment;
+    const el = clone.querySelector('.org-entry') as HTMLElement;
+    if (data) {
+      const set = (f: string, v: string) => { const i = el.querySelector(`[data-field="${f}"]`) as HTMLInputElement | HTMLTextAreaElement; if (i) i.value = v; };
+      set('role', data.role); set('organization', data.organization); set('startDate', data.startDate); set('endDate', data.endDate); set('description', data.description);
+    }
+    el.querySelector('.delete-entry-btn')!.addEventListener('click', () => { el.remove(); syncToStore(); });
+    el.querySelectorAll('.org-input').forEach(i => { i.addEventListener('input', syncToStore); i.addEventListener('change', syncToStore); });
+    return el;
+  }
+
+  function renderFromStore(data: OrganizationExperience[]) {
+    isUpdatingFromStore = true; container.innerHTML = '';
+    if (data.length === 0) container.appendChild(createEntry());
+    else data.forEach(item => container.appendChild(createEntry(item)));
+    isUpdatingFromStore = false;
+  }
+
+  renderFromStore(cvStore.get().organizationExperience);
+  addBtn.addEventListener('click', () => container.appendChild(createEntry()));
 </script>
