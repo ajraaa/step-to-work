@@ -106,22 +106,18 @@
   if (form) {
     const parseCSV = (val: string) => val.split(',').map(s => s.trim()).filter(Boolean);
 
-    // Isi form dari store saat halaman dimuat
-    cvStore.subscribe((data) => {
-      const s = data.skills;
-      const fields: (keyof Skills)[] = [
-        'programmingLanguages', 'frameworksAndLibraries', 'tools',
-        'databases', 'testing', 'others'
-      ];
-      fields.forEach(field => {
-        const input = form.querySelector(`[name="${field}"]`) as HTMLInputElement | null;
-        if (input && s[field]?.length > 0) {
-          const storeVal = s[field].join(', ');
-          if (input.value !== storeVal) {
-            input.value = storeVal;
-          }
-        }
-      });
+    const fields: (keyof Skills)[] = [
+      'programmingLanguages', 'frameworksAndLibraries', 'tools',
+      'databases', 'testing', 'others'
+    ];
+
+    // Isi form dari store HANYA saat pertama kali halaman dimuat
+    const initialData = cvStore.get().skills;
+    fields.forEach(field => {
+      const input = form.querySelector(`[name="${field}"]`) as HTMLInputElement | null;
+      if (input && initialData[field]?.length > 0) {
+        input.value = initialData[field].join(', ');
+      }
     });
 
     // Simpan ke store saat input berubah (real-time)
