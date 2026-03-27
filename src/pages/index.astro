@@ -40,6 +40,13 @@ import Layout from '../layouts/Layout.astro';
 							<!-- Font Selector -->
 							<select id="font-selector" class="text-xs border border-gray-300 rounded-md px-2 py-1 bg-white text-gray-600 focus:outline-none focus:ring-1 focus:ring-blue-400 focus:border-blue-400 cursor-pointer transition-colors hover:border-gray-400">
 							</select>
+							<!-- Export PDF Button -->
+							<button id="export-pdf-btn" class="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-md bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:from-blue-700 hover:to-indigo-700 transition-all shadow-sm cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed">
+								<svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+									<path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+								</svg>
+								<span id="export-pdf-label">Export PDF</span>
+							</button>
 							<!-- Live Indicator -->
 							<div class="flex items-center gap-1.5 text-xs text-emerald-600 font-medium">
 								<span class="relative flex h-2 w-2">
@@ -58,11 +65,12 @@ import Layout from '../layouts/Layout.astro';
 </Layout>
 
 <script>
-	import { cvStyleStore, FONT_OPTIONS, updateCVStyle } from '../stores/cvStores';
+	import { cvStyleStore, cvStore, FONT_OPTIONS, updateCVStyle } from '../stores/cvStores';
+	import html2pdf from 'html2pdf.js';
 
+	// ===== Font Selector =====
 	const select = document.getElementById('font-selector') as HTMLSelectElement;
 	if (select) {
-		// Populate options
 		FONT_OPTIONS.forEach(opt => {
 			const option = document.createElement('option');
 			option.value = opt.value;
@@ -70,18 +78,111 @@ import Layout from '../layouts/Layout.astro';
 			select.appendChild(option);
 		});
 
-		// Set initial value from store
 		select.value = cvStyleStore.get().fontFamily;
 
-		// On change → update store
 		select.addEventListener('change', () => {
 			updateCVStyle({ fontFamily: select.value });
 		});
 
-		// Sync if store changes externally
 		cvStyleStore.subscribe(style => {
 			if (select.value !== style.fontFamily) {
 				select.value = style.fontFamily;
+			}
+		});
+	}
+
+	// ===== PDF Export =====
+	const exportBtn = document.getElementById('export-pdf-btn') as HTMLButtonElement;
+	const exportLabel = document.getElementById('export-pdf-label') as HTMLSpanElement;
+
+	if (exportBtn) {
+		exportBtn.addEventListener('click', async () => {
+			const element = document.getElementById('cv-preview');
+			if (!element) return;
+
+			// Disable button and show loading state
+			exportBtn.disabled = true;
+			exportLabel.textContent = 'Generating...';
+
+			try {
+				// Get user name for filename
+				const cvData = cvStore.get();
+				const userName = cvData.personalInfo.fullName?.trim() || 'CV';
+				const safeFileName = userName.replace(/[^a-zA-Z0-9\s]/g, '').replace(/\s+/g, '_');
+
+				// Pre-compute all color styles from the ORIGINAL document (browser resolves oklch → rgb)
+				const colorProps = [
+					'color', 'backgroundColor',
+					'borderColor', 'borderTopColor', 'borderRightColor', 'borderBottomColor', 'borderLeftColor',
+					'outlineColor', 'textDecorationColor', 'boxShadow',
+				];
+				const originalElements = element.querySelectorAll('*');
+				const precomputed = new Map<number, Record<string, string>>();
+
+				originalElements.forEach((el, index) => {
+					const computed = window.getComputedStyle(el);
+					const styles: Record<string, string> = {};
+					colorProps.forEach(prop => {
+						styles[prop] = computed.getPropertyValue(
+							prop.replace(/[A-Z]/g, m => '-' + m.toLowerCase())
+						);
+					});
+					precomputed.set(index, styles);
+				});
+
+				// Also pre-compute for the root element itself
+				const rootComputed = window.getComputedStyle(element);
+				const rootStyles: Record<string, string> = {};
+				colorProps.forEach(prop => {
+					rootStyles[prop] = rootComputed.getPropertyValue(
+						prop.replace(/[A-Z]/g, m => '-' + m.toLowerCase())
+					);
+				});
+
+				const opt = {
+					margin:       0,
+					filename:     `${safeFileName}_CV.pdf`,
+					image:        { type: 'jpeg' as const, quality: 0.98 },
+					html2canvas:  {
+						scale: 2,
+						useCORS: true,
+						letterRendering: true,
+						backgroundColor: '#ffffff',
+						onclone: (clonedDoc: Document) => {
+							// Remove all stylesheets to avoid oklch parsing
+							const sheets = clonedDoc.querySelectorAll('style, link[rel="stylesheet"]');
+							sheets.forEach(s => s.remove());
+
+							// Apply pre-computed RGB colors as inline styles on the cloned CV
+							const clonedPreview = clonedDoc.getElementById('cv-preview');
+							if (!clonedPreview) return;
+
+							// Apply root styles
+							colorProps.forEach(prop => {
+								const cssProp = prop.replace(/[A-Z]/g, m => '-' + m.toLowerCase());
+								clonedPreview.style.setProperty(cssProp, rootStyles[prop]);
+							});
+
+							const clonedElements = clonedPreview.querySelectorAll('*');
+							clonedElements.forEach((el, index) => {
+								const styles = precomputed.get(index);
+								if (!styles) return;
+								colorProps.forEach(prop => {
+									const cssProp = prop.replace(/[A-Z]/g, m => '-' + m.toLowerCase());
+									(el as HTMLElement).style.setProperty(cssProp, styles[prop]);
+								});
+							});
+						},
+					},
+					jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' as const },
+				};
+
+				await html2pdf().set(opt).from(element).save();
+			} catch (err) {
+				console.error('PDF export failed:', err);
+			} finally {
+				exportBtn.disabled = false;
+				exportLabel.textContent = 'Export PDF';
 			}
 		});
 	}
