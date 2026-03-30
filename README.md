@@ -39,8 +39,8 @@ src/
   components/
     forms/       # CV section forms
     preview/     # CV preview component
-  lib/
-    store.ts     # Nanostores state management
+  stores/
+    cvStores.ts     # Nanostores state management
   pages/
     index.astro  # Main app (form + preview)
 ```
