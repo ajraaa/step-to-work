@@ -172,6 +172,26 @@ import Layout from '../layouts/Layout.astro';
 									(el as HTMLElement).style.setProperty(cssProp, styles[prop]);
 								});
 							});
+
+							// Apply custom styles ONLY for PDF export
+							const pdfHeaders = clonedPreview.querySelectorAll('h2[data-pdf-header="true"]');
+							let customCSS = '';
+							
+							if (pdfHeaders.length > 0) {
+								const htmlElement = pdfHeaders[0] as HTMLElement;
+								const currentPaddingBottom = htmlElement.style.getPropertyValue('padding-bottom') || htmlElement.style.paddingBottom || '3px';
+								const paddingValue = parseFloat(currentPaddingBottom);
+								
+								if (!isNaN(paddingValue)) {
+									customCSS = `\nh2[data-pdf-header="true"] { padding-bottom: ${paddingValue * 6}px !important; margin-bottom: 0 !important; }\n`;
+								}
+							}
+							
+							if (customCSS) {
+								const styleEl = clonedDoc.createElement('style');
+								styleEl.innerHTML = customCSS;
+								clonedDoc.head.appendChild(styleEl);
+							}
 						},
 					},
 					jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' as const },
