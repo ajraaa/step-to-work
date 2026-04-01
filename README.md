@@ -1,53 +1,47 @@
 # CV Generator
 
-An AI-powered web application to generate professional CVs/resumes with intelligent suggestions.
+AI-powered web app to create professional CVs with live preview and PDF export.
 
-## Features
+## ✨ Features
 
-- **Dynamic Forms** — Multi-entry support for all CV sections (education, work, skills, projects, etc.)
-- **Live Preview** — Real-time CV rendering as you type
-- **PDF Export** — Download high-quality PDF with accurate colors
-- **Font Customization** — Choose your preferred CV font
-- **Multi-step Navigation** — Stepper UI for smooth form flow
-- **Central State Management** — All data stored in nanostores for instant updates
+- Live preview as you type
+- Multi-entry forms for all sections
+- PDF export with accurate styling
+- Font selector
+- Responsive two-column layout
 
-## Tech Stack
+## 🛠️ Tech
 
-- **Framework:** Astro
-- **Styling:** Tailwind CSS
-- **State:** Nanostores
-- **PDF:** html2pdf.js
-- **Future:** Supabase (persistence), OpenRouter (AI features)
+- **Astro** + **Tailwind CSS**
+- **Nanostores** for state
+- **html2pdf.js** for PDF export
 
-## Development
+## 🚀 Quick Start
 
 ```bash
-# Install dependencies
 npm install
-
-# Start dev server
 npm run dev
-
-# Build for production
-npm run build
 ```
 
-## Project Structure
+Open http://localhost:4321 and start building your CV.
+
+## 📁 Structure
 
 ```
 src/
   components/
-    forms/       # CV section forms
-    preview/     # CV preview component
+    forms/     # All CV section forms
+    preview/   # Live CV preview
   stores/
-    cvStores.ts     # Nanostores state management
+    cvStores.ts   # Global state
   pages/
-    index.astro  # Main app (form + preview)
+    index.astro   # Main page
 ```
 
-## Status
+## 🎯 Status
 
-Core functionality complete. Next: template selector, Supabase integration, AI bullet improver.
+Core done: forms, preview, PDF export.  
+Next: templates, Supabase, AI features.
 
 ---
-Built with ❤️ by Azzra
+Made by Azzra
