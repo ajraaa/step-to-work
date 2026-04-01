@@ -1,88 +1,119 @@
 ---
 // src/components/preview/CVPreview.astro
-// ATS-Friendly CV Preview — clean, simple, parseable layout
+// ATS-Friendly CV Preview — multi-page A4 layout with scaling
+// #cv-preview stays visible (for PDF export). Pages overlay covers it visually.
 ---
 
-<div id="cv-preview" class="bg-white max-w-[794px] mx-auto shadow-lg border border-gray-200" style="font-family: 'Times New Roman', Georgia, serif; color: #1a1a1a; line-height: 1.4;">
-
-  <!-- ===== HEADER: Name, Title, Contact ===== -->
-  <div style="padding: 32px 40px 16px 40px; text-align: center;">
-    <h1 id="p-fullName" style="font-size: 24px; font-weight: 700; margin: 0 0 2px 0; letter-spacing: 0.5px; text-transform: uppercase;">Nama Lengkap</h1>
-    <p id="p-jobTitle" style="font-size: 14px; margin: 0 0 8px 0; color: #444;">Posisi Pekerjaan</p>
-    <div id="p-contact" style="font-size: 11px; color: #555; display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 12px;"></div>
-    <div id="p-links" style="font-size: 11px; color: #555; display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 12px; margin-top: 2px;"></div>
+<div id="cv-preview-wrapper" style="position: relative;">
+  <!-- Visual pages: scaled to fit, in normal flow -->
+  <div id="cv-preview-scaler" style="width: 100%; overflow: hidden;">
+    <div id="cv-pages-container" style="display: flex; flex-direction: column; align-items: center; gap: 24px; transform-origin: top center;"></div>
   </div>
 
-  <!-- ===== SUMMARY ===== -->
-  <div id="section-summary" style="padding: 0 40px; display: none;">
-    <h2 data-pdf-header="true" style="font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1.5px solid #1a1a1a; padding-bottom: 1px; margin: 14px 0 6px 0; display: block; width: 100%; box-sizing: border-box; line-height: 1.2;">Ringkasan Profesional</h2>
-    <p id="p-summary" style="font-size: 11.5px; margin: 0; text-align: justify;"></p>
-  </div>
+  <!-- Export source: invisible but rendered for measurement + PDF export -->
+  <div id="cv-preview" style="position: absolute; left: 0; top: 0; width: 794px; opacity: 0; pointer-events: none; font-family: 'Times New Roman', Georgia, serif; color: #1a1a1a; line-height: 1.4; background: white;">
 
-  <!-- ===== WORK EXPERIENCE ===== -->
-  <div id="section-work" style="padding: 0 40px; display: none;">
-    <h2 data-pdf-header="true" style="font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1.5px solid #1a1a1a; padding-bottom: 1px; margin: 14px 0 6px 0; display: block; width: 100%; box-sizing: border-box; line-height: 1.2;">Pengalaman Kerja</h2>
-    <div id="p-workList"></div>
-  </div>
+    <!-- ===== HEADER ===== -->
+    <div style="padding: 32px 40px 16px 40px; text-align: center;">
+      <h1 id="p-fullName" style="font-size: 24px; font-weight: 700; margin: 0 0 2px 0; letter-spacing: 0.5px; text-transform: uppercase;">Nama Lengkap</h1>
+      <p id="p-jobTitle" style="font-size: 14px; margin: 0 0 8px 0; color: #444;">Posisi Pekerjaan</p>
+      <div id="p-contact" style="font-size: 11px; color: #555; display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 12px;"></div>
+      <div id="p-links" style="font-size: 11px; color: #555; display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 12px; margin-top: 2px;"></div>
+    </div>
 
-  <!-- ===== EDUCATION ===== -->
-  <div id="section-education" style="padding: 0 40px; display: none;">
-    <h2 data-pdf-header="true" style="font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1.5px solid #1a1a1a; padding-bottom: 1px; margin: 14px 0 6px 0; display: block; width: 100%; box-sizing: border-box; line-height: 1.2;">Pendidikan</h2>
-    <div id="p-eduList"></div>
-  </div>
+    <!-- ===== SUMMARY ===== -->
+    <div id="section-summary" style="padding: 0 40px; display: none;">
+      <h2 data-pdf-header="true" style="font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1.5px solid #1a1a1a; padding-bottom: 1px; margin: 14px 0 6px 0; display: block; width: 100%; box-sizing: border-box; line-height: 1.2;">Ringkasan Profesional</h2>
+      <p id="p-summary" style="font-size: 11.5px; margin: 0; text-align: justify;"></p>
+    </div>
 
-  <!-- ===== SKILLS ===== -->
-  <div id="section-skills" style="padding: 0 40px; display: none;">
-    <h2 data-pdf-header="true" style="font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1.5px solid #1a1a1a; padding-bottom: 1px; margin: 14px 0 6px 0; display: block; width: 100%; box-sizing: border-box; line-height: 1.2;">Keahlian</h2>
-    <div id="p-skillsList" style="font-size: 11.5px;"></div>
-  </div>
+    <!-- ===== WORK EXPERIENCE ===== -->
+    <div id="section-work" style="padding: 0 40px; display: none;">
+      <h2 data-pdf-header="true" style="font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1.5px solid #1a1a1a; padding-bottom: 1px; margin: 14px 0 6px 0; display: block; width: 100%; box-sizing: border-box; line-height: 1.2;">Pengalaman Kerja</h2>
+      <div id="p-workList"></div>
+    </div>
 
-  <!-- ===== PROJECTS ===== -->
-  <div id="section-projects" style="padding: 0 40px; display: none;">
-    <h2 data-pdf-header="true" style="font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1.5px solid #1a1a1a; padding-bottom: 1px; margin: 14px 0 6px 0; display: block; width: 100%; box-sizing: border-box; line-height: 1.2;">Proyek</h2>
-    <div id="p-projectsList"></div>
-  </div>
+    <!-- ===== EDUCATION ===== -->
+    <div id="section-education" style="padding: 0 40px; display: none;">
+      <h2 data-pdf-header="true" style="font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1.5px solid #1a1a1a; padding-bottom: 1px; margin: 14px 0 6px 0; display: block; width: 100%; box-sizing: border-box; line-height: 1.2;">Pendidikan</h2>
+      <div id="p-eduList"></div>
+    </div>
 
-  <!-- ===== CERTIFICATIONS ===== -->
-  <div id="section-certs" style="padding: 0 40px; display: none;">
-    <h2 data-pdf-header="true" style="font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1.5px solid #1a1a1a; padding-bottom: 1px; margin: 14px 0 6px 0; display: block; width: 100%; box-sizing: border-box; line-height: 1.2;">Sertifikasi</h2>
-    <div id="p-certsList"></div>
-  </div>
+    <!-- ===== SKILLS ===== -->
+    <div id="section-skills" style="padding: 0 40px; display: none;">
+      <h2 data-pdf-header="true" style="font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1.5px solid #1a1a1a; padding-bottom: 1px; margin: 14px 0 6px 0; display: block; width: 100%; box-sizing: border-box; line-height: 1.2;">Keahlian</h2>
+      <div id="p-skillsList" style="font-size: 11.5px;"></div>
+    </div>
 
-  <!-- ===== ORGANIZATION EXPERIENCE ===== -->
-  <div id="section-org" style="padding: 0 40px; display: none;">
-    <h2 data-pdf-header="true" style="font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1.5px solid #1a1a1a; padding-bottom: 1px; margin: 14px 0 6px 0; display: block; width: 100%; box-sizing: border-box; line-height: 1.2;">Pengalaman Organisasi</h2>
-    <div id="p-orgList"></div>
-  </div>
+    <!-- ===== PROJECTS ===== -->
+    <div id="section-projects" style="padding: 0 40px; display: none;">
+      <h2 data-pdf-header="true" style="font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1.5px solid #1a1a1a; padding-bottom: 1px; margin: 14px 0 6px 0; display: block; width: 100%; box-sizing: border-box; line-height: 1.2;">Proyek</h2>
+      <div id="p-projectsList"></div>
+    </div>
 
-  <!-- ===== VOLUNTEER EXPERIENCE ===== -->
-  <div id="section-volunteer" style="padding: 0 40px; display: none;">
-    <h2 data-pdf-header="true" style="font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1.5px solid #1a1a1a; padding-bottom: 1px; margin: 14px 0 6px 0; display: block; width: 100%; box-sizing: border-box; line-height: 1.2;">Pengalaman Sukarelawan</h2>
-    <div id="p-volList"></div>
-  </div>
+    <!-- ===== CERTIFICATIONS ===== -->
+    <div id="section-certs" style="padding: 0 40px; display: none;">
+      <h2 data-pdf-header="true" style="font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1.5px solid #1a1a1a; padding-bottom: 1px; margin: 14px 0 6px 0; display: block; width: 100%; box-sizing: border-box; line-height: 1.2;">Sertifikasi</h2>
+      <div id="p-certsList"></div>
+    </div>
 
-  <!-- ===== LANGUAGES ===== -->
-  <div id="section-languages" style="padding: 0 40px; display: none;">
-    <h2 data-pdf-header="true" style="font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1.5px solid #1a1a1a; padding-bottom: 1px; margin: 14px 0 6px 0; display: block; width: 100%; box-sizing: border-box; line-height: 1.2;">Bahasa</h2>
-    <div id="p-langList" style="font-size: 11.5px;"></div>
-  </div>
+    <!-- ===== ORGANIZATION EXPERIENCE ===== -->
+    <div id="section-org" style="padding: 0 40px; display: none;">
+      <h2 data-pdf-header="true" style="font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1.5px solid #1a1a1a; padding-bottom: 1px; margin: 14px 0 6px 0; display: block; width: 100%; box-sizing: border-box; line-height: 1.2;">Pengalaman Organisasi</h2>
+      <div id="p-orgList"></div>
+    </div>
 
-  <!-- ===== REFERENCES ===== -->
-  <div id="section-refs" style="padding: 0 40px 32px 40px; display: none;">
-    <h2 data-pdf-header="true" style="font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1.5px solid #1a1a1a; padding-bottom: 1px; margin: 14px 0 6px 0; display: block; width: 100%; box-sizing: border-box; line-height: 1.2;">Referensi</h2>
-    <div id="p-refsList"></div>
-  </div>
+    <!-- ===== VOLUNTEER EXPERIENCE ===== -->
+    <div id="section-volunteer" style="padding: 0 40px; display: none;">
+      <h2 data-pdf-header="true" style="font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1.5px solid #1a1a1a; padding-bottom: 1px; margin: 14px 0 6px 0; display: block; width: 100%; box-sizing: border-box; line-height: 1.2;">Pengalaman Sukarelawan</h2>
+      <div id="p-volList"></div>
+    </div>
 
-  <!-- Bottom padding fallback -->
-  <div style="padding-bottom: 24px;"></div>
+    <!-- ===== LANGUAGES ===== -->
+    <div id="section-languages" style="padding: 0 40px; display: none;">
+      <h2 data-pdf-header="true" style="font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1.5px solid #1a1a1a; padding-bottom: 1px; margin: 14px 0 6px 0; display: block; width: 100%; box-sizing: border-box; line-height: 1.2;">Bahasa</h2>
+      <div id="p-langList" style="font-size: 11.5px;"></div>
+    </div>
+
+    <!-- ===== REFERENCES ===== -->
+    <div id="section-refs" style="padding: 0 40px 32px 40px; display: none;">
+      <h2 data-pdf-header="true" style="font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1.5px solid #1a1a1a; padding-bottom: 1px; margin: 14px 0 6px 0; display: block; width: 100%; box-sizing: border-box; line-height: 1.2;">Referensi</h2>
+      <div id="p-refsList"></div>
+    </div>
+
+    <div style="padding-bottom: 24px;"></div>
+  </div>
 </div>
+
+<style is:global>
+  .cv-page {
+    width: 794px;
+    height: 1123px;
+    background: white;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12), 0 1px 4px rgba(0, 0, 0, 0.08);
+    border: 1px solid #e5e7eb;
+    overflow: hidden;
+    position: relative;
+    box-sizing: border-box;
+  }
+
+  .cv-page-number {
+    position: absolute;
+    bottom: 12px;
+    right: 20px;
+    font-size: 10px;
+    color: #999;
+    font-family: 'Times New Roman', Georgia, serif;
+  }
+</style>
 
 <script>
   import { cvStore } from '../../stores/cvStores';
   import { cvStyleStore } from '../../stores/cvStores';
   import type { CVData } from '../../stores/cvStores';
 
-  // Helper: format "2024-06" → "Jun 2024"
+  const PAGE_HEIGHT = 1123;
+
   function fmtDate(d: string | null | undefined): string {
     if (!d) return 'Sekarang';
     const [y, m] = d.split('-');
@@ -90,22 +121,72 @@
     return `${months[parseInt(m, 10) - 1]} ${y}`;
   }
 
-  // Helper: toggle section visibility
   function showSection(id: string, visible: boolean) {
     const el = document.getElementById(id);
     if (el) el.style.display = visible ? 'block' : 'none';
   }
 
+  /** Create visual page slices from #cv-preview */
+  function paginate() {
+    const preview = document.getElementById('cv-preview');
+    const container = document.getElementById('cv-pages-container');
+    const wrapper = document.getElementById('cv-preview-wrapper');
+    if (!preview || !container || !wrapper) return;
+
+    const currentFont = cvStyleStore.get().fontFamily;
+    const totalHeight = preview.scrollHeight;
+    const numPages = Math.max(1, Math.ceil(totalHeight / PAGE_HEIGHT));
+
+    container.innerHTML = '';
+
+    for (let i = 0; i < numPages; i++) {
+      const page = document.createElement('div');
+      page.className = 'cv-page';
+
+      // Clone the full content and offset to show the right page slice
+      const contentClone = preview.cloneNode(true) as HTMLElement;
+      contentClone.style.position = 'static';
+      contentClone.style.zIndex = 'auto';
+      contentClone.style.opacity = '1';
+      contentClone.style.pointerEvents = 'auto';
+      contentClone.style.marginTop = `-${i * PAGE_HEIGHT}px`;
+      contentClone.style.fontFamily = currentFont;
+      contentClone.removeAttribute('id');
+      contentClone.querySelectorAll('[id]').forEach(el => el.removeAttribute('id'));
+
+      page.appendChild(contentClone);
+
+      if (numPages > 1) {
+        const pageNum = document.createElement('div');
+        pageNum.className = 'cv-page-number';
+        pageNum.textContent = `${i + 1} / ${numPages}`;
+        page.appendChild(pageNum);
+      }
+
+      container.appendChild(page);
+    }
+
+    // Scale to fit available width
+    const availW = wrapper.clientWidth;
+    const scale = Math.min(1, availW / 794);
+    container.style.transform = `scale(${scale})`;
+
+    // Set scaler height to the visual pages height
+    const scaler = document.getElementById('cv-preview-scaler');
+    if (scaler) {
+      const totalPagesHeight = numPages * PAGE_HEIGHT + (numPages - 1) * 24;
+      scaler.style.height = `${totalPagesHeight * scale}px`;
+    }
+  }
+
   function render(data: CVData) {
     const p = data.personalInfo;
 
-    // --- Header ---
     const nameEl = document.getElementById('p-fullName');
     const titleEl = document.getElementById('p-jobTitle');
     if (nameEl) nameEl.textContent = p.fullName || 'Nama Lengkap';
     if (titleEl) titleEl.textContent = p.jobTitle || 'Posisi Pekerjaan';
 
-    // Contact line
     const contactEl = document.getElementById('p-contact');
     if (contactEl) {
       const parts: string[] = [];
@@ -115,7 +196,6 @@
       contactEl.innerHTML = parts.map(t => `<span>${t}</span>`).join('<span style="color:#999">|</span>');
     }
 
-    // Links line
     const linksEl = document.getElementById('p-links');
     if (linksEl) {
       const links: string[] = [];
@@ -125,12 +205,10 @@
       linksEl.innerHTML = links.map(u => `<a href="${u}" style="color:#2563eb; text-decoration:none;">${u}</a>`).join('<span style="color:#999">|</span>');
     }
 
-    // --- Summary ---
     const summaryEl = document.getElementById('p-summary');
     if (summaryEl) summaryEl.textContent = p.summary;
     showSection('section-summary', !!p.summary);
 
-    // --- Work Experience ---
     const workList = document.getElementById('p-workList');
     if (workList) {
       workList.innerHTML = data.workExperience.map(w => `
@@ -146,7 +224,6 @@
     }
     showSection('section-work', data.workExperience.length > 0);
 
-    // --- Education ---
     const eduList = document.getElementById('p-eduList');
     if (eduList) {
       eduList.innerHTML = data.education.map(e => `
@@ -163,7 +240,6 @@
     }
     showSection('section-education', data.education.length > 0);
 
-    // --- Skills ---
     const skillsList = document.getElementById('p-skillsList');
     const s = data.skills;
     const hasSkills = Object.values(s).some(arr => arr.length > 0);
@@ -187,7 +263,6 @@
     }
     showSection('section-skills', hasSkills);
 
-    // --- Projects ---
     const projectsList = document.getElementById('p-projectsList');
     if (projectsList) {
       projectsList.innerHTML = data.projects.map(proj => `
@@ -204,7 +279,6 @@
     }
     showSection('section-projects', data.projects.length > 0);
 
-    // --- Certifications ---
     const certsList = document.getElementById('p-certsList');
     if (certsList) {
       certsList.innerHTML = data.certifications.map(c => `
@@ -219,7 +293,6 @@
     }
     showSection('section-certs', data.certifications.length > 0);
 
-    // --- Organization Experience ---
     const orgList = document.getElementById('p-orgList');
     if (orgList) {
       orgList.innerHTML = data.organizationExperience.map(o => `
@@ -235,7 +308,6 @@
     }
     showSection('section-org', data.organizationExperience.length > 0);
 
-    // --- Volunteer Experience ---
     const volList = document.getElementById('p-volList');
     if (volList) {
       volList.innerHTML = data.volunteerExperience.map(v => `
@@ -251,7 +323,6 @@
     }
     showSection('section-volunteer', data.volunteerExperience.length > 0);
 
-    // --- Languages ---
     const langList = document.getElementById('p-langList');
     if (langList) {
       langList.innerHTML = data.languages.map(l =>
@@ -260,7 +331,6 @@
     }
     showSection('section-languages', data.languages.length > 0);
 
-    // --- References ---
     const refsList = document.getElementById('p-refsList');
     if (refsList) {
       refsList.innerHTML = data.references.map(r => `
@@ -271,16 +341,32 @@
       `).join('');
     }
     showSection('section-refs', data.references.length > 0);
+
+    requestAnimationFrame(() => paginate());
   }
 
-  // Subscribe and render on every change
   cvStore.subscribe(render);
 
-  // Subscribe to style changes (font, etc.)
   cvStyleStore.subscribe(style => {
     const preview = document.getElementById('cv-preview');
     if (preview) {
       preview.style.fontFamily = style.fontFamily;
     }
+    requestAnimationFrame(() => paginate());
   });
+
+  // Recalculate scale on resize
+  const resizeObserver = new ResizeObserver(() => {
+    const container = document.getElementById('cv-pages-container');
+    const scaler = document.getElementById('cv-preview-scaler');
+    if (!container || !scaler) return;
+    const availW = scaler.clientWidth;
+    const scale = Math.min(1, availW / 794);
+    container.style.transform = `scale(${scale})`;
+    const numPages = container.children.length || 1;
+    const totalPagesHeight = numPages * PAGE_HEIGHT + (numPages - 1) * 24;
+    scaler.style.height = `${totalPagesHeight * scale}px`;
+  });
+  const scalerEl = document.getElementById('cv-preview-scaler');
+  if (scalerEl) resizeObserver.observe(scalerEl);
 </script>

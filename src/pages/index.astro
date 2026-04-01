@@ -33,7 +33,7 @@ import Layout from '../layouts/Layout.astro';
 
 			<!-- Right: Preview Panel -->
 			<section>
-				<div class="lg:sticky lg:top-24">
+				<div>
 					<div class="mb-5 flex items-center justify-between">
 						<h2 class="text-xs font-semibold text-gray-400 uppercase tracking-widest">Preview</h2>
 						<div class="flex items-center gap-3">
@@ -157,6 +157,9 @@ import Layout from '../layouts/Layout.astro';
 							const clonedPreview = clonedDoc.getElementById('cv-preview');
 							if (!clonedPreview) return;
 
+							// Make clone visible (original has opacity:0)
+							clonedPreview.style.opacity = '1';
+
 							// Apply root styles
 							colorProps.forEach(prop => {
 								const cssProp = prop.replace(/[A-Z]/g, m => '-' + m.toLowerCase());
@@ -176,17 +179,17 @@ import Layout from '../layouts/Layout.astro';
 							// Apply custom styles ONLY for PDF export
 							const pdfHeaders = clonedPreview.querySelectorAll('h2[data-pdf-header="true"]');
 							let customCSS = '';
-							
+
 							if (pdfHeaders.length > 0) {
 								const htmlElement = pdfHeaders[0] as HTMLElement;
 								const currentPaddingBottom = htmlElement.style.getPropertyValue('padding-bottom') || htmlElement.style.paddingBottom || '3px';
 								const paddingValue = parseFloat(currentPaddingBottom);
-								
+
 								if (!isNaN(paddingValue)) {
 									customCSS = `\nh2[data-pdf-header="true"] { padding-bottom: ${paddingValue * 6}px !important; margin-bottom: 0 !important; }\n`;
 								}
 							}
-							
+
 							if (customCSS) {
 								const styleEl = clonedDoc.createElement('style');
 								styleEl.innerHTML = customCSS;
