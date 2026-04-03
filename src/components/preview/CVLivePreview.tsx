@@ -124,7 +124,7 @@ const CVLivePreview: React.FC = () => {
                 <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
               </svg>
             )}
-            <span>Export PDF</span>
+            <span>Download CV</span>
           </button>
           
           <div className={`flex items-center gap-1.5 text-xs font-medium ${instance.loading ? 'text-blue-500' : 'text-emerald-600'}`}>
