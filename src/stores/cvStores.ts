@@ -207,12 +207,7 @@ export type CVStyle = {
 
 export const FONT_OPTIONS: { label: string; value: string }[] = [
   { label: 'Times New Roman', value: "'Times New Roman', Georgia, serif" },
-  { label: 'Arial', value: "Arial, Helvetica, sans-serif" },
   { label: 'Helvetica', value: "Helvetica, Arial, sans-serif" },
-  { label: 'Calibri', value: "Calibri, 'Segoe UI', sans-serif" },
-  { label: 'Georgia', value: "Georgia, 'Times New Roman', serif" },
-  { label: 'Garamond', value: "Garamond, 'Times New Roman', serif" },
-  { label: 'Cambria', value: "Cambria, Georgia, serif" },
 ];
 
 const defaultCVStyle: CVStyle = {
