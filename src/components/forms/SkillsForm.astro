@@ -6,123 +6,179 @@
   <div class="flex justify-between items-center mb-6">
     <h2 class="text-xl font-semibold text-gray-800">Keahlian (Skills)</h2>
   </div>
+
+  <div class="mb-5">
+    <label for="presetPicker" class="block text-sm font-medium text-gray-700 mb-2">Preset Kategori Keahlian</label>
+    <select id="presetPicker" class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none cursor-pointer transition-all">
+      <option value="">-- Pilih Preset Kategori --</option>
+      <option value="IT">IT & Software Development</option>
+      <option value="Creative">Creative & Design</option>
+      <option value="Admin">Administrasi & Bisnis</option>
+    </select>
+    <p class="text-xs text-gray-500 mt-1.5 ml-1">Memilih preset akan mengganti daftar kategori di bawah.</p>
+  </div>
   
-  <form id="skillsForm" class="space-y-5">
-    <p class="text-sm text-gray-500 mb-4 bg-blue-50 p-3 rounded-lg border border-blue-100 text-blue-700">
-      Pisahkan setiap skill dengan koma (,). Biarkan kosong jika tidak ada.
+  <form id="skillsForm" class="space-y-4">
+    <p class="text-sm text-gray-500 mb-4 bg-blue-50 p-3 rounded-lg border border-blue-100 text-blue-700 leading-relaxed">
+      Ketik judul kategori yang diinginkan, kemudian pisahkan setiap skill dengan koma (,). Biarkan kosong jika tidak relevan.
     </p>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-      <!-- Programming Languages -->
-      <div class="space-y-1.5 cursor-pointer">
-        <label for="programmingLanguages" class="block text-sm font-medium text-gray-700 cursor-pointer">Bahasa Pemrograman</label>
-        <input 
-          type="text" 
-          id="programmingLanguages" 
-          name="programmingLanguages" 
-          placeholder="JavaScript, TypeScript, HTML, CSS" 
-          class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none" 
-        />
-      </div>
-
-      <!-- Frameworks And Libraries -->
-      <div class="space-y-1.5 cursor-pointer">
-        <label for="frameworksAndLibraries" class="block text-sm font-medium text-gray-700 cursor-pointer">Framework & Library</label>
-        <input 
-          type="text" 
-          id="frameworksAndLibraries" 
-          name="frameworksAndLibraries" 
-          placeholder="React, Next.js, Tailwind CSS" 
-          class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none" 
-        />
-      </div>
-
-      <!-- Tools -->
-      <div class="space-y-1.5 cursor-pointer">
-        <label for="tools" class="block text-sm font-medium text-gray-700 cursor-pointer">Tools (Alat)</label>
-        <input 
-          type="text" 
-          id="tools" 
-          name="tools" 
-          placeholder="Git, VS Code, Figma, Docker" 
-          class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none" 
-        />
-      </div>
-
-      <!-- Databases -->
-      <div class="space-y-1.5 cursor-pointer">
-        <label for="databases" class="block text-sm font-medium text-gray-700 cursor-pointer">Database</label>
-        <input 
-          type="text" 
-          id="databases" 
-          name="databases" 
-          placeholder="PostgreSQL, MongoDB, Firebase" 
-          class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none" 
-        />
-      </div>
-
-      <!-- Testing -->
-      <div class="space-y-1.5 cursor-pointer">
-        <label for="testing" class="block text-sm font-medium text-gray-700 cursor-pointer">Testing</label>
-        <input 
-          type="text" 
-          id="testing" 
-          name="testing" 
-          placeholder="Jest, React Testing Library, Cypress" 
-          class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none" 
-        />
-      </div>
-
-      <!-- Others -->
-      <div class="space-y-1.5 cursor-pointer">
-        <label for="others" class="block text-sm font-medium text-gray-700 cursor-pointer">Lainnya</label>
-        <input 
-          type="text" 
-          id="others" 
-          name="others" 
-          placeholder="REST API, GraphQL, CI/CD, Agile/Scrum" 
-          class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none" 
-        />
-      </div>
+    <!-- Tempat render dynamic inputs -->
+    <div id="skillsContainer" class="grid grid-cols-1 md:grid-cols-2 gap-4">
     </div>
 
-
+    <!-- Tombol Tambah Kategori -->
+    <div class="pt-2">
+      <button 
+        type="button" 
+        id="addSkillCatBtn"
+        class="w-full border-2 border-dashed border-gray-300 text-gray-500 font-medium px-4 py-3 rounded-lg hover:border-blue-400 hover:text-blue-600 focus:outline-none focus:ring-4 focus:ring-blue-500/20 transition-all active:scale-[0.99] cursor-pointer"
+      >
+        + Tambah Kategori Keahlian
+      </button>
+    </div>
   </form>
 </div>
 
+<template id="skillCatTemplate">
+  <div class="skill-cat-entry space-y-2 relative group border border-gray-200 p-4 rounded-xl bg-white shadow-sm hover:border-blue-300 transition-colors">
+    <button 
+      type="button" 
+      class="delete-cat-btn absolute top-3 right-3 text-gray-400 hover:text-red-500 transition-colors cursor-pointer"
+      title="Hapus kategori ini"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    </button>
+    <div class="pr-6">
+      <input 
+        type="text" 
+        data-field="category" 
+        placeholder="Nama Kategori (ex: Bahasa Pemrograman)" 
+        class="skill-input font-semibold text-sm text-gray-800 bg-transparent border-b border-dashed border-gray-300 w-full focus:border-blue-500 focus:outline-none mb-1.5 pb-1 placeholder-gray-400"
+      />
+    </div>
+    <input 
+      type="text" 
+      data-field="items" 
+      placeholder="Contoh: JavaScript, HTML, CSS" 
+      class="skill-input w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none text-sm" 
+    />
+  </div>
+</template>
+
 <script>
   import { cvStore, updateSkills } from '../../stores/cvStores';
-  import type { Skills } from '../../stores/cvStores';
+  import type { SkillCategory } from '../../stores/cvStores';
 
-  const form = document.getElementById('skillsForm');
-  if (form) {
-    const parseCSV = (val: string) => val.split(',').map(s => s.trim()).filter(Boolean);
+  const container = document.getElementById('skillsContainer')!;
+  const addBtn = document.getElementById('addSkillCatBtn')!;
+  const template = document.getElementById('skillCatTemplate') as HTMLTemplateElement;
+  const presetPicker = document.getElementById('presetPicker') as HTMLSelectElement;
 
-    const fields: (keyof Skills)[] = [
-      'programmingLanguages', 'frameworksAndLibraries', 'tools',
-      'databases', 'testing', 'others'
-    ];
+  const presets: Record<string, SkillCategory[]> = {
+    'IT': [
+      { id: '1', category: 'Bahasa Pemrograman', items: [] },
+      { id: '2', category: 'Framework & Library', items: [] },
+      { id: '3', category: 'Tools', items: [] },
+      { id: '4', category: 'Database', items: [] },
+      { id: '5', category: 'Testing', items: [] },
+      { id: '6', category: 'Lainnya', items: [] }
+    ],
+    'Creative': [
+      { id: '1', category: 'Software Design', items: [] },
+      { id: '2', category: 'Keahlian Artistik', items: [] },
+      { id: '3', category: 'Fotografi / Videografi', items: [] },
+      { id: '4', category: 'Tools', items: [] },
+      { id: '5', category: 'Lainnya', items: [] }
+    ],
+    'Admin': [
+      { id: '1', category: 'Aplikasi Perkantoran', items: [] },
+      { id: '2', category: 'Administrasi Data', items: [] },
+      { id: '3', category: 'Komunikasi', items: [] },
+      { id: '4', category: 'Lainnya', items: [] }
+    ]
+  };
 
-    // Isi form dari store HANYA saat pertama kali halaman dimuat
-    const initialData = cvStore.get().skills;
-    fields.forEach(field => {
-      const input = form.querySelector(`[name="${field}"]`) as HTMLInputElement | null;
-      if (input && initialData[field]?.length > 0) {
-        input.value = initialData[field].join(', ');
-      }
-    });
+  let isUpdatingFromStore = false;
 
-    // Simpan ke store saat input berubah (real-time)
-    const inputs = form.querySelectorAll<HTMLInputElement>('input');
-    inputs.forEach(input => {
-      input.addEventListener('input', () => {
-        updateSkills({
-          [input.name]: parseCSV(input.value)
-        });
+  const parseCSV = (val: string) => val.split(',').map(s => s.trim()).filter(Boolean);
+
+  function syncToStore() {
+    if (isUpdatingFromStore) return;
+
+    const entries = container.querySelectorAll('.skill-cat-entry');
+    const items: SkillCategory[] = [];
+
+    entries.forEach((entry, i) => {
+      const catInput = entry.querySelector('[data-field="category"]') as HTMLInputElement;
+      const itemsInput = entry.querySelector('[data-field="items"]') as HTMLInputElement;
+      
+      items.push({
+        id: String(i + 1),
+        category: catInput.value || 'Kategori Baru',
+        items: parseCSV(itemsInput.value)
       });
     });
 
-
-    form.addEventListener('submit', (e) => e.preventDefault());
+    updateSkills(items);
   }
+
+  function createEntry(data?: SkillCategory): HTMLElement {
+    const clone = template.content.cloneNode(true) as DocumentFragment;
+    const entryEl = clone.querySelector('.skill-cat-entry') as HTMLElement;
+
+    if (data) {
+      const catInput = entryEl.querySelector('[data-field="category"]') as HTMLInputElement;
+      const itemsInput = entryEl.querySelector('[data-field="items"]') as HTMLInputElement;
+      
+      catInput.value = data.category;
+      itemsInput.value = data.items.join(', ');
+    }
+
+    entryEl.querySelector('.delete-cat-btn')!.addEventListener('click', () => {
+      entryEl.remove();
+      syncToStore();
+    });
+
+    entryEl.querySelectorAll('.skill-input').forEach(input => {
+      input.addEventListener('input', syncToStore);
+    });
+
+    return entryEl;
+  }
+
+  function renderFromStore(data: SkillCategory[]) {
+    isUpdatingFromStore = true;
+    container.innerHTML = '';
+
+    if (data.length === 0) {
+      container.appendChild(createEntry({ id: '1', category: '', items: [] }));
+    } else {
+      data.forEach(item => {
+        container.appendChild(createEntry(item));
+      });
+    }
+    isUpdatingFromStore = false;
+  }
+
+  // Init from store
+  const initialData = cvStore.get().skills;
+  renderFromStore(initialData);
+
+  // Add button click
+  addBtn.addEventListener('click', () => {
+    container.appendChild(createEntry({ id: Date.now().toString(), category: '', items: [] }));
+    syncToStore();
+  });
+
+  // Preset picker logic
+  presetPicker.addEventListener('change', (e) => {
+    const preset = (e.target as HTMLSelectElement).value;
+    if (presets[preset]) {
+      renderFromStore(presets[preset]);
+      syncToStore();
+    }
+  });
 </script>

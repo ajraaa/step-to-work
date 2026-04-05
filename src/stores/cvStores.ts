@@ -33,13 +33,10 @@ export type Education = {
   relevantCoursework: string[];
 };
 
-export type Skills = {
-  programmingLanguages: string[];
-  frameworksAndLibraries: string[];
-  tools: string[];
-  databases: string[];
-  testing: string[];
-  others: string[];
+export type SkillCategory = {
+  id: string;
+  category: string;
+  items: string[];
 };
 
 export type Certification = {
@@ -92,7 +89,7 @@ export type CVData = {
   personalInfo: PersonalInfo;
   workExperience: WorkExperience[];
   education: Education[];
-  skills: Skills;
+  skills: SkillCategory[];
   certifications: Certification[];
   projects: Project[];
   languages: Language[];
@@ -115,14 +112,14 @@ const defaultCVData: CVData = {
   },
   workExperience: [],
   education: [],
-  skills: {
-    programmingLanguages: [],
-    frameworksAndLibraries: [],
-    tools: [],
-    databases: [],
-    testing: [],
-    others: [],
-  },
+  skills: [
+    { id: '1', category: 'Bahasa Pemrograman', items: [] },
+    { id: '2', category: 'Framework & Library', items: [] },
+    { id: '3', category: 'Tools', items: [] },
+    { id: '4', category: 'Database', items: [] },
+    { id: '5', category: 'Testing', items: [] },
+    { id: '6', category: 'Lainnya', items: [] }
+  ],
   certifications: [],
   projects: [],
   languages: [],
@@ -137,7 +134,39 @@ export const cvStore = persistentAtom<CVData>(
   defaultCVData,
   {
     encode: JSON.stringify,
-    decode: JSON.parse,
+    decode: (val) => {
+      const p = JSON.parse(val);
+      if (p && p.skills && !Array.isArray(p.skills)) {
+        // Migrate old object skills to array
+        const oldSkills = p.skills;
+        const mapped = [];
+        const labels: Record<string, string> = {
+          programmingLanguages: 'Bahasa Pemrograman',
+          frameworksAndLibraries: 'Framework & Library',
+          tools: 'Tools',
+          databases: 'Database',
+          testing: 'Testing',
+          others: 'Lainnya',
+        };
+        let idCounter = 1;
+        for (const key in labels) {
+          if (oldSkills[key] && oldSkills[key].length > 0) {
+            mapped.push({
+              id: String(idCounter++),
+              category: labels[key],
+              items: oldSkills[key]
+            });
+          }
+        }
+        if (mapped.length === 0) {
+          mapped.push({ id: '1', category: 'Bahasa Pemrograman', items: [] });
+          mapped.push({ id: '2', category: 'Framework & Library', items: [] });
+          mapped.push({ id: '3', category: 'Tools', items: [] });
+        }
+        p.skills = mapped;
+      }
+      return p;
+    },
   }
 );
 
@@ -191,12 +220,12 @@ export function removeFromSection<K extends ArraySections>(
   });
 }
 
-// Helper untuk mengupdate skills (karena skills bukan array, melainkan objek)
-export function updateSkills(data: Partial<Skills>) {
+// Helper untuk mengupdate seluruh array skills
+export function updateSkills(data: SkillCategory[]) {
   const current = cvStore.get();
   cvStore.set({
     ...current,
-    skills: { ...current.skills, ...data }
+    skills: data
   });
 }
 

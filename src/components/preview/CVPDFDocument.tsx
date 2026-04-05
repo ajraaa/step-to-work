@@ -154,16 +154,9 @@ const CVPDFDocument: React.FC<Props> = ({ data, fontFamilyCSS }) => {
   if (p.github) links.push(p.github);
   if (p.portfolio) links.push(p.portfolio);
 
-  const skillLabels: Record<string, string> = {
-    programmingLanguages: 'Bahasa Pemrograman',
-    frameworksAndLibraries: 'Framework & Library',
-    tools: 'Tools',
-    databases: 'Database',
-    testing: 'Testing',
-    others: 'Lainnya',
-  };
 
-  const hasSkills = Object.values(data.skills).some(arr => arr.length > 0);
+
+  const hasSkills = data.skills.some(cat => cat.items.length > 0);
 
   return (
     <Document title={`${p.fullName || 'CV'} - Resume`}>
@@ -266,16 +259,15 @@ const CVPDFDocument: React.FC<Props> = ({ data, fontFamilyCSS }) => {
         {hasSkills && (
           <View wrap={false} style={styles.section}>
             <Text style={styles.sectionHeader}>Keahlian</Text>
-            {Object.entries(skillLabels).map(([key, label]) => {
-              const arr = data.skills[key as keyof typeof data.skills];
-              if (arr.length > 0) {
+            {data.skills.map(cat => {
+              if (cat.items.length > 0) {
                 return (
-                  <View key={key} style={{ flexDirection: 'row', marginBottom: 0 }}>
+                  <View key={cat.id} style={{ flexDirection: 'row', marginBottom: 0 }}>
                     <Text style={{ fontFamily: baseFont === 'Helvetica' ? 'Helvetica-Bold' : 'Times-Bold', fontSize: 9, lineHeight: 1.5 }}>
-                      {label}: 
+                      {cat.category}: 
                     </Text>
                     <Text style={{ fontSize: 9, marginLeft: 4, lineHeight: 1.5 }}>
-                      {arr.join(', ')}
+                      {cat.items.join(', ')}
                     </Text>
                   </View>
                 );
