@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { useStore } from '@nanostores/react';
 import { usePDF } from '@react-pdf/renderer';
 import CVPDFDocument from './CVPDFDocument';
-import { cvStore, cvStyleStore, FONT_OPTIONS, updateCVStyle } from '../../stores/cvStores';
-import type { CVData, CVStyle } from '../../stores/cvStores';
+import { cvStore } from '../../stores/cvStores';
+import type { CVData } from '../../stores/cvStores';
+import { cvStyleStore, FONT_OPTIONS, updateCVStyle } from '../../stores/cvStyleStores';
+import type { CVStyle } from '../../stores/cvStyleStores';
 
 // Setup react-pdf for rendering the PDF in the DOM
 import { Document as PDFDocument, Page as PDFPage, pdfjs } from 'react-pdf';
