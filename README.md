@@ -46,33 +46,54 @@ Open http://localhost:4321 (dev) or http://localhost:4322 (preview)
 ```
 src/
   components/
+    containers/      # Layout/composed components (FormContainer)
     forms/           # CV section form components
-    preview/         # React PDF preview component
+      PersonalInfoForm.astro
+      WorkExperienceForm.astro
+      EducationForm.astro
+      SkillsForm.astro
+      ProjectsForm.astro
+      CertificationsForm.astro
+      LanguagesForm.astro
+      ReferencesForm.astro
+      OrganizationExperienceForm.astro
+      VolunteerExperienceForm.astro
+    preview/         # React PDF preview components
+      CVLivePreview.tsx
+      CVPDFDocument.tsx
+    ui/              # Reusable UI primitives
+      Stepper.astro
   stores/
-    cvStores.ts      # Nanostores state (CV data + styling)
+    cvStores.ts      # Central nanostores (CV data + style state)
   pages/
-    index.astro      # Main app (form + preview layout)
+    index.astro      # Main app (two-column layout)
 public/              # Static assets
 ```
 
 ## 🔧 Development Notes
 
-- **State:** CV data is stored in a central nanostores store for reactive updates.
-- **Preview:** Uses `@react-pdf/renderer` components (`Document`, `Page`, `View`, `Text`) for accurate PDF layout.
-- **Styling:** Tailwind CSS for UI; react-pdf styles for PDF output.
-- **PDF Export:** Calls `pdf(<CVPreview />).toBlob()` and triggers browser download.
-- **Fonts:** Font selector updates store; preview applies via inline style.
+- **State Management:** CV data and styling state are centralized in `src/stores/cvStores.ts` using Nanostores for reactivity.
+- **Component Architecture:**
+  - `containers/`: Composed components that orchestrate multiple parts (e.g., `FormContainer` manages stepper + form panels).
+  - `forms/`: Individual CV section forms (10 sections) with multi-entry support.
+  - `preview/`: React components using `@react-pdf/renderer` for live preview and PDF generation.
+  - `ui/`: Reusable UI primitives like `Stepper`.
+- **Styling:** Tailwind CSS for the UI; `@react-pdf/renderer` style objects for PDF output.
+- **PDF Export:** Uses `pdf(<CVLivePreview />).toBlob()` to generate PDF with proper page breaks.
+- **Fonts:** Font selection stored in nanostores and applied inline to react-pdf components.
 
 ## 🎯 Current Status
 
 ✅ **Done:**
-- All form sections with multi-entry support
-- Live preview with react-pdf
-- Multi-page detection & handling
-- PDF export with proper page breaks
-- Font customization
-- Astro v6.1.1 upgrade
-- State management refactored
+- All form sections (10) with dynamic multi-entry and real-time store sync
+- Live preview using react-pdf (WYSIWYG)
+- Multi-page A4 support with accurate pagination
+- PDF export with proper scaling and layout
+- Font customization (persisted)
+- Multi-step navigation (Stepper)
+- Style state separated into `cvStyleStores` module
+- Components restructured: `containers/`, `forms/`, `preview/`, `ui/`
+- Astro v6.1.1 + React integration
 
 ⏳ **In Progress / TODO:**
 - Template selector UI (Modern/Classic/Minimal)
