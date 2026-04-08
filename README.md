@@ -94,6 +94,7 @@ public/              # Static assets
 - Style state separated into `cvStyleStores` module
 - Components restructured: `containers/`, `forms/`, `preview/`, `ui/`
 - Astro v6.1.1 + React integration
+- Skills form: dynamic category management with presets
 
 ⏳ **In Progress / TODO:**
 - Template selector UI (Modern/Classic/Minimal)
@@ -103,6 +104,7 @@ public/              # Static assets
 - Tests for store and preview
 - Landing page
 - Dark mode
+- Full CV customization (padding, margin, etc)
 
 ## 🤝 Contributing
 
