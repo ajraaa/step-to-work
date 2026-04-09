@@ -15,7 +15,7 @@ AI-powered web app to create professional CVs with live preview and PDF export.
 
 ## 🛠️ Tech Stack
 
-- **Framework:** Astro 6.1.1
+- **Framework:** Astro
 - **UI Components:** React (via `@astrojs/react`)
 - **PDF Generation:** `@react-pdf/renderer`
 - **Styling:** Tailwind CSS
