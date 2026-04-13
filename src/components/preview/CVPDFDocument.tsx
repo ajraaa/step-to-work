@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Document, Page, Text, View, StyleSheet, Link } from '@react-pdf/renderer';
 import type { CVData } from '../../stores/cvStores';
 
@@ -26,7 +26,9 @@ const CVPDFDocument: React.FC<Props> = ({ data, fontFamilyCSS }) => {
   const p = data.personalInfo;
   const baseFont = getBaseFont(fontFamilyCSS);
 
-  const styles = StyleSheet.create({
+  // Memoize styles per baseFont — StyleSheet.create() hanya dipanggil saat font berubah,
+  // bukan setiap render (yang menjadi penyebab utama flicker/re-render cascade)
+  const styles = useMemo(() => StyleSheet.create({
     page: {
       paddingTop: 32,
       paddingBottom: 32,
@@ -142,7 +144,7 @@ const CVPDFDocument: React.FC<Props> = ({ data, fontFamilyCSS }) => {
       color: '#444444',
       lineHeight: 1.2,
     },
-  });
+  }), [baseFont]);
 
   const contacts = [];
   if (p.email) contacts.push(p.email);

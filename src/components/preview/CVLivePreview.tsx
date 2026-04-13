@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import { useStore } from '@nanostores/react';
 import { usePDF } from '@react-pdf/renderer';
 import CVPDFDocument from './CVPDFDocument';
@@ -7,23 +7,17 @@ import type { CVData } from '../../stores/cvStores';
 import { cvStyleStore, FONT_OPTIONS, updateCVStyle } from '../../stores/cvStyleStores';
 import type { CVStyle } from '../../stores/cvStyleStores';
 
-// Setup react-pdf for rendering the PDF in the DOM
 import { Document as PDFDocument, Page as PDFPage, pdfjs } from 'react-pdf';
 import 'react-pdf/dist/Page/AnnotationLayer.css';
 import 'react-pdf/dist/Page/TextLayer.css';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
 
-// Inline simple debounce hook
 function useDebounce<T>(value: T, delay: number): T {
   const [debouncedValue, setDebouncedValue] = useState<T>(value);
   useEffect(() => {
-    const handler = setTimeout(() => {
-      setDebouncedValue(value);
-    }, delay);
-    return () => {
-      clearTimeout(handler);
-    };
+    const handler = setTimeout(() => setDebouncedValue(value), delay);
+    return () => clearTimeout(handler);
   }, [value, delay]);
   return debouncedValue;
 }
@@ -32,64 +26,70 @@ const CVLivePreview: React.FC = () => {
   const rawData = useStore(cvStore);
   const rawStyle = useStore(cvStyleStore);
 
-  const debouncedData = useDebounce<CVData>(rawData, 500);
-  const debouncedStyle = useDebounce<CVStyle>(rawStyle, 500);
+  const debouncedData = useDebounce<CVData>(rawData, 600);
+  const debouncedStyle = useDebounce<CVStyle>(rawStyle, 600);
 
-  const doc = <CVPDFDocument data={debouncedData} fontFamilyCSS={debouncedStyle.fontFamily} />;
+  const doc = useMemo(
+    () => <CVPDFDocument data={debouncedData} fontFamilyCSS={debouncedStyle.fontFamily} />,
+    [debouncedData, debouncedStyle]
+  );
+
   const [instance, updateInstance] = usePDF({ document: doc });
 
+  const isMounted = useRef(false);
   useEffect(() => {
+    if (!isMounted.current) { isMounted.current = true; return; }
     updateInstance(doc);
-  }, [debouncedData, debouncedStyle]);
+  }, [doc]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // displayUrl hanya diupdate saat PDF selesai generate — tidak pernah null setelah pertama kali
+  const [displayUrl, setDisplayUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (instance.url && !instance.loading) {
+      setDisplayUrl(instance.url);
+    }
+  }, [instance.url, instance.loading]);
+
+  // Responsive width — throttled
+  const [containerWidth, setContainerWidth] = useState<number | undefined>();
+  const containerRef = useRef<HTMLDivElement>(null);
+  const resizeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    const observer = new ResizeObserver((entries) => {
+      if (!entries[0] || entries[0].contentRect.width <= 0) return;
+      if (resizeTimer.current) clearTimeout(resizeTimer.current);
+      resizeTimer.current = setTimeout(() => {
+        setContainerWidth(Math.min(794, entries[0].contentRect.width - 20));
+      }, 150);
+    });
+    if (containerRef.current) observer.observe(containerRef.current);
+    return () => { observer.disconnect(); if (resizeTimer.current) clearTimeout(resizeTimer.current); };
+  }, []);
+
+  const [numPages, setNumPages] = useState<number | undefined>();
+  const onDocumentLoadSuccess = useCallback(({ numPages }: { numPages: number }) => {
+    setNumPages(numPages);
+  }, []);
 
   const handleFontChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     updateCVStyle({ fontFamily: e.target.value });
   };
 
   const handleDownload = () => {
-    if (!instance.url) return;
+    if (!displayUrl) return;
     const userName = debouncedData.personalInfo.fullName?.trim() || 'CV';
-    const safeFileName = userName.replace(/[^a-zA-Z0-9\s]/g, '').replace(/\\s+/g, '_');
-    
+    const safeFileName = userName.replace(/[^a-zA-Z0-9\s]/g, '').replace(/\s+/g, '_');
     const link = document.createElement('a');
-    link.href = instance.url;
+    link.href = displayUrl;
     link.download = `${safeFileName}_CV.pdf`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
   };
 
-  const [displayUrl, setDisplayUrl] = useState<string | null>(null);
-  const [isIframeLoading, setIsIframeLoading] = useState<boolean>(true);
-  const [numPages, setNumPages] = useState<number>();
-  
-  // Responsive container width
-  const [containerWidth, setContainerWidth] = useState<number>();
-  const containerRef = React.useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const observer = new ResizeObserver((entries) => {
-      if (entries[0] && entries[0].contentRect.width > 0) {
-        // Limit max width to 794 (A4) to avoid getting too big on large screens,
-        // but shrink if the container is smaller. subtract safe padding.
-        setContainerWidth(Math.min(794, entries[0].contentRect.width - 32));
-      }
-    });
-    if (containerRef.current) observer.observe(containerRef.current);
-    return () => observer.disconnect();
-  }, []);
-
-  useEffect(() => {
-    if (instance.url) {
-      setDisplayUrl(instance.url);
-      setIsIframeLoading(true);
-    }
-  }, [instance.url]);
-
-  function onDocumentLoadSuccess({ numPages }: { numPages: number }): void {
-    setNumPages(numPages);
-    setIsIframeLoading(false);
-  }
+  const isReady = !!displayUrl;
 
   return (
     <div className="flex flex-col h-full">
@@ -97,7 +97,7 @@ const CVLivePreview: React.FC = () => {
       <div className="mb-5 flex items-center justify-between">
         <h2 className="text-xs font-semibold text-gray-400 uppercase tracking-widest">Preview</h2>
         <div className="flex items-center gap-3">
-          <select 
+          <select
             className="text-xs border border-gray-300 rounded-md px-2 py-1 bg-white text-gray-600 focus:outline-none focus:ring-1 focus:ring-blue-400 focus:border-blue-400 cursor-pointer transition-colors hover:border-gray-400"
             value={rawStyle.fontFamily}
             onChange={handleFontChange}
@@ -106,12 +106,12 @@ const CVLivePreview: React.FC = () => {
               <option key={opt.value} value={opt.value}>{opt.label}</option>
             ))}
           </select>
-          
+
           <button
             onClick={handleDownload}
-            disabled={instance.loading || !instance.url}
+            disabled={!isReady || instance.loading}
             className={`inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-md text-white transition-all shadow-sm ${
-              (instance.loading || !instance.url)
+              (!isReady || instance.loading)
                 ? 'bg-gray-400 cursor-not-allowed opacity-70'
                 : 'bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 cursor-pointer'
             }`}
@@ -128,7 +128,7 @@ const CVLivePreview: React.FC = () => {
             )}
             <span>Download CV</span>
           </button>
-          
+
           <div className={`flex items-center gap-1.5 text-xs font-medium ${instance.loading ? 'text-blue-500' : 'text-emerald-600'}`}>
             <span className="relative flex h-2 w-2">
               <span className={`absolute inline-flex h-full w-full rounded-full opacity-75 ${instance.loading ? 'bg-blue-400 animate-ping' : 'bg-emerald-400'}`}></span>
@@ -139,59 +139,50 @@ const CVLivePreview: React.FC = () => {
         </div>
       </div>
 
-      {/* Embedded DOM PDF Viewer */}
-      <div 
+      {/* PDF Viewer */}
+      <div
         ref={containerRef}
-        className="w-full aspect-[1/1.414] bg-gray-50/50 rounded-xl overflow-y-auto overflow-x-hidden relative border border-gray-200/60 custom-scrollbar flex flex-col items-center py-6"
+        className="cv-preview-container"
       >
-        <style>{`
-          .custom-scrollbar::-webkit-scrollbar { width: 8px; }
-          .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-          .custom-scrollbar::-webkit-scrollbar-thumb { background-color: #cbd5e1; border-radius: 10px; }
-          .custom-scrollbar::-webkit-scrollbar-thumb:hover { background-color: #94a3b8; }
-          .react-pdf__Page__canvas { border-radius: 4px; }
-        `}</style>
-        
-        {displayUrl ? (
-          <div className="relative">
+        {isReady ? (
+          <div className="relative w-full flex flex-col items-center">
             <PDFDocument
               file={displayUrl}
               onLoadSuccess={onDocumentLoadSuccess}
               loading=""
               className="flex flex-col items-center gap-6"
             >
-              {Array.from(new Array(numPages || 0), (el, index) => (
-                <PDFPage 
-                  key={`page_${index + 1}`} 
-                  pageNumber={index + 1} 
+              {Array.from(new Array(numPages || 0), (_el, index) => (
+                <PDFPage
+                  key={`page_${index + 1}`}
+                  pageNumber={index + 1}
                   width={containerWidth}
-                  className="shadow-[0_4px_24px_rgba(0,0,0,0.08),0_1px_4px_rgba(0,0,0,0.04)] bg-white rounded-sm overflow-hidden"
+                  className="cv-page-shadow"
                   renderTextLayer={true}
                   renderAnnotationLayer={false}
                 />
               ))}
             </PDFDocument>
 
-            {/* Loading Overlay */}
-            {(instance.loading || isIframeLoading) && (
-              <div className="absolute inset-0 bg-gray-50/60 backdrop-blur-[1.5px] flex flex-col items-center justify-center z-10 transition-all rounded-md">
-                <div className="bg-white px-6 py-4 rounded-xl shadow-lg border border-gray-100 flex flex-col items-center sticky top-1/2 -translate-y-1/2">
-                  <svg className="animate-spin h-8 w-8 text-blue-600 mb-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            {instance.loading && (
+              <div className="absolute inset-0 bg-white/50 backdrop-blur-[2px] flex items-start justify-center pt-20 z-10 pointer-events-none">
+                <div className="bg-white px-5 py-3 rounded-xl shadow-lg border border-gray-100 flex items-center gap-3">
+                  <svg className="animate-spin h-5 w-5 text-blue-600 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                   </svg>
-                  <p className="text-sm font-bold text-gray-700 tracking-wide">Merender UI...</p>
+                  <p className="text-sm font-semibold text-gray-700">Merender PDF...</p>
                 </div>
               </div>
             )}
           </div>
         ) : (
-          <div className="text-gray-400 flex flex-col items-center justify-center h-full min-h-[400px]">
-             <svg className="animate-spin h-8 w-8 mb-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <div className="text-gray-400 flex flex-col items-center justify-center h-full min-h-[600px]">
+            <svg className="animate-spin h-8 w-8 mb-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
               <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
               <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
             </svg>
-            <p className="text-sm">Mempersiapkan Pratinjau...</p>
+            <p className="text-sm font-medium">Mempersiapkan Pratinjau...</p>
           </div>
         )}
       </div>
