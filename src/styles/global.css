@@ -57,3 +57,15 @@
 .react-pdf__Page__textContent {
   border-radius: 4px;
 }
+
+/* Crossfade buffer layer */
+.cv-buffer-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: opacity 0.3s ease;
+}
