@@ -186,12 +186,12 @@ const CVLivePreview: React.FC = () => {
             <span>Download CV</span>
           </button>
 
-          <div className={`flex items-center gap-1.5 text-xs font-medium ${isUpdating ? 'text-blue-500' : 'text-emerald-600'}`}>
+          <div className="flex items-center gap-1.5 text-xs font-medium text-emerald-600">
             <span className="relative flex h-2 w-2">
-              <span className={`absolute inline-flex h-full w-full rounded-full opacity-75 ${isUpdating ? 'bg-blue-400 animate-ping' : 'bg-emerald-400'}`}></span>
-              <span className={`relative inline-flex rounded-full h-2 w-2 ${isUpdating ? 'bg-blue-500' : 'bg-emerald-500'}`}></span>
+              <span className="absolute inline-flex h-full w-full rounded-full opacity-75 bg-emerald-400" />
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
             </span>
-            {isUpdating ? 'Rendering...' : 'Live'}
+            Live
           </div>
         </div>
       </div>
