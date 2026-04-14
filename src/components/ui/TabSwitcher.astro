@@ -1,11 +1,24 @@
 ---
 // src/components/ui/TabSwitcher.astro
 ---
-<div class="flex items-center gap-1 bg-gray-100 p-1 rounded-xl self-start w-fit border border-gray-200/50">
-  <button id="tab-content" class="px-6 py-2 text-xs font-bold rounded-lg transition-all duration-300 text-white bg-blue-600 shadow-md shadow-blue-200">
+<div class="relative flex items-center gap-1 bg-gray-100 p-1 rounded-xl self-start w-fit border border-gray-200/50">
+  <!-- Sliding Background Pill -->
+  <div 
+    id="active-pill" 
+    class="absolute top-1 bottom-1 left-1 bg-blue-600 rounded-lg shadow-md shadow-blue-200 transition-all duration-500 z-0"
+    style="transition-timing-function: cubic-bezier(0.68, -0.6, 0.32, 1.6);"
+  ></div>
+
+  <button 
+    id="tab-content" 
+    class="relative z-10 px-6 py-2 text-xs font-bold rounded-lg transition-colors duration-300 text-white"
+  >
     Content
   </button>
-  <button id="tab-customize" class="px-6 py-2 text-xs font-bold rounded-lg transition-all duration-300 text-gray-500 hover:text-gray-700">
+  <button 
+    id="tab-styling" 
+    class="relative z-10 px-6 py-2 text-xs font-bold rounded-lg transition-colors duration-300 text-gray-500 hover:text-gray-700"
+  >
     Styling
   </button>
 </div>
@@ -14,37 +27,43 @@
   import { activeTabStore } from '../../stores/uiStore';
 
   const btnContent = document.getElementById('tab-content');
-  const btnCustomize = document.getElementById('tab-customize');
+  const btnStyling = document.getElementById('tab-styling');
+  const activePill = document.getElementById('active-pill');
 
   function updateActiveStyles(activeTab: 'content' | 'customize') {
-    const activeClasses = ['bg-blue-600', 'text-white', 'shadow-md', 'shadow-blue-200'];
-    const inactiveClasses = ['text-gray-500', 'hover:text-gray-700'];
+    if (!activePill || !btnContent || !btnStyling) return;
 
     if (activeTab === 'content') {
-      btnContent?.classList.add(...activeClasses);
-      btnContent?.classList.remove(...inactiveClasses);
+      // Move pill to content
+      activePill.style.left = `${btnContent.offsetLeft}px`;
+      activePill.style.width = `${btnContent.offsetWidth}px`;
       
-      btnCustomize?.classList.remove(...activeClasses);
-      btnCustomize?.classList.add(...inactiveClasses);
+      btnContent.classList.add('text-white');
+      btnContent.classList.remove('text-gray-500', 'hover:text-gray-700');
+      
+      btnStyling.classList.remove('text-white');
+      btnStyling.classList.add('text-gray-500', 'hover:text-gray-700');
     } else {
-      btnCustomize?.classList.add(...activeClasses);
-      btnCustomize?.classList.remove(...inactiveClasses);
+      // Move pill to styling
+      activePill.style.left = `${btnStyling.offsetLeft}px`;
+      activePill.style.width = `${btnStyling.offsetWidth}px`;
       
-      btnContent?.classList.remove(...activeClasses);
-      btnContent?.classList.add(...inactiveClasses);
+      btnStyling.classList.add('text-white');
+      btnStyling.classList.remove('text-gray-500', 'hover:text-gray-700');
+      
+      btnContent.classList.remove('text-white');
+      btnContent.classList.add('text-gray-500', 'hover:text-gray-700');
     }
   }
 
-  // Subscribe to store changes to update button styling
+  // Subscribe to store changes
   activeTabStore.subscribe((value) => {
     updateActiveStyles(value);
   });
 
-  btnContent?.addEventListener('click', () => {
-    activeTabStore.set('content');
-  });
+  btnContent?.addEventListener('click', () => activeTabStore.set('content'));
+  btnStyling?.addEventListener('click', () => activeTabStore.set('customize'));
 
-  btnCustomize?.addEventListener('click', () => {
-    activeTabStore.set('customize');
-  });
+  // Handle window resize to keep pill aligned
+  window.addEventListener('resize', () => updateActiveStyles(activeTabStore.get()));
 </script>
