@@ -1,12 +1,12 @@
 ---
 // src/components/ui/TabSwitcher.astro
 ---
-<div class="flex items-center gap-1 bg-gray-100/80 p-1 rounded-lg self-start w-fit border border-gray-200/50">
-  <button id="tab-content" class="px-5 py-1.5 text-xs font-semibold rounded-md transition-all text-gray-700 bg-white shadow-sm ring-1 ring-black/5">
+<div class="flex items-center gap-1 bg-gray-100 p-1 rounded-xl self-start w-fit border border-gray-200/50">
+  <button id="tab-content" class="px-6 py-2 text-xs font-bold rounded-lg transition-all duration-300 text-white bg-blue-600 shadow-md shadow-blue-200">
     Content
   </button>
-  <button id="tab-customize" class="px-5 py-1.5 text-xs font-semibold rounded-md transition-all text-gray-500 hover:text-gray-700">
-    Customize
+  <button id="tab-customize" class="px-6 py-2 text-xs font-bold rounded-lg transition-all duration-300 text-gray-500 hover:text-gray-700">
+    Styling
   </button>
 </div>
 
@@ -17,18 +17,21 @@
   const btnCustomize = document.getElementById('tab-customize');
 
   function updateActiveStyles(activeTab: 'content' | 'customize') {
+    const activeClasses = ['bg-blue-600', 'text-white', 'shadow-md', 'shadow-blue-200'];
+    const inactiveClasses = ['text-gray-500', 'hover:text-gray-700'];
+
     if (activeTab === 'content') {
-      btnContent?.classList.add('bg-white', 'shadow-sm', 'text-gray-700', 'ring-1', 'ring-black/5');
-      btnContent?.classList.remove('text-gray-500', 'hover:text-gray-700');
+      btnContent?.classList.add(...activeClasses);
+      btnContent?.classList.remove(...inactiveClasses);
       
-      btnCustomize?.classList.remove('bg-white', 'shadow-sm', 'text-gray-700', 'ring-1', 'ring-black/5');
-      btnCustomize?.classList.add('text-gray-500', 'hover:text-gray-700');
+      btnCustomize?.classList.remove(...activeClasses);
+      btnCustomize?.classList.add(...inactiveClasses);
     } else {
-      btnCustomize?.classList.add('bg-white', 'shadow-sm', 'text-gray-700', 'ring-1', 'ring-black/5');
-      btnCustomize?.classList.remove('text-gray-500', 'hover:text-gray-700');
+      btnCustomize?.classList.add(...activeClasses);
+      btnCustomize?.classList.remove(...inactiveClasses);
       
-      btnContent?.classList.remove('bg-white', 'shadow-sm', 'text-gray-700', 'ring-1', 'ring-black/5');
-      btnContent?.classList.add('text-gray-500', 'hover:text-gray-700');
+      btnContent?.classList.remove(...activeClasses);
+      btnContent?.classList.add(...inactiveClasses);
     }
   }
 
