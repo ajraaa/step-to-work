@@ -26,15 +26,15 @@ import CVCustomization from '../components/editor/CVCustomization.tsx';
 	<main class="max-w-screen-2xl mx-auto px-6 py-8">
 		<div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
 			<!-- Left: Form Panel -->
-			<section class="flex flex-col h-[calc(100vh-8rem)]">
+			<section class="flex flex-col">
 				<div class="mb-5">
 					<TabSwitcher />
 				</div>
 				
-				<div id="content-panel" class="transition-opacity duration-300 opacity-100 flex-1 overflow-y-auto px-4 pt-6 pb-12 custom-scrollbar">
+				<div id="content-panel" class="transition-opacity duration-300 opacity-100">
 					<FormContainer />
 				</div>
-				<div id="customization-panel" class="hidden transition-opacity duration-300 opacity-0 flex-1 overflow-y-auto px-4 pt-6 pb-12 custom-scrollbar">
+				<div id="customization-panel" class="hidden transition-opacity duration-300 opacity-0">
 					<div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-2">
 						<CVCustomization client:only="react" />
 					</div>
@@ -42,7 +42,7 @@ import CVCustomization from '../components/editor/CVCustomization.tsx';
 			</section>
 
 			<!-- Right: Preview Panel -->
-			<section>
+			<section class="lg:sticky lg:top-24 lg:h-fit">
 				<div>
 					<CVLivePreview client:only="react" />
 				</div>
