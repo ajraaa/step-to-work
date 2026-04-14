@@ -148,7 +148,17 @@ const CVLivePreview: React.FC = () => {
     <div className="flex flex-col h-full">
       {/* Header Toolbar */}
       <div className="mb-5 flex items-center justify-between">
-        <h2 className="text-xs font-semibold text-gray-400 uppercase tracking-widest">Preview</h2>
+        <div className="flex items-center gap-2.5">
+          <h2 className="text-xs font-semibold text-gray-400 uppercase tracking-widest">Preview</h2>
+          <div className="flex items-center gap-1.5 text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-100/50">
+            <span className="relative flex h-1.5 w-1.5">
+              <span className="absolute inline-flex h-full w-full rounded-full opacity-75 bg-emerald-400 animate-ping" />
+              <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500" />
+            </span>
+            LIVE
+          </div>
+        </div>
+        
         <div className="flex items-center gap-3">
           <button
             onClick={handleDownload}
@@ -171,14 +181,6 @@ const CVLivePreview: React.FC = () => {
             )}
             <span>Download CV</span>
           </button>
-
-          <div className="flex items-center gap-1.5 text-xs font-medium text-emerald-600">
-            <span className="relative flex h-2 w-2">
-              <span className="absolute inline-flex h-full w-full rounded-full opacity-75 bg-emerald-400" />
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
-            </span>
-            Live
-          </div>
         </div>
       </div>
 
