@@ -4,7 +4,7 @@ import { usePDF } from '@react-pdf/renderer';
 import CVPDFDocument from './CVPDFDocument';
 import { cvStore } from '../../stores/cvStores';
 import type { CVData } from '../../stores/cvStores';
-import { cvStyleStore, FONT_OPTIONS, updateCVStyle } from '../../stores/cvStyleStores';
+import { cvStyleStore } from '../../stores/cvStyleStores';
 import type { CVStyle } from '../../stores/cvStyleStores';
 
 import { Document as PDFViewer, Page as PDFPage, pdfjs } from 'react-pdf';
@@ -33,7 +33,7 @@ const CVLivePreview: React.FC = () => {
   const debouncedStyle = useDebounce<CVStyle>(rawStyle, 600);
 
   const doc = useMemo(
-    () => <CVPDFDocument data={debouncedData} fontFamilyCSS={debouncedStyle.fontFamily} />,
+    () => <CVPDFDocument data={debouncedData} styleConfig={debouncedStyle} />,
     [debouncedData, debouncedStyle]
   );
 
@@ -94,10 +94,6 @@ const CVLivePreview: React.FC = () => {
     return () => { observer.disconnect(); if (resizeTimer.current) clearTimeout(resizeTimer.current); };
   }, []);
 
-  const handleFontChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    updateCVStyle({ fontFamily: e.target.value });
-  };
-
   const handleDownload = () => {
     const active = activeBuffer === 'A' ? bufferA : bufferB;
     if (!active?.url) return;
@@ -154,16 +150,6 @@ const CVLivePreview: React.FC = () => {
       <div className="mb-5 flex items-center justify-between">
         <h2 className="text-xs font-semibold text-gray-400 uppercase tracking-widest">Preview</h2>
         <div className="flex items-center gap-3">
-          <select
-            className="text-xs border border-gray-300 rounded-md px-2 py-1 bg-white text-gray-600 focus:outline-none focus:ring-1 focus:ring-blue-400 focus:border-blue-400 cursor-pointer transition-colors hover:border-gray-400"
-            value={rawStyle.fontFamily}
-            onChange={handleFontChange}
-          >
-            {FONT_OPTIONS.map((opt) => (
-              <option key={opt.value} value={opt.value}>{opt.label}</option>
-            ))}
-          </select>
-
           <button
             onClick={handleDownload}
             disabled={!isReady || instance.loading}

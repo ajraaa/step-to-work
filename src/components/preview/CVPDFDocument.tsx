@@ -1,10 +1,11 @@
 import React, { useMemo } from 'react';
 import { Document, Page, Text, View, StyleSheet, Link } from '@react-pdf/renderer';
 import type { CVData } from '../../stores/cvStores';
+import type { CVStyle } from '../../stores/cvStyleStores';
 
 type Props = {
   data: CVData;
-  fontFamilyCSS: string;
+  styleConfig: CVStyle;
 };
 
 // Map web font family to React PDF base font
@@ -22,21 +23,22 @@ const fmtDate = (d?: string | null): string => {
   return `${months[parseInt(m, 10) - 1]} ${y}`;
 };
 
-const CVPDFDocument: React.FC<Props> = ({ data, fontFamilyCSS }) => {
+const CVPDFDocument: React.FC<Props> = ({ data, styleConfig }) => {
   const p = data.personalInfo;
-  const baseFont = getBaseFont(fontFamilyCSS);
+  const baseFont = getBaseFont(styleConfig.fontFamily);
+  const sScale = 1 + (styleConfig.fontSizeOffset * 0.05);
 
   // Memoize styles per baseFont — StyleSheet.create() hanya dipanggil saat font berubah,
   // bukan setiap render (yang menjadi penyebab utama flicker/re-render cascade)
   const styles = useMemo(() => StyleSheet.create({
     page: {
-      paddingTop: 32,
-      paddingBottom: 32,
-      paddingLeft: 30,
-      paddingRight: 30,
+      paddingTop: styleConfig.pagePadding,
+      paddingBottom: styleConfig.pagePadding,
+      paddingLeft: styleConfig.pagePadding,
+      paddingRight: styleConfig.pagePadding,
       fontFamily: baseFont,
       color: '#1a1a1a',
-      lineHeight: 1.4,
+      lineHeight: styleConfig.lineHeight,
       backgroundColor: '#ffffff',
     },
     header: {
@@ -44,14 +46,14 @@ const CVPDFDocument: React.FC<Props> = ({ data, fontFamilyCSS }) => {
       marginBottom: 15,
     },
     fullName: {
-      fontSize: 18,
+      fontSize: 18 * sScale,
       fontWeight: 700,
       marginBottom: -1,
       letterSpacing: 0.5,
       textTransform: 'uppercase',
     },
     jobTitle: {
-      fontSize: 10.5,
+      fontSize: 10.5 * sScale,
       color: '#444444',
       marginBottom: -1,
     },
@@ -63,24 +65,24 @@ const CVPDFDocument: React.FC<Props> = ({ data, fontFamilyCSS }) => {
       marginTop: -5,
     },
     contactItem: {
-      fontSize: 9,
+      fontSize: 9 * sScale,
       color: '#555555',
     },
     contactSeparator: {
-      fontSize: 9,
+      fontSize: 9 * sScale,
       color: '#999999',
       marginHorizontal: 8,
     },
     linkItem: {
-      fontSize: 9,
+      fontSize: 9 * sScale,
       color: '#2563eb',
       textDecoration: 'none',
     },
     section: {
-      marginBottom: 8,
+      marginBottom: styleConfig.sectionSpacing,
     },
     sectionHeader: {
-      fontSize: 10,
+      fontSize: 10 * sScale,
       fontFamily: baseFont === 'Helvetica' ? 'Helvetica-Bold' : 'Times-Bold',
       textTransform: 'uppercase',
       letterSpacing: 1,
@@ -101,23 +103,23 @@ const CVPDFDocument: React.FC<Props> = ({ data, fontFamilyCSS }) => {
       alignItems: 'baseline',
     },
     itemTitle: {
-      fontSize: 9,
+      fontSize: 9 * sScale,
       fontFamily: baseFont === 'Helvetica' ? 'Helvetica-Bold' : 'Times-Bold',
       lineHeight: 1.5,
     },
     itemDate: {
-      fontSize: 8,
+      fontSize: 8 * sScale,
       color: '#555555',
       lineHeight: 1.5,
     },
     itemSubtitle: {
-      fontSize: 8.5,
+      fontSize: 8.5 * sScale,
       fontFamily: baseFont === 'Helvetica' ? 'Helvetica-Oblique' : 'Times-Italic',
       color: '#333333',
       lineHeight: 1.5,
     },
     itemText: {
-      fontSize: 9,
+      fontSize: 9 * sScale,
       textAlign: 'justify',
       lineHeight: 1.5,
     },
@@ -131,20 +133,20 @@ const CVPDFDocument: React.FC<Props> = ({ data, fontFamilyCSS }) => {
     },
     bulletPoint: {
       width: 12,
-      fontSize: 8.5,
+      fontSize: 8.5 * sScale,
       lineHeight: 1.2,
     },
     bulletText: {
       flex: 1,
-      fontSize: 8.5,
+      fontSize: 8.5 * sScale,
       lineHeight: 1.2,
     },
     smallText: {
-      fontSize: 8,
+      fontSize: 8 * sScale,
       color: '#444444',
       lineHeight: 1.2,
     },
-  }), [baseFont]);
+  }), [baseFont, styleConfig, sScale]);
 
   const contacts = [];
   if (p.email) contacts.push(p.email);
@@ -265,10 +267,10 @@ const CVPDFDocument: React.FC<Props> = ({ data, fontFamilyCSS }) => {
               if (cat.items.length > 0) {
                 return (
                   <View key={cat.id} style={{ flexDirection: 'row', marginBottom: 0 }}>
-                    <Text style={{ fontFamily: baseFont === 'Helvetica' ? 'Helvetica-Bold' : 'Times-Bold', fontSize: 9, lineHeight: 1.5 }}>
+                    <Text style={{ fontFamily: baseFont === 'Helvetica' ? 'Helvetica-Bold' : 'Times-Bold', fontSize: 9 * sScale, lineHeight: 1.5 }}>
                       {cat.category}: 
                     </Text>
-                    <Text style={{ fontSize: 9, marginLeft: 4, lineHeight: 1.5 }}>
+                    <Text style={{ fontSize: 9 * sScale, marginLeft: 4, lineHeight: 1.5 }}>
                       {cat.items.join(', ')}
                     </Text>
                   </View>
@@ -287,11 +289,11 @@ const CVPDFDocument: React.FC<Props> = ({ data, fontFamilyCSS }) => {
               <View key={i} wrap={false} style={styles.itemContainer}>
                 <View style={styles.itemHeaderRow}>
                   <Text style={styles.itemTitle}>{proj.name}</Text>
-                  {proj.url && <Link src={proj.url} style={[styles.linkItem, { fontSize: 8, lineHeight: 1.5 }]}>{proj.url}</Link>}
+                  {proj.url && <Link src={proj.url} style={[styles.linkItem, { fontSize: 8 * sScale, lineHeight: 1.5 }]}>{proj.url}</Link>}
                 </View>
                 <Text style={styles.itemText}>{proj.description}</Text>
                 {proj.techStack.length > 0 && (
-                  <Text style={[styles.itemSubtitle, { fontSize: 8, marginTop: 1 }]}>
+                  <Text style={[styles.itemSubtitle, { fontSize: 8 * sScale, marginTop: 1 }]}>
                     Tech: {proj.techStack.join(', ')}
                   </Text>
                 )}
@@ -373,10 +375,10 @@ const CVPDFDocument: React.FC<Props> = ({ data, fontFamilyCSS }) => {
             <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 16 }}>
               {data.languages.map((l, i) => (
                 <View key={i} style={{ flexDirection: 'row' }}>
-                  <Text style={{ fontFamily: baseFont === 'Helvetica' ? 'Helvetica-Bold' : 'Times-Bold', fontSize: 8.5 }}>
+                  <Text style={{ fontFamily: baseFont === 'Helvetica' ? 'Helvetica-Bold' : 'Times-Bold', fontSize: 8.5 * sScale }}>
                     {l.language}
                   </Text>
-                  <Text style={{ fontSize: 8.5, marginLeft: 1.5, }}>{` — ${l.proficiency}`}</Text>
+                  <Text style={{ fontSize: 8.5 * sScale, marginLeft: 1.5, }}>{` — ${l.proficiency}`}</Text>
                 </View>
               ))}
             </View>
@@ -390,12 +392,12 @@ const CVPDFDocument: React.FC<Props> = ({ data, fontFamilyCSS }) => {
             {data.references.map((r, i) => (
               <View key={i} wrap={false} style={styles.itemContainer}>
                 <View style={{ flexDirection: 'row' }}>
-                  <Text style={{ fontFamily: baseFont === 'Helvetica' ? 'Helvetica-Bold' : 'Times-Bold', fontSize: 8.5 }}>
+                  <Text style={{ fontFamily: baseFont === 'Helvetica' ? 'Helvetica-Bold' : 'Times-Bold', fontSize: 8.5 * sScale }}>
                     {r.name}
                   </Text>
-                  <Text style={{ fontSize: 8.5 }}>{` — ${r.jobTitle}, ${r.company}`}</Text>
+                  <Text style={{ fontSize: 8.5 * sScale }}>{` — ${r.jobTitle}, ${r.company}`}</Text>
                 </View>
-                <Text style={{ fontSize: 8.5, color: '#555555' }}>
+                <Text style={{ fontSize: 8.5 * sScale, color: '#555555' }}>
                   {r.relationship} · {r.email} · {r.phone}
                 </Text>
               </View>

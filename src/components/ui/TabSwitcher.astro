@@ -1,0 +1,47 @@
+---
+// src/components/ui/TabSwitcher.astro
+---
+<div class="flex items-center gap-1 bg-gray-100/80 p-1 rounded-lg self-start w-fit border border-gray-200/50">
+  <button id="tab-content" class="px-5 py-1.5 text-xs font-semibold rounded-md transition-all text-gray-700 bg-white shadow-sm ring-1 ring-black/5">
+    Content
+  </button>
+  <button id="tab-customize" class="px-5 py-1.5 text-xs font-semibold rounded-md transition-all text-gray-500 hover:text-gray-700">
+    Customize
+  </button>
+</div>
+
+<script>
+  import { activeTabStore } from '../../stores/uiStore';
+
+  const btnContent = document.getElementById('tab-content');
+  const btnCustomize = document.getElementById('tab-customize');
+
+  function updateActiveStyles(activeTab: 'content' | 'customize') {
+    if (activeTab === 'content') {
+      btnContent?.classList.add('bg-white', 'shadow-sm', 'text-gray-700', 'ring-1', 'ring-black/5');
+      btnContent?.classList.remove('text-gray-500', 'hover:text-gray-700');
+      
+      btnCustomize?.classList.remove('bg-white', 'shadow-sm', 'text-gray-700', 'ring-1', 'ring-black/5');
+      btnCustomize?.classList.add('text-gray-500', 'hover:text-gray-700');
+    } else {
+      btnCustomize?.classList.add('bg-white', 'shadow-sm', 'text-gray-700', 'ring-1', 'ring-black/5');
+      btnCustomize?.classList.remove('text-gray-500', 'hover:text-gray-700');
+      
+      btnContent?.classList.remove('bg-white', 'shadow-sm', 'text-gray-700', 'ring-1', 'ring-black/5');
+      btnContent?.classList.add('text-gray-500', 'hover:text-gray-700');
+    }
+  }
+
+  // Subscribe to store changes to update button styling
+  activeTabStore.subscribe((value) => {
+    updateActiveStyles(value);
+  });
+
+  btnContent?.addEventListener('click', () => {
+    activeTabStore.set('content');
+  });
+
+  btnCustomize?.addEventListener('click', () => {
+    activeTabStore.set('customize');
+  });
+</script>
