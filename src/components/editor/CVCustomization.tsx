@@ -39,7 +39,7 @@ const CVCustomization: React.FC = () => {
             min="-2" max="4" step="0.5" 
             value={style.fontSizeOffset} 
             onChange={(e) => updateCVStyle({ fontSizeOffset: parseFloat(e.target.value) })}
-            className="w-full accent-blue-600 cursor-pointer relative z-10"
+            className="premium-range relative z-10"
           />
           <div 
             className="absolute top-0 w-0.5 h-4 bg-gray-300 rounded-full -translate-x-1/2" 
@@ -64,7 +64,7 @@ const CVCustomization: React.FC = () => {
             min="1.0" max="2.0" step="0.1" 
             value={style.lineHeight} 
             onChange={(e) => updateCVStyle({ lineHeight: parseFloat(e.target.value) })}
-            className="w-full accent-blue-600 cursor-pointer relative z-10"
+            className="premium-range relative z-10"
           />
           <div 
             className="absolute top-0 w-0.5 h-4 bg-gray-300 rounded-full -translate-x-1/2" 
@@ -89,7 +89,7 @@ const CVCustomization: React.FC = () => {
             min="15" max="50" step="1" 
             value={style.paddingX} 
             onChange={(e) => updateCVStyle({ paddingX: parseInt(e.target.value) })}
-            className="w-full accent-blue-600 cursor-pointer relative z-10"
+            className="premium-range relative z-10"
           />
           <div 
             className="absolute top-0 w-0.5 h-4 bg-gray-300 rounded-full -translate-x-1/2" 
@@ -114,7 +114,7 @@ const CVCustomization: React.FC = () => {
             min="15" max="50" step="1" 
             value={style.paddingY} 
             onChange={(e) => updateCVStyle({ paddingY: parseInt(e.target.value) })}
-            className="w-full accent-blue-600 cursor-pointer relative z-10"
+            className="premium-range relative z-10"
           />
           <div 
             className="absolute top-0 w-0.5 h-4 bg-gray-300 rounded-full -translate-x-1/2" 
@@ -139,7 +139,7 @@ const CVCustomization: React.FC = () => {
             min="2" max="16" step="1" 
             value={style.sectionSpacing} 
             onChange={(e) => updateCVStyle({ sectionSpacing: parseInt(e.target.value) })}
-            className="w-full accent-blue-600 cursor-pointer relative z-10"
+            className="premium-range relative z-10"
           />
           <div 
             className="absolute top-0 w-0.5 h-4 bg-gray-300 rounded-full -translate-x-1/2" 
