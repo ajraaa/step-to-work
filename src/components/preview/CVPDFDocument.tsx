@@ -32,10 +32,10 @@ const CVPDFDocument: React.FC<Props> = ({ data, styleConfig }) => {
   // bukan setiap render (yang menjadi penyebab utama flicker/re-render cascade)
   const styles = useMemo(() => StyleSheet.create({
     page: {
-      paddingTop: styleConfig.pagePadding,
-      paddingBottom: styleConfig.pagePadding,
-      paddingLeft: styleConfig.pagePadding,
-      paddingRight: styleConfig.pagePadding,
+      paddingTop: styleConfig.paddingY,
+      paddingBottom: styleConfig.paddingY,
+      paddingLeft: styleConfig.paddingX,
+      paddingRight: styleConfig.paddingX,
       fontFamily: baseFont,
       color: '#1a1a1a',
       lineHeight: styleConfig.lineHeight,

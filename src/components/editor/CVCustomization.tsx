@@ -80,15 +80,40 @@ const CVCustomization: React.FC = () => {
 
       <div className="flex flex-col gap-2.5">
         <div className="flex justify-between items-center">
-          <label className="text-sm font-medium text-gray-700 tracking-wide">Page Padding</label>
-          <span className="text-xs font-semibold bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full">{style.pagePadding}px</span>
+          <label className="text-sm font-medium text-gray-700 tracking-wide">Horizontal Padding (Left/Right)</label>
+          <span className="text-xs font-semibold bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full">{style.paddingX}px</span>
         </div>
         <div className="relative pt-1">
           <input 
             type="range" 
             min="15" max="50" step="1" 
-            value={style.pagePadding} 
-            onChange={(e) => updateCVStyle({ pagePadding: parseInt(e.target.value) })}
+            value={style.paddingX} 
+            onChange={(e) => updateCVStyle({ paddingX: parseInt(e.target.value) })}
+            className="w-full accent-blue-600 cursor-pointer relative z-10"
+          />
+          <div 
+            className="absolute top-0 w-0.5 h-4 bg-gray-300 rounded-full -translate-x-1/2" 
+            style={{ left: '42.86%' }} 
+            title="Default"
+          />
+        </div>
+        <div className="flex justify-between text-[11px] font-medium text-gray-400 uppercase tracking-wider">
+          <span>Narrow</span>
+          <span>Wide</span>
+        </div>
+      </div>
+
+      <div className="flex flex-col gap-2.5">
+        <div className="flex justify-between items-center">
+          <label className="text-sm font-medium text-gray-700 tracking-wide">Vertical Padding (Top/Bottom)</label>
+          <span className="text-xs font-semibold bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full">{style.paddingY}px</span>
+        </div>
+        <div className="relative pt-1">
+          <input 
+            type="range" 
+            min="15" max="50" step="1" 
+            value={style.paddingY} 
+            onChange={(e) => updateCVStyle({ paddingY: parseInt(e.target.value) })}
             className="w-full accent-blue-600 cursor-pointer relative z-10"
           />
           <div 

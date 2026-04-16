@@ -3,7 +3,8 @@ import { persistentAtom } from '@nanostores/persistent';
 // ===== CV Style Customization =====
 export type CVStyle = {
   fontFamily: string;
-  pagePadding: number;
+  paddingX: number;
+  paddingY: number;
   sectionSpacing: number;
   lineHeight: number;
   fontSizeOffset: number;
@@ -16,7 +17,8 @@ export const FONT_OPTIONS: { label: string; value: string }[] = [
 
 const defaultCVStyle: CVStyle = {
   fontFamily: FONT_OPTIONS[0].value,
-  pagePadding: 30,
+  paddingX: 30,
+  paddingY: 30,
   sectionSpacing: 8,
   lineHeight: 1.4,
   fontSizeOffset: 0,
