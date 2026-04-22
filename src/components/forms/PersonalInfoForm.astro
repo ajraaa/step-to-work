@@ -112,6 +112,16 @@
     <!-- Summary -->
     <div class="space-y-1.5 cursor-pointer">
       <label for="summary" class="block text-sm font-medium text-gray-700 cursor-pointer">Ringkasan Profesional (Summary)</label>
+      <div class="ai-toolbar">
+        <button type="button" id="aiGenerateSummaryBtn" class="ai-btn ai-btn--summary" title="Generate ringkasan profesional dengan AI">
+          <svg class="ai-btn__sparkle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l2.4 7.2H22l-6 4.8 2.4 7.2L12 16.4l-6.8 4.8 2.4-7.2-6-4.8h7.6z"/></svg>
+          ✨ AI Generate Summary
+        </button>
+        <button type="button" id="aiSkillGapBtn" class="ai-btn ai-btn--skillgap" title="Analisis skill gap berdasarkan job description">
+          <svg class="ai-btn__sparkle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2z"/></svg>
+          🔍 AI Skill Gap Analysis
+        </button>
+      </div>
       <textarea 
         id="summary" 
         name="summary" 
@@ -124,11 +134,55 @@
 
 
   </form>
+
+  <!-- AI Skill Gap Analysis Modal -->
+  <div id="aiSkillGapModal" class="ai-modal-overlay">
+    <div class="ai-modal">
+      <div class="ai-modal__header">
+        <h3>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2"><path d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2z"/></svg>
+          AI Skill Gap Analysis
+        </h3>
+        <button type="button" class="ai-modal__close" id="aiSkillGapClose">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <div class="ai-modal__body">
+        <p class="text-sm text-gray-600 mb-3">Paste job description (lowongan kerja) yang ingin Anda lamar, lalu AI akan menganalisis skill gap Anda.</p>
+        <textarea id="aiJobDescInput" class="ai-modal__input" placeholder="Paste job description di sini...&#10;&#10;Contoh: We are looking for a Frontend Developer with experience in React, TypeScript, and Next.js..."></textarea>
+        <div class="ai-modal__actions">
+          <button type="button" class="ai-btn ai-btn--skillgap" id="aiSkillGapAnalyzeBtn">
+            <svg class="ai-btn__sparkle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l2.4 7.2H22l-6 4.8 2.4 7.2L12 16.4l-6.8 4.8 2.4-7.2-6-4.8h7.6z"/></svg>
+            Analyze Skill Gap
+          </button>
+        </div>
+        <div id="aiSkillGapResult" class="ai-modal__result" style="display:none;"></div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script>
   import { cvStore, updatePersonalInfo } from '../../stores/cvStores';
   import type { PersonalInfo } from '../../stores/cvStores';
+
+  // AI Toast notification helper
+  function showAIToast(message: string, type: 'success' | 'error' | 'info' = 'info') {
+    let toast = document.getElementById('ai-toast');
+    if (!toast) {
+      toast = document.createElement('div');
+      toast.id = 'ai-toast';
+      document.body.appendChild(toast);
+    }
+    toast.className = `ai-toast ai-toast--${type}`;
+    toast.textContent = message;
+    requestAnimationFrame(() => {
+      toast!.classList.add('active');
+    });
+    setTimeout(() => {
+      toast!.classList.remove('active');
+    }, 3000);
+  }
 
   const form = document.getElementById('personalInfoForm');
   if (form) {
@@ -157,4 +211,124 @@
 
     form.addEventListener('submit', (e) => e.preventDefault());
   }
+
+  // ---- AI: Generate Summary ----
+  const aiSummaryBtn = document.getElementById('aiGenerateSummaryBtn');
+  const summaryTextarea = document.getElementById('summary') as HTMLTextAreaElement;
+
+  aiSummaryBtn?.addEventListener('click', async () => {
+    const cvData = cvStore.get();
+    
+    // Check if there's any data to work with
+    const hasData = cvData.personalInfo.jobTitle || 
+                    cvData.workExperience.length > 0 || 
+                    cvData.skills.some(s => s.items.length > 0);
+    
+    if (!hasData) {
+      showAIToast('Isi data CV terlebih dahulu (minimal posisi, pengalaman, atau skills).', 'error');
+      return;
+    }
+
+    aiSummaryBtn.classList.add('ai-btn--loading');
+    const originalLabel = aiSummaryBtn.innerHTML;
+    aiSummaryBtn.innerHTML = `<svg class="ai-btn__sparkle ai-btn__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4m0 12v4m-7.07-3.93l2.83-2.83m8.48-8.48l2.83-2.83M2 12h4m12 0h4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83"/></svg> Generating...`;
+
+    try {
+      const res = await fetch('/api/ai/generate-summary', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          personalInfo: cvData.personalInfo,
+          workExperience: cvData.workExperience,
+          education: cvData.education,
+          skills: cvData.skills,
+          projects: cvData.projects,
+        }),
+      });
+      const data = await res.json();
+      
+      if (data.error) {
+        showAIToast(data.error, 'error');
+      } else if (data.result && summaryTextarea) {
+        summaryTextarea.value = data.result;
+        summaryTextarea.dispatchEvent(new Event('input', { bubbles: true }));
+        showAIToast('Ringkasan profesional berhasil di-generate! ✨', 'success');
+      }
+    } catch (err) {
+      showAIToast('Gagal menghubungi AI. Coba lagi nanti.', 'error');
+    } finally {
+      aiSummaryBtn.classList.remove('ai-btn--loading');
+      aiSummaryBtn.innerHTML = originalLabel;
+    }
+  });
+
+  // ---- AI: Skill Gap Analysis ----
+  const aiSkillGapBtn = document.getElementById('aiSkillGapBtn');
+  const aiSkillGapModal = document.getElementById('aiSkillGapModal');
+  const aiSkillGapClose = document.getElementById('aiSkillGapClose');
+  const aiJobDescInput = document.getElementById('aiJobDescInput') as HTMLTextAreaElement;
+  const aiSkillGapAnalyzeBtn = document.getElementById('aiSkillGapAnalyzeBtn');
+  const aiSkillGapResult = document.getElementById('aiSkillGapResult');
+
+  // Open modal
+  aiSkillGapBtn?.addEventListener('click', () => {
+    aiSkillGapModal?.classList.add('active');
+  });
+
+  // Close modal
+  aiSkillGapClose?.addEventListener('click', () => {
+    aiSkillGapModal?.classList.remove('active');
+  });
+  aiSkillGapModal?.addEventListener('click', (e) => {
+    if (e.target === aiSkillGapModal) {
+      aiSkillGapModal.classList.remove('active');
+    }
+  });
+
+  // Analyze
+  aiSkillGapAnalyzeBtn?.addEventListener('click', async () => {
+    const jobDesc = aiJobDescInput?.value?.trim();
+    if (!jobDesc) {
+      showAIToast('Paste job description terlebih dahulu!', 'error');
+      return;
+    }
+
+    const cvData = cvStore.get();
+
+    aiSkillGapAnalyzeBtn.classList.add('ai-btn--loading');
+    const originalLabel = aiSkillGapAnalyzeBtn.innerHTML;
+    aiSkillGapAnalyzeBtn.innerHTML = `<svg class="ai-btn__sparkle ai-btn__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4m0 12v4m-7.07-3.93l2.83-2.83m8.48-8.48l2.83-2.83M2 12h4m12 0h4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83"/></svg> Analyzing...`;
+    
+    if (aiSkillGapResult) {
+      aiSkillGapResult.style.display = 'none';
+      aiSkillGapResult.textContent = '';
+    }
+
+    try {
+      const res = await fetch('/api/ai/skill-gap', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          jobDescription: jobDesc,
+          skills: cvData.skills,
+          workExperience: cvData.workExperience,
+          projects: cvData.projects,
+        }),
+      });
+      const data = await res.json();
+
+      if (data.error) {
+        showAIToast(data.error, 'error');
+      } else if (data.result && aiSkillGapResult) {
+        aiSkillGapResult.textContent = data.result;
+        aiSkillGapResult.style.display = 'block';
+        showAIToast('Skill gap analysis selesai! 🔍', 'success');
+      }
+    } catch (err) {
+      showAIToast('Gagal menghubungi AI. Coba lagi nanti.', 'error');
+    } finally {
+      aiSkillGapAnalyzeBtn.classList.remove('ai-btn--loading');
+      aiSkillGapAnalyzeBtn.innerHTML = originalLabel;
+    }
+  });
 </script>

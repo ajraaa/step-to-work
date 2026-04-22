@@ -27,7 +27,7 @@
       <div class="space-y-1.5"><label class="block text-sm font-medium text-gray-700">URL Proyek (Opsional)</label><input type="url" data-field="url" placeholder="https://github.com/azzra/project" class="proj-input w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none" /></div>
       <div class="space-y-1.5 md:col-span-2"><label class="block text-sm font-medium text-gray-700">Deskripsi Singkat</label><textarea data-field="description" rows="2" placeholder="Dashboard analytics untuk platform e-commerce..." class="proj-input w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none resize-y leading-relaxed"></textarea></div>
       <div class="space-y-1.5 md:col-span-2"><label class="block text-sm font-medium text-gray-700">Tech Stack</label><p class="text-xs text-gray-500 mb-1">Pisahkan dengan koma (,).</p><input type="text" data-field="techStack" placeholder="Next.js, TypeScript, Recharts, Tailwind CSS" class="proj-input w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none" /></div>
-      <div class="space-y-1.5 md:col-span-2"><label class="block text-sm font-medium text-gray-700">Pencapaian / Fitur Utama (Highlights)</label><p class="text-xs text-gray-500 mb-1">Pisahkan setiap poin dengan baris baru (Enter).</p><textarea data-field="highlights" rows="4" placeholder="- Menangani 10.000+ data transaksi...&#10;- Mengimplementasikan filter dan export..." class="proj-input w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none resize-y leading-relaxed"></textarea></div>
+      <div class="space-y-1.5 md:col-span-2"><label class="block text-sm font-medium text-gray-700">Pencapaian / Fitur Utama (Highlights)</label><p class="text-xs text-gray-500 mb-1">Pisahkan setiap poin dengan baris baru (Enter).</p><div class="ai-toolbar"><button type="button" class="ai-btn ai-btn--optimize ai-optimize-btn" title="Ubah deskripsi menjadi bullet point dengan action verbs"><svg class="ai-btn__sparkle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l2.4 7.2H22l-6 4.8 2.4 7.2L12 16.4l-6.8 4.8 2.4-7.2-6-4.8h7.6z"/></svg>✨ AI Optimize</button></div><textarea data-field="highlights" rows="4" placeholder="- Menangani 10.000+ data transaksi...&#10;- Mengimplementasikan filter dan export..." class="proj-input w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none resize-y leading-relaxed"></textarea></div>
     </div>
   </div>
 </template>
@@ -35,6 +35,20 @@
 <script>
   import { cvStore, updateCVSection } from '../../stores/cvStores';
   import type { Project } from '../../stores/cvStores';
+
+  // AI Toast notification helper
+  function showAIToast(message: string, type: 'success' | 'error' | 'info' = 'info') {
+    let toast = document.getElementById('ai-toast');
+    if (!toast) {
+      toast = document.createElement('div');
+      toast.id = 'ai-toast';
+      document.body.appendChild(toast);
+    }
+    toast.className = `ai-toast ai-toast--${type}`;
+    toast.textContent = message;
+    requestAnimationFrame(() => { toast!.classList.add('active'); });
+    setTimeout(() => { toast!.classList.remove('active'); }, 3000);
+  }
 
   const container = document.getElementById('projEntries')!;
   const addBtn = document.getElementById('addProjBtn')!;
@@ -67,6 +81,46 @@
     }
     el.querySelector('.delete-entry-btn')!.addEventListener('click', () => { el.remove(); syncToStore(); });
     el.querySelectorAll('.proj-input').forEach(i => { i.addEventListener('input', syncToStore); i.addEventListener('change', syncToStore); });
+
+    // AI Optimize button handler
+    const aiOptBtn = el.querySelector('.ai-optimize-btn');
+    const highlightsTA = el.querySelector('[data-field="highlights"]') as HTMLTextAreaElement;
+    const nameInput = el.querySelector('[data-field="name"]') as HTMLInputElement;
+    
+    aiOptBtn?.addEventListener('click', async () => {
+      const text = highlightsTA?.value?.trim();
+      if (!text) {
+        showAIToast('Tulis pencapaian/highlights terlebih dahulu!', 'error');
+        return;
+      }
+      
+      aiOptBtn.classList.add('ai-btn--loading');
+      const originalLabel = aiOptBtn.innerHTML;
+      aiOptBtn.innerHTML = `<svg class="ai-btn__sparkle ai-btn__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4m0 12v4m-7.07-3.93l2.83-2.83m8.48-8.48l2.83-2.83M2 12h4m12 0h4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83"/></svg> Optimizing...`;
+      
+      try {
+        const res = await fetch('/api/ai/optimize-bullet', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ text, context: `Project: ${nameInput?.value || ''}` }),
+        });
+        const data = await res.json();
+        
+        if (data.error) {
+          showAIToast(data.error, 'error');
+        } else if (data.result) {
+          highlightsTA.value = data.result;
+          highlightsTA.dispatchEvent(new Event('input', { bubbles: true }));
+          showAIToast('Highlights berhasil dioptimasi! ✨', 'success');
+        }
+      } catch (err) {
+        showAIToast('Gagal menghubungi AI. Coba lagi nanti.', 'error');
+      } finally {
+        aiOptBtn.classList.remove('ai-btn--loading');
+        aiOptBtn.innerHTML = originalLabel;
+      }
+    });
+
     return el;
   }
 

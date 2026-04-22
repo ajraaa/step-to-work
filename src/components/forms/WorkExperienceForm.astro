@@ -106,6 +106,12 @@
     <div class="space-y-1.5 cursor-pointer mt-5">
       <label class="block text-sm font-medium text-gray-700 cursor-pointer">Tanggung Jawab & Pencapaian</label>
       <p class="text-xs text-gray-500 mb-2">Pisahkan setiap poin dengan baris baru (Enter).</p>
+      <div class="ai-toolbar">
+        <button type="button" class="ai-btn ai-btn--optimize ai-optimize-btn" title="Ubah deskripsi menjadi bullet point dengan action verbs">
+          <svg class="ai-btn__sparkle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l2.4 7.2H22l-6 4.8 2.4 7.2L12 16.4l-6.8 4.8 2.4-7.2-6-4.8h7.6z"/></svg>
+          ✨ AI Optimize
+        </button>
+      </div>
       <textarea 
         data-field="responsibilities" 
         rows="4" 
@@ -119,6 +125,24 @@
 <script>
   import { cvStore, updateCVSection } from '../../stores/cvStores';
   import type { WorkExperience } from '../../stores/cvStores';
+
+  // AI Toast notification helper
+  function showAIToast(message: string, type: 'success' | 'error' | 'info' = 'info') {
+    let toast = document.getElementById('ai-toast');
+    if (!toast) {
+      toast = document.createElement('div');
+      toast.id = 'ai-toast';
+      document.body.appendChild(toast);
+    }
+    toast.className = `ai-toast ai-toast--${type}`;
+    toast.textContent = message;
+    requestAnimationFrame(() => {
+      toast!.classList.add('active');
+    });
+    setTimeout(() => {
+      toast!.classList.remove('active');
+    }, 3000);
+  }
 
   const container = document.getElementById('workEntries')!;
   const addBtn = document.getElementById('addWorkBtn')!;
@@ -208,6 +232,48 @@
     entryEl.querySelectorAll('.work-input').forEach(input => {
       input.addEventListener('input', syncToStore);
       input.addEventListener('change', syncToStore); // untuk checkbox & month input
+    });
+
+    // Event: AI Optimize button
+    const aiOptBtn = entryEl.querySelector('.ai-optimize-btn');
+    const responsibilitiesTA = entryEl.querySelector('[data-field="responsibilities"]') as HTMLTextAreaElement;
+    const jobTitleInput = entryEl.querySelector('[data-field="jobTitle"]') as HTMLInputElement;
+    
+    aiOptBtn?.addEventListener('click', async () => {
+      const text = responsibilitiesTA?.value?.trim();
+      if (!text) {
+        showAIToast('Tulis deskripsi pekerjaan terlebih dahulu!', 'error');
+        return;
+      }
+      
+      aiOptBtn.classList.add('ai-btn--loading');
+      const originalLabel = aiOptBtn.innerHTML;
+      aiOptBtn.innerHTML = `<svg class="ai-btn__sparkle ai-btn__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4m0 12v4m-7.07-3.93l2.83-2.83m8.48-8.48l2.83-2.83M2 12h4m12 0h4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83"/></svg> Optimizing...`;
+      
+      try {
+        const res = await fetch('/api/ai/optimize-bullet', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            text,
+            jobTitle: jobTitleInput?.value || '',
+          }),
+        });
+        const data = await res.json();
+        
+        if (data.error) {
+          showAIToast(data.error, 'error');
+        } else if (data.result) {
+          responsibilitiesTA.value = data.result;
+          responsibilitiesTA.dispatchEvent(new Event('input', { bubbles: true }));
+          showAIToast('Bullet points berhasil dioptimasi! ✨', 'success');
+        }
+      } catch (err) {
+        showAIToast('Gagal menghubungi AI. Coba lagi nanti.', 'error');
+      } finally {
+        aiOptBtn.classList.remove('ai-btn--loading');
+        aiOptBtn.innerHTML = originalLabel;
+      }
     });
 
     return entryEl;
