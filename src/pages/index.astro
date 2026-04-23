@@ -18,7 +18,13 @@ import CVCustomization from '../components/editor/CVCustomization.tsx';
 				</div>
 				<h1 class="text-lg font-semibold text-gray-800 tracking-tight">Step to Work</h1>
 			</div>
-			<span class="text-xs font-medium text-gray-400 tracking-wide uppercase hidden sm:block">CV Builder</span>
+			<div class="flex items-center gap-4">
+				<select id="language-switcher" class="bg-white/50 border border-gray-200 text-gray-700 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-1.5 outline-none cursor-pointer transition-all hover:bg-white">
+					<option value="id">🇮🇩 ID</option>
+					<option value="en">🇬🇧 EN</option>
+				</select>
+				<span class="text-xs font-medium text-gray-400 tracking-wide uppercase hidden sm:block">CV Builder</span>
+			</div>
 		</div>
 	</header>
 
@@ -53,9 +59,65 @@ import CVCustomization from '../components/editor/CVCustomization.tsx';
 
 <script>
   import { activeTabStore } from '../stores/uiStore';
+  import { appLanguageStore } from '../stores/i18nStore';
+  import { translations } from '../lib/translations';
 
   const contentPanel = document.getElementById('content-panel');
   const customizationPanel = document.getElementById('customization-panel');
+  const langSwitcher = document.getElementById('language-switcher') as HTMLSelectElement;
+
+  // Dictionary Text Replacer
+  if (langSwitcher) {
+    langSwitcher.addEventListener('change', (e) => {
+      const target = e.target as HTMLSelectElement;
+      appLanguageStore.set(target.value as 'id' | 'en');
+    });
+
+    appLanguageStore.subscribe((lang) => {
+      langSwitcher.value = lang;
+      
+      const walkDOM = (node: Node) => {
+        if (node.nodeType === 3) { // Text node
+          const text = node.nodeValue?.trim();
+          if (text) {
+             let key = null;
+             for (const k in translations) {
+                if (translations[k].id === text || translations[k].en === text) {
+                   key = k;
+                   break;
+                }
+             }
+             if (key) {
+               node.nodeValue = node.nodeValue?.replace(text, translations[key][lang]) || null;
+             }
+          }
+        } else if (node.nodeType === 1) { // Element node
+          const el = node as HTMLElement;
+          // Skip script, style, and the react-pdf container to avoid conflicts
+          if (el.tagName === 'SCRIPT' || el.tagName === 'STYLE' || el.classList.contains('cv-preview-container')) return;
+
+          if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+            const input = el as HTMLInputElement | HTMLTextAreaElement;
+            const placeholder = input.placeholder?.trim();
+            if (placeholder) {
+              for (const k in translations) {
+                if (translations[k].id === placeholder || translations[k].en === placeholder) {
+                   input.placeholder = translations[k][lang];
+                   break;
+                }
+              }
+            }
+          }
+          
+          for (const child of node.childNodes) {
+            walkDOM(child);
+          }
+        }
+      };
+      
+      walkDOM(document.body);
+    });
+  }
 
   let firstRun = true;
   activeTabStore.subscribe((tab) => {

@@ -6,6 +6,7 @@ import { cvStore } from '../../stores/cvStores';
 import type { CVData } from '../../stores/cvStores';
 import { cvStyleStore } from '../../stores/cvStyleStores';
 import type { CVStyle } from '../../stores/cvStyleStores';
+import { appLanguageStore } from '../../stores/i18nStore';
 
 import { Document as PDFViewer, Page as PDFPage, pdfjs } from 'react-pdf';
 import 'react-pdf/dist/Page/AnnotationLayer.css';
@@ -28,13 +29,14 @@ type Buffer = { url: string; pages: number; ready: boolean };
 const CVLivePreview: React.FC = () => {
   const rawData = useStore(cvStore);
   const rawStyle = useStore(cvStyleStore);
+  const language = useStore(appLanguageStore);
 
   const debouncedData = useDebounce<CVData>(rawData, 600);
   const debouncedStyle = useDebounce<CVStyle>(rawStyle, 600);
 
   const doc = useMemo(
-    () => <CVPDFDocument data={debouncedData} styleConfig={debouncedStyle} />,
-    [debouncedData, debouncedStyle]
+    () => <CVPDFDocument data={debouncedData} styleConfig={debouncedStyle} language={language} />,
+    [debouncedData, debouncedStyle, language]
   );
 
   const [instance, updateInstance] = usePDF({ document: doc });
@@ -149,7 +151,7 @@ const CVLivePreview: React.FC = () => {
       {/* Header Toolbar */}
       <div className="mb-5 flex items-center justify-between">
         <div className="flex items-center gap-2.5">
-          <h2 className="text-xs font-semibold text-gray-400 uppercase tracking-widest">Preview</h2>
+          <h2 className="text-xs font-semibold text-gray-400 uppercase tracking-widest">{language === 'id' ? 'Pratinjau' : 'Preview'}</h2>
           <div className="flex items-center gap-1.5 text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-100/50">
             <span className="relative flex h-1.5 w-1.5">
               <span className="absolute inline-flex h-full w-full rounded-full opacity-75 bg-emerald-400 animate-ping" />
@@ -179,7 +181,7 @@ const CVLivePreview: React.FC = () => {
                 <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
               </svg>
             )}
-            <span>Download CV</span>
+            <span>{language === 'id' ? 'Unduh CV' : 'Download CV'}</span>
           </button>
         </div>
       </div>
@@ -199,7 +201,7 @@ const CVLivePreview: React.FC = () => {
                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
               </svg>
-              <p className="text-sm font-medium text-gray-400">Mempersiapkan Pratinjau...</p>
+              <p className="text-sm font-medium text-gray-400">{language === 'id' ? 'Mempersiapkan Pratinjau...' : 'Preparing Preview...'}</p>
             </div>
           )}
         </div>

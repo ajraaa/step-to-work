@@ -2,10 +2,12 @@ import React, { useMemo } from 'react';
 import { Document, Page, Text, View, StyleSheet, Link } from '@react-pdf/renderer';
 import type { CVData } from '../../stores/cvStores';
 import type { CVStyle } from '../../stores/cvStyleStores';
+import type { Language } from '../../stores/i18nStore';
 
 type Props = {
   data: CVData;
   styleConfig: CVStyle;
+  language: Language;
 };
 
 // Map web font family to React PDF base font
@@ -16,14 +18,16 @@ const getBaseFont = (cssFont: string) => {
   return 'Times-Roman';
 };
 
-const fmtDate = (d?: string | null): string => {
-  if (!d) return 'Sekarang';
+const fmtDate = (d: string | null | undefined, lang: Language): string => {
+  if (!d) return lang === 'id' ? 'Sekarang' : 'Present';
   const [y, m] = d.split('-');
-  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+  const monthsId = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+  const monthsEn = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  const months = lang === 'id' ? monthsId : monthsEn;
   return `${months[parseInt(m, 10) - 1]} ${y}`;
 };
 
-const CVPDFDocument: React.FC<Props> = ({ data, styleConfig }) => {
+const CVPDFDocument: React.FC<Props> = ({ data, styleConfig, language }) => {
   const p = data.personalInfo;
   const baseFont = getBaseFont(styleConfig.fontFamily);
   const sScale = 1 + (styleConfig.fontSizeOffset * 0.05);
@@ -167,8 +171,8 @@ const CVPDFDocument: React.FC<Props> = ({ data, styleConfig }) => {
       <Page size="A4" style={styles.page}>
         {/* HEADER */}
         <View style={styles.header}>
-          <Text style={styles.fullName}>{p.fullName || 'Nama Lengkap'}</Text>
-          <Text style={styles.jobTitle}>{p.jobTitle || 'Posisi Pekerjaan'}</Text>
+          <Text style={styles.fullName}>{p.fullName || (language === 'id' ? 'Nama Lengkap' : 'Full Name')}</Text>
+          <Text style={styles.jobTitle}>{p.jobTitle || (language === 'id' ? 'Posisi Pekerjaan' : 'Job Title')}</Text>
           
           <View style={styles.contactRow}>
             {contacts.map((c, i) => (
@@ -194,7 +198,7 @@ const CVPDFDocument: React.FC<Props> = ({ data, styleConfig }) => {
         {/* SUMMARY */}
         {p.summary && (
           <View wrap={false} style={styles.section}>
-            <Text style={styles.sectionHeader}>Ringkasan Profesional</Text>
+            <Text style={styles.sectionHeader}>{language === 'id' ? 'Ringkasan Profesional' : 'Professional Summary'}</Text>
             <Text style={styles.itemText}>{p.summary}</Text>
           </View>
         )}
@@ -202,13 +206,13 @@ const CVPDFDocument: React.FC<Props> = ({ data, styleConfig }) => {
         {/* WORK EXPERIENCE */}
         {data.workExperience.length > 0 && (
           <View style={styles.section}>
-            <Text style={styles.sectionHeader}>Pengalaman Kerja</Text>
+            <Text style={styles.sectionHeader}>{language === 'id' ? 'Pengalaman Kerja' : 'Work Experience'}</Text>
             {data.workExperience.map((w, i) => (
               <View key={i} wrap={false} style={styles.itemContainer}>
                 <View style={styles.itemHeaderRow}>
                   <Text style={styles.itemTitle}>{w.jobTitle}</Text>
                   <Text style={styles.itemDate}>
-                    {fmtDate(w.startDate)} — {w.isCurrentJob ? 'Sekarang' : fmtDate(w.endDate)}
+                    {fmtDate(w.startDate, language)} — {w.isCurrentJob ? (language === 'id' ? 'Sekarang' : 'Present') : fmtDate(w.endDate, language)}
                   </Text>
                 </View>
                 <Text style={styles.itemSubtitle}>
@@ -232,13 +236,13 @@ const CVPDFDocument: React.FC<Props> = ({ data, styleConfig }) => {
         {/* EDUCATION */}
         {data.education.length > 0 && (
           <View style={styles.section}>
-            <Text style={styles.sectionHeader}>Pendidikan</Text>
+            <Text style={styles.sectionHeader}>{language === 'id' ? 'Pendidikan' : 'Education'}</Text>
             {data.education.map((e, i) => (
               <View key={i} wrap={false} style={styles.itemContainer}>
                 <View style={styles.itemHeaderRow}>
                   <Text style={styles.itemTitle}>{e.degree}</Text>
                   <Text style={styles.itemDate}>
-                    {fmtDate(e.startDate)} — {fmtDate(e.endDate)}
+                    {fmtDate(e.startDate, language)} — {fmtDate(e.endDate, language)}
                   </Text>
                 </View>
                 <Text style={styles.itemSubtitle}>
@@ -246,12 +250,12 @@ const CVPDFDocument: React.FC<Props> = ({ data, styleConfig }) => {
                 </Text>
                 {e.gpa && (
                   <Text style={styles.smallText}>
-                    IPK: {e.gpa}{e.maxGpa ? ` / ${e.maxGpa}` : ''}
+                    {language === 'id' ? 'IPK' : 'GPA'}: {e.gpa}{e.maxGpa ? ` / ${e.maxGpa}` : ''}
                   </Text>
                 )}
                 {e.relevantCoursework.length > 0 && (
                   <Text style={styles.smallText}>
-                    Mata Kuliah: {e.relevantCoursework.join(', ')}
+                    {language === 'id' ? 'Mata Kuliah' : 'Coursework'}: {e.relevantCoursework.join(', ')}
                   </Text>
                 )}
               </View>
@@ -262,7 +266,7 @@ const CVPDFDocument: React.FC<Props> = ({ data, styleConfig }) => {
         {/* SKILLS */}
         {hasSkills && (
           <View wrap={false} style={styles.section}>
-            <Text style={styles.sectionHeader}>Keahlian</Text>
+            <Text style={styles.sectionHeader}>{language === 'id' ? 'Keahlian' : 'Skills'}</Text>
             {data.skills.map(cat => {
               if (cat.items.length > 0) {
                 return (
@@ -284,7 +288,7 @@ const CVPDFDocument: React.FC<Props> = ({ data, styleConfig }) => {
         {/* PROJECTS */}
         {data.projects.length > 0 && (
           <View style={styles.section}>
-            <Text style={styles.sectionHeader}>Proyek</Text>
+            <Text style={styles.sectionHeader}>{language === 'id' ? 'Proyek' : 'Projects'}</Text>
             {data.projects.map((proj, i) => (
               <View key={i} wrap={false} style={styles.itemContainer}>
                 <View style={styles.itemHeaderRow}>
@@ -315,13 +319,13 @@ const CVPDFDocument: React.FC<Props> = ({ data, styleConfig }) => {
         {/* CERTIFICATIONS */}
         {data.certifications.length > 0 && (
           <View style={styles.section}>
-            <Text style={styles.sectionHeader}>Sertifikasi</Text>
+            <Text style={styles.sectionHeader}>{language === 'id' ? 'Sertifikasi' : 'Certifications'}</Text>
             {data.certifications.map((c, i) => (
               <View key={i} wrap={false} style={styles.itemContainer}>
                 <View style={styles.itemHeaderRow}>
                   <Text style={styles.itemTitle}>{c.name}</Text>
                   <Text style={styles.itemDate}>
-                    {fmtDate(c.issueDate)}{c.expiryDate ? ` — ${fmtDate(c.expiryDate)}` : ''}
+                    {fmtDate(c.issueDate, language)}{c.expiryDate ? ` — ${fmtDate(c.expiryDate, language)}` : ''}
                   </Text>
                 </View>
                 <Text style={styles.itemSubtitle}>{c.issuer}</Text>
@@ -333,13 +337,13 @@ const CVPDFDocument: React.FC<Props> = ({ data, styleConfig }) => {
         {/* ORGANIZATION EXPERIENCE */}
         {data.organizationExperience.length > 0 && (
           <View style={styles.section}>
-            <Text style={styles.sectionHeader}>Pengalaman Organisasi</Text>
+            <Text style={styles.sectionHeader}>{language === 'id' ? 'Pengalaman Organisasi' : 'Organization Experience'}</Text>
             {data.organizationExperience.map((o, i) => (
               <View key={i} wrap={false} style={styles.itemContainer}>
                 <View style={styles.itemHeaderRow}>
                   <Text style={styles.itemTitle}>{o.role}</Text>
                   <Text style={styles.itemDate}>
-                    {fmtDate(o.startDate)} — {fmtDate(o.endDate)}
+                    {fmtDate(o.startDate, language)} — {fmtDate(o.endDate, language)}
                   </Text>
                 </View>
                 <Text style={styles.itemSubtitle}>{o.organization}</Text>
@@ -352,13 +356,13 @@ const CVPDFDocument: React.FC<Props> = ({ data, styleConfig }) => {
         {/* VOLUNTEER EXPERIENCE */}
         {data.volunteerExperience.length > 0 && (
           <View style={styles.section}>
-            <Text style={styles.sectionHeader}>Pengalaman Sukarelawan</Text>
+            <Text style={styles.sectionHeader}>{language === 'id' ? 'Pengalaman Sukarelawan' : 'Volunteer Experience'}</Text>
             {data.volunteerExperience.map((v, i) => (
               <View key={i} wrap={false} style={styles.itemContainer}>
                 <View style={styles.itemHeaderRow}>
                   <Text style={styles.itemTitle}>{v.role}</Text>
                   <Text style={styles.itemDate}>
-                    {fmtDate(v.startDate)} — {fmtDate(v.endDate)}
+                    {fmtDate(v.startDate, language)} — {fmtDate(v.endDate, language)}
                   </Text>
                 </View>
                 <Text style={styles.itemSubtitle}>{v.organization}</Text>
@@ -371,7 +375,7 @@ const CVPDFDocument: React.FC<Props> = ({ data, styleConfig }) => {
         {/* LANGUAGES */}
         {data.languages.length > 0 && (
           <View wrap={false} style={styles.section}>
-            <Text style={styles.sectionHeader}>Bahasa</Text>
+            <Text style={styles.sectionHeader}>{language === 'id' ? 'Bahasa' : 'Languages'}</Text>
             <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 16 }}>
               {data.languages.map((l, i) => (
                 <View key={i} style={{ flexDirection: 'row' }}>
@@ -388,7 +392,7 @@ const CVPDFDocument: React.FC<Props> = ({ data, styleConfig }) => {
         {/* REFERENCES */}
         {data.references.length > 0 && (
           <View style={styles.section}>
-            <Text style={styles.sectionHeader}>Referensi</Text>
+            <Text style={styles.sectionHeader}>{language === 'id' ? 'Referensi' : 'References'}</Text>
             {data.references.map((r, i) => (
               <View key={i} wrap={false} style={styles.itemContainer}>
                 <View style={{ flexDirection: 'row' }}>
