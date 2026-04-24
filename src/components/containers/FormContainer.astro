@@ -107,7 +107,7 @@ import ReferencesForm from '../forms/ReferencesForm.astro';
     if (btnNext) {
       const isLastStep = currentStep === TOTAL_STEPS - 1;
       const lang = localStorage.getItem('cv-app-language') || 'id';
-      const isEn = lang === '"en"';
+      const isEn = lang.includes('en');
       const textSelesai = isEn ? 'Finish' : 'Selesai';
       const textLanjut = isEn ? 'Next' : 'Lanjut';
       btnNext.innerHTML = isLastStep
