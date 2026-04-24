@@ -96,6 +96,7 @@ import CVCustomization from '../components/editor/CVCustomization.tsx';
           // Skip script, style, and the react-pdf container to avoid conflicts
           if (el.tagName === 'SCRIPT' || el.tagName === 'STYLE' || el.classList.contains('cv-preview-container')) return;
 
+          // Translate placeholder for inputs
           if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
             const input = el as HTMLInputElement | HTMLTextAreaElement;
             const placeholder = input.placeholder?.trim();
@@ -105,6 +106,17 @@ import CVCustomization from '../components/editor/CVCustomization.tsx';
                    input.placeholder = translations[k][lang];
                    break;
                 }
+              }
+            }
+          }
+
+          // Translate title attribute for any element
+          const titleAttr = el.getAttribute('title')?.trim();
+          if (titleAttr) {
+            for (const k in translations) {
+              if (translations[k].id === titleAttr || translations[k].en === titleAttr) {
+                 el.setAttribute('title', translations[k][lang]);
+                 break;
               }
             }
           }

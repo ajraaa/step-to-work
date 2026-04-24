@@ -116,11 +116,72 @@ export const translations: Record<string, Record<'id' | 'en', string>> = {
   "Hubungan (Contoh: Manager)": { id: "Hubungan (Contoh: Manager)", en: "Relationship (e.g., Manager)" },
   "Tambah Referensi": { id: "Tambah Referensi", en: "Add Reference" },
 
+  // Missing Descriptions & Sub-labels
+  "Keahlian (Skills)": { id: "Keahlian (Skills)", en: "Skills" },
+  "Pengalaman Sukarelawan (Volunteer)": { id: "Pengalaman Sukarelawan (Volunteer)", en: "Volunteer Experience" },
+  "Berikan ringkasan tugas, wewenang, atau pencapaian Anda selama menjabat.": { id: "Berikan ringkasan tugas, wewenang, atau pencapaian Anda selama menjabat.", en: "Provide a summary of your tasks, responsibilities, or achievements during your tenure." },
+  "Memilih preset akan mengganti daftar kategori di bawah.": { id: "Memilih preset akan mengganti daftar kategori di bawah.", en: "Selecting a preset will replace the category list below." },
+  "Pisahkan setiap mata kuliah dengan koma (,).": { id: "Pisahkan setiap mata kuliah dengan koma (,).", en: "Separate each coursework with commas (,)." },
+  "IPK Maksimal (Opsional)": { id: "IPK Maksimal (Opsional)", en: "Max GPA (Optional)" },
+
+  // Placeholders
+  "Memimpin tim 10 orang dalam pengembangan website organisasi...": { id: "Memimpin tim 10 orang dalam pengembangan website organisasi...", en: "Lead a team of 10 in developing the organization website..." },
+  "Ketua Divisi IT": { id: "Ketua Divisi IT", en: "Head of IT Division" },
+  "Himpunan Mahasiswa Teknik Informatika": { id: "Himpunan Mahasiswa Teknik Informatika", en: "Informatics Engineering Student Association" },
+  "S1 Teknik Informatika": { id: "S1 Teknik Informatika", en: "B.Sc. in Computer Science" },
+  "Universitas Indonesia": { id: "Universitas Indonesia", en: "University of Indonesia" },
+  "Struktur Data & Algoritma, Pemrograman Web, Basis Data...": { id: "Struktur Data & Algoritma, Pemrograman Web, Basis Data...", en: "Data Structures & Algorithms, Web Programming, Databases..." },
+  "Mentor Pemrograman": { id: "Mentor Pemrograman", en: "Programming Mentor" },
+  "Membimbing 15 peserta bootcamp dalam mempelajari dasar-dasar web development...": { id: "Membimbing 15 peserta bootcamp dalam mempelajari dasar-dasar web development...", en: "Mentored 15 bootcamp participants in learning web development basics..." },
+  "Dashboard analytics untuk platform e-commerce...": { id: "Dashboard analytics untuk platform e-commerce...", en: "Analytics dashboard for e-commerce platform..." },
+  "- Menangani 10.000+ data transaksi...\n- Mengimplementasikan filter dan export...": { id: "- Menangani 10.000+ data transaksi...\n- Mengimplementasikan filter dan export...", en: "- Handled 10,000+ transaction data...\n- Implemented filtering and export..." },
+  "Nama Kategori (ex: Bahasa Pemrograman)": { id: "Nama Kategori (ex: Bahasa Pemrograman)", en: "Category Name (e.g., Programming Languages)" },
+  "Contoh: JavaScript, HTML, CSS": { id: "Contoh: JavaScript, HTML, CSS", en: "Example: JavaScript, HTML, CSS" },
+  "Frontend Developer dengan 2+ tahun pengalaman dalam membangun aplikasi web modern...": { id: "Frontend Developer dengan 2+ tahun pengalaman dalam membangun aplikasi web modern...", en: "Frontend Developer with 2+ years of experience in building modern web applications..." },
+  "Paste job description di sini...\n\nContoh: We are looking for a Frontend Developer with experience in React, TypeScript, and Next.js...": { id: "Paste job description di sini...\n\nContoh: We are looking for a Frontend Developer with experience in React, TypeScript, and Next.js...", en: "Paste job description here...\n\nExample: We are looking for a Frontend Developer with experience in React, TypeScript, and Next.js..." },
+  "- Mengembangkan dan memelihara aplikasi web...\n- Mengimplementasikan design system...": { id: "- Mengembangkan dan memelihara aplikasi web...\n- Mengimplementasikan design system...", en: "- Developed and maintained web applications...\n- Implemented design system..." },
+
   // AI Prompts
   "Paste job description (lowongan kerja) yang ingin Anda lamar, lalu AI akan menganalisis skill gap Anda.": { id: "Paste job description (lowongan kerja) yang ingin Anda lamar, lalu AI akan menganalisis skill gap Anda.", en: "Paste the job description you want to apply for, and AI will analyze your skill gap." },
   "Generate ringkasan profesional dengan AI": { id: "Generate ringkasan profesional dengan AI", en: "Generate professional summary with AI" },
   "Analisis skill gap berdasarkan job description": { id: "Analisis skill gap berdasarkan job description", en: "Analyze skill gap based on job description" },
   "Isi data CV terlebih dahulu (minimal posisi, pengalaman, atau skills).": { id: "Isi data CV terlebih dahulu (minimal posisi, pengalaman, atau skills).", en: "Fill in CV data first (minimum job title, experience, or skills)." },
+  "Ringkasan profesional berhasil di-generate! ✨": { id: "Ringkasan profesional berhasil di-generate! ✨", en: "Professional summary generated successfully! ✨" },
+  "Gagal menghubungi AI. Coba lagi nanti.": { id: "Gagal menghubungi AI. Coba lagi nanti.", en: "Failed to contact AI. Please try again later." },
+  "Paste job description terlebih dahulu!": { id: "Paste job description terlebih dahulu!", en: "Please paste the job description first!" },
+  "Skill gap analysis selesai! 🔍": { id: "Skill gap analysis selesai! 🔍", en: "Skill gap analysis completed! 🔍" },
+  "Tulis deskripsi pekerjaan terlebih dahulu!": { id: "Tulis deskripsi pekerjaan terlebih dahulu!", en: "Please write the job description first!" },
+  "Bullet points berhasil dioptimasi! ✨": { id: "Bullet points berhasil dioptimasi! ✨", en: "Bullet points optimized successfully! ✨" },
+  "Tulis pencapaian/highlights terlebih dahulu!": { id: "Tulis pencapaian/highlights terlebih dahulu!", en: "Please write achievements/highlights first!" },
+  "Highlights berhasil dioptimasi! ✨": { id: "Highlights berhasil dioptimasi! ✨", en: "Highlights optimized successfully! ✨" },
+
+  // Skill Presets
+  "-- Pilih Preset Kategori --": { id: "-- Pilih Preset Kategori --", en: "-- Select Category Preset --" },
+  "IT & Software Development": { id: "IT & Software Development", en: "IT & Software Development" },
+  "Creative & Design": { id: "Creative & Design", en: "Creative & Design" },
+  "Administrasi & Bisnis": { id: "Administrasi & Bisnis", en: "Administration & Business" },
+  "Ketik judul kategori yang diinginkan, kemudian pisahkan setiap skill dengan koma (,). Biarkan kosong atau hapus kategori jika tidak relevan.": { id: "Ketik judul kategori yang diinginkan, kemudian pisahkan setiap skill dengan koma (,). Biarkan kosong atau hapus kategori jika tidak relevan.", en: "Type the desired category title, then separate each skill with a comma (,). Leave blank or delete the category if not relevant." },
+  "Saya masih bekerja di posisi ini": { id: "Saya masih bekerja di posisi ini", en: "I still work in this role" },
+
+  // Buttons with "+" 
+  "+ Tambah Pengalaman Kerja": { id: "+ Tambah Pengalaman Kerja", en: "+ Add Work Experience" },
+  "+ Tambah Pendidikan": { id: "+ Tambah Pendidikan", en: "+ Add Education" },
+  "+ Tambah Kategori Keahlian": { id: "+ Tambah Kategori Keahlian", en: "+ Add Skill Category" },
+  "+ Tambah Sertifikasi": { id: "+ Tambah Sertifikasi", en: "+ Add Certification" },
+  "+ Tambah Proyek": { id: "+ Tambah Proyek", en: "+ Add Project" },
+  "+ Tambah Bahasa": { id: "+ Tambah Bahasa", en: "+ Add Language" },
+  "+ Tambah Pengalaman Organisasi": { id: "+ Tambah Pengalaman Organisasi", en: "+ Add Organization Experience" },
+  "+ Tambah Pengalaman Sukarelawan": { id: "+ Tambah Pengalaman Sukarelawan", en: "+ Add Volunteer Experience" },
+  "+ Tambah Referensi": { id: "+ Tambah Referensi", en: "+ Add Reference" },
+
+  // Tooltips
+  "Hapus pengalaman ini": { id: "Hapus pengalaman ini", en: "Delete this experience" },
+  "Hapus kategori ini": { id: "Hapus kategori ini", en: "Delete this category" },
+  "Hapus proyek ini": { id: "Hapus proyek ini", en: "Delete this project" },
+  "Hapus pendidikan ini": { id: "Hapus pendidikan ini", en: "Delete this education" },
+  "Hapus sertifikasi ini": { id: "Hapus sertifikasi ini", en: "Delete this certification" },
+  "Hapus bahasa ini": { id: "Hapus bahasa ini", en: "Delete this language" },
+  "Hapus referensi ini": { id: "Hapus referensi ini", en: "Delete this reference" },
 
   // Editor
   "Kustomisasi Tampilan": { id: "Kustomisasi Tampilan", en: "Customize Appearance" },
