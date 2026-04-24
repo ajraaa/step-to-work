@@ -106,6 +106,7 @@ export const translations: Record<string, Record<'id' | 'en', string>> = {
 
   // Languages Form
   "Tingkat Kemahiran": { id: "Tingkat Kemahiran", en: "Proficiency Level" },
+  "Pilih tingkat kemahiran": { id: "Pilih tingkat kemahiran", en: "Select proficiency level" },
   "Tambah Bahasa": { id: "Tambah Bahasa", en: "Add Language" },
 
   // References Form
