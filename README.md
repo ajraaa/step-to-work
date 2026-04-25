@@ -73,12 +73,12 @@ src/
 - [x] Modern UI redesign
 - [x] Persistent state management using Nanostores
 - [x] Responsive layout with split-screen editor/preview
+- [x] Multi-language support for PDF output (ID/EN)
 
 ### ⏳ Planned / Roadmap
 - [ ] Multiple template presets (Modern, Classic, Creative)
 - [ ] Supabase integration for cloud saving and user accounts
 - [ ] Drag & drop section reordering
-- [ ] Multi-language support for PDF output
 - [ ] Pre-designed content templates for various industries
 
 ## 🤝 Contributing
