@@ -80,6 +80,7 @@ src/
 - [ ] Supabase integration for cloud saving and user accounts
 - [ ] Drag & drop section reordering
 - [ ] Pre-designed content templates for various industries
+- [ ] Ability to add custom section
 
 ## 🤝 Contributing
 
