@@ -301,7 +301,8 @@
     
     if (aiSkillGapResult) {
       aiSkillGapResult.style.display = 'none';
-      aiSkillGapResult.textContent = '';
+      aiSkillGapResult.innerHTML = '';
+      aiSkillGapResult.classList.remove('ai-fade-in');
     }
 
     try {
@@ -320,8 +321,11 @@
       if (data.error) {
         showAIToast(data.error, 'error');
       } else if (data.result && aiSkillGapResult) {
-        aiSkillGapResult.textContent = data.result;
+        aiSkillGapResult.innerHTML = formatMarkdown(data.result);
         aiSkillGapResult.style.display = 'block';
+        // Trigger reflow to restart animation
+        void aiSkillGapResult.offsetWidth;
+        aiSkillGapResult.classList.add('ai-fade-in');
         showAIToast('Skill gap analysis selesai! 🔍', 'success');
       }
     } catch (err) {
@@ -331,4 +335,101 @@
       aiSkillGapAnalyzeBtn.innerHTML = originalLabel;
     }
   });
+
+  // Helper to parse basic markdown to beautiful HTML
+  function formatMarkdown(text: string): string {
+    if (!text) return '';
+    
+    // Escape HTML to prevent XSS
+    const escaped = text
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;');
+
+    const lines = escaped.split('\n');
+    let html = '';
+    let inList = false;
+    let inSection = false;
+
+    for (let line of lines) {
+      const trimmed = line.trim();
+      if (!trimmed) {
+        if (inList) {
+          html += '</ul>';
+          inList = false;
+        }
+        continue;
+      }
+
+      // Check for Section Headers (starts with ✅, ⚠️, 💡)
+      const headerMatch = trimmed.match(/^(?:#+\s*)?([✅⚠️💡][^:]+):?$/) || trimmed.match(/^(?:#+\s*)(.*)$/);
+      if (headerMatch) {
+        if (inList) {
+          html += '</ul>';
+          inList = false;
+        }
+        if (inSection) {
+          html += '</div>'; // Close previous section div
+        }
+        
+        const title = headerMatch[1].trim();
+        let headerClass = 'ai-result__header--info';
+        if (title.includes('✅')) {
+          headerClass = 'ai-result__header--success';
+        } else if (title.includes('⚠️')) {
+          headerClass = 'ai-result__header--warning';
+        }
+        
+        html += `<div class="ai-result__section">`;
+        html += `<div class="ai-result__header ${headerClass}">${title}</div>`;
+        inSection = true;
+        continue;
+      }
+
+      // Check for List Items (starts with -, *, +)
+      const listMatch = trimmed.match(/^[-*+]\s+(.*)$/);
+      if (listMatch) {
+        if (!inList) {
+          html += '<ul class="ai-result__list">';
+          inList = true;
+        }
+        const content = parseInlineMarkdown(listMatch[1]);
+        html += `<li class="ai-result__list-item">${content}</li>`;
+      } else {
+        if (inList) {
+          html += '</ul>';
+          inList = false;
+        }
+        const content = parseInlineMarkdown(trimmed);
+        html += `<p class="ai-result__paragraph">${content}</p>`;
+      }
+    }
+
+    if (inList) {
+      html += '</ul>';
+    }
+    if (inSection) {
+      html += '</div>';
+    }
+
+    return html;
+  }
+
+  function parseInlineMarkdown(text: string): string {
+    // Bold-Italic ***text***
+    text = text.replace(/\*\*\*(.*?)\*\*\*/g, '<strong class="ai-result__strong"><em class="ai-result__em">$1</em></strong>');
+    
+    // Bold **text** or __text__
+    text = text.replace(/\*\*(.*?)\*\*/g, '<strong class="ai-result__strong">$1</strong>');
+    text = text.replace(/__(.*?)__/g, '<strong class="ai-result__strong">$1</strong>');
+    
+    // Italic *text* or _text_
+    text = text.replace(/\*(.*?)\*/g, '<em class="ai-result__em">$1</em>');
+    text = text.replace(/_(.*?)_/g, '<em class="ai-result__em">$1</em>');
+    
+    // Inline code `code`
+    text = text.replace(/`(.*?)`/g, '<code class="ai-result__code">$1</code>');
+    
+    return text;
+  }
 </script>
