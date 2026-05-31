@@ -138,26 +138,100 @@
   <!-- AI Skill Gap Analysis Modal -->
   <div id="aiSkillGapModal" class="ai-modal-overlay">
     <div class="ai-modal">
+      
+      <!-- Modal Header -->
       <div class="ai-modal__header">
-        <h3>
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2"><path d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2z"/></svg>
-          AI Skill Gap Analysis
-        </h3>
-        <button type="button" class="ai-modal__close" id="aiSkillGapClose">
+        <div class="flex items-center gap-2.5">
+          <div class="p-1.5 bg-emerald-50 rounded-lg text-emerald-600">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2z"/></svg>
+          </div>
+          <div>
+            <h3 class="font-bold text-gray-800 text-sm">AI Skill Gap Analysis</h3>
+            <p class="text-[11px] text-gray-500 font-normal">Bandingkan kualifikasi CV Anda dengan deskripsi lowongan kerja</p>
+          </div>
+        </div>
+        <button type="button" class="ai-modal__close" id="aiSkillGapClose" title="Tutup">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
         </button>
       </div>
-      <div class="ai-modal__body">
-        <p class="text-sm text-gray-600 mb-3">Paste job description (lowongan kerja) yang ingin Anda lamar, lalu AI akan menganalisis skill gap Anda.</p>
-        <textarea id="aiJobDescInput" class="ai-modal__input" placeholder="Paste job description di sini...&#10;&#10;Contoh: We are looking for a Frontend Developer with experience in React, TypeScript, and Next.js..."></textarea>
-        <div class="ai-modal__actions">
+
+      <!-- Step 1: Input Panel -->
+      <div id="aiSkillGapInputPanel" class="ai-modal__panel active">
+        <div class="ai-modal__body">
+          <div class="mb-4">
+            <label for="aiJobDescInput" class="block text-xs font-semibold text-gray-700 mb-1">Job Description (Deskripsi Lowongan)</label>
+            <p class="text-[11px] text-gray-500 leading-relaxed">Tempelkan kriteria atau kualifikasi lowongan pekerjaan di bawah. AI akan membandingkannya dengan data CV Anda secara real-time.</p>
+          </div>
+          <textarea id="aiJobDescInput" class="ai-modal__input" placeholder="Contoh:&#10;We are looking for a Frontend Developer with 2+ years of experience in React, TypeScript, and Tailwind CSS. Experience with RESTful APIs, State Management, and responsive design is required..."></textarea>
+        </div>
+        
+        <div class="ai-modal__footer">
+          <button type="button" class="ai-modal__secondary-btn" id="aiSkillGapCancelBtn">Batal</button>
           <button type="button" class="ai-btn ai-btn--skillgap" id="aiSkillGapAnalyzeBtn">
             <svg class="ai-btn__sparkle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l2.4 7.2H22l-6 4.8 2.4 7.2L12 16.4l-6.8 4.8 2.4-7.2-6-4.8h7.6z"/></svg>
-            Analyze Skill Gap
+            Mulai Analisis
           </button>
         </div>
-        <div id="aiSkillGapResult" class="ai-modal__result" style="display:none;"></div>
       </div>
+
+      <!-- Loading Panel -->
+      <div id="aiSkillGapLoadingPanel" class="ai-modal__panel">
+        <div class="ai-modal__body flex flex-col items-center justify-center py-10 text-center">
+          <div class="ai-loading-pulse mb-6">
+            <div class="ai-pulse-ring"></div>
+            <div class="ai-pulse-dot">🔍</div>
+          </div>
+          <h4 class="font-bold text-gray-800 text-sm mb-1">Menganalisis Kualifikasi CV Anda...</h4>
+          <p class="text-xs text-gray-500 max-w-sm mb-6 leading-relaxed">Gemini AI sedang mencocokkan riwayat kerja, proyek, dan skill Anda dengan deskripsi lowongan kerja.</p>
+          
+          <div class="w-full max-w-xs space-y-3 bg-gray-50 p-4 rounded-xl border border-gray-100 text-left" id="aiLoadingSteps">
+            <div class="flex items-center gap-2.5" id="aiStep1">
+              <div class="ai-step-indicator active">✓</div>
+              <span class="text-xs font-medium text-gray-700">Membaca data CV</span>
+            </div>
+            <div class="flex items-center gap-2.5" id="aiStep2">
+              <div class="ai-step-indicator loading"></div>
+              <span class="text-xs font-medium text-gray-600">Memindai job description...</span>
+            </div>
+            <div class="flex items-center gap-2.5" id="aiStep3">
+              <div class="ai-step-indicator pending"></div>
+              <span class="text-xs font-medium text-gray-400">Menghitung persentase kecocokan</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 2: Result Panel -->
+      <div id="aiSkillGapResultPanel" class="ai-modal__panel">
+        <div class="ai-modal__body">
+          <!-- Success banner inside result -->
+          <div class="mb-4 p-3 bg-emerald-50 rounded-xl border border-emerald-100 flex items-center justify-between">
+            <div class="flex items-center gap-2 text-emerald-800 text-[11px]">
+              <span class="flex h-2 w-2 rounded-full bg-emerald-500 animate-ping"></span>
+              <span class="font-semibold text-emerald-800">Analisis Berhasil Selesai!</span>
+            </div>
+            <span class="text-[10px] text-emerald-600 bg-emerald-100 px-2 py-0.5 rounded font-semibold uppercase tracking-wider">Gemini 3.5 AI</span>
+          </div>
+
+          <div id="aiSkillGapResult" class="ai-modal__result"></div>
+        </div>
+        
+        <div class="ai-modal__footer justify-between">
+          <button type="button" class="ai-modal__secondary-btn" id="aiSkillGapBackBtn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+            Ubah Deskripsi
+          </button>
+          
+          <div class="flex gap-2">
+            <button type="button" class="ai-modal__secondary-btn" id="aiSkillGapCopyBtn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3"/></svg>
+              <span>Salin Hasil</span>
+            </button>
+            <button type="button" class="ai-modal__primary-btn" id="aiSkillGapDoneBtn">Selesai</button>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 </div>
@@ -270,22 +344,97 @@
   const aiSkillGapAnalyzeBtn = document.getElementById('aiSkillGapAnalyzeBtn');
   const aiSkillGapResult = document.getElementById('aiSkillGapResult');
 
+  // Panels
+  const inputPanel = document.getElementById('aiSkillGapInputPanel');
+  const loadingPanel = document.getElementById('aiSkillGapLoadingPanel');
+  const resultPanel = document.getElementById('aiSkillGapResultPanel');
+
+  // Buttons
+  const cancelBtn = document.getElementById('aiSkillGapCancelBtn');
+  const backBtn = document.getElementById('aiSkillGapBackBtn');
+  const copyBtn = document.getElementById('aiSkillGapCopyBtn');
+  const doneBtn = document.getElementById('aiSkillGapDoneBtn');
+
+  function showPanel(panel: HTMLElement | null) {
+    [inputPanel, loadingPanel, resultPanel].forEach(p => p?.classList.remove('active'));
+    panel?.classList.add('active');
+  }
+
+  function startLoadingSteps() {
+    const step1 = document.getElementById('aiStep1');
+    const step2 = document.getElementById('aiStep2');
+    const step3 = document.getElementById('aiStep3');
+
+    if (!step1 || !step2 || !step3) return;
+
+    step1.innerHTML = `<div class="ai-step-indicator active">✓</div><span class="text-xs font-medium text-gray-700">Membaca data CV</span>`;
+    step2.innerHTML = `<div class="ai-step-indicator loading"></div><span class="text-xs font-medium text-gray-600">Memindai job description...</span>`;
+    step3.innerHTML = `<div class="ai-step-indicator pending"></div><span class="text-xs font-medium text-gray-400">Menghitung persentase kecocokan</span>`;
+
+    setTimeout(() => {
+      if (!loadingPanel?.classList.contains('active')) return;
+      step2.innerHTML = `<div class="ai-step-indicator active">✓</div><span class="text-xs font-medium text-gray-700">Memindai job description</span>`;
+      step3.innerHTML = `<div class="ai-step-indicator loading"></div><span class="text-xs font-medium text-gray-600">Menganalisis kesesuaian skill...</span>`;
+    }, 1200);
+
+    setTimeout(() => {
+      if (!loadingPanel?.classList.contains('active')) return;
+      step3.innerHTML = `<div class="ai-step-indicator active">✓</div><span class="text-xs font-medium text-gray-700">Menyusun rekomendasi karir</span>`;
+    }, 2500);
+  }
+
   // Open modal
   aiSkillGapBtn?.addEventListener('click', () => {
     aiSkillGapModal?.classList.add('active');
+    showPanel(inputPanel);
+    setTimeout(() => aiJobDescInput?.focus(), 150);
   });
 
-  // Close modal
-  aiSkillGapClose?.addEventListener('click', () => {
+  // Close modal functions
+  const closeModal = () => {
     aiSkillGapModal?.classList.remove('active');
-  });
+  };
+  aiSkillGapClose?.addEventListener('click', closeModal);
+  cancelBtn?.addEventListener('click', closeModal);
+  doneBtn?.addEventListener('click', closeModal);
+
   aiSkillGapModal?.addEventListener('click', (e) => {
     if (e.target === aiSkillGapModal) {
-      aiSkillGapModal.classList.remove('active');
+      closeModal();
     }
   });
 
-  // Analyze
+  // Back Button
+  backBtn?.addEventListener('click', () => {
+    showPanel(inputPanel);
+  });
+
+  // Copy Button
+  copyBtn?.addEventListener('click', async () => {
+    if (!aiSkillGapResult) return;
+    try {
+      await navigator.clipboard.writeText(aiSkillGapResult.innerText);
+      showAIToast('Hasil analisis disalin ke clipboard! 📋', 'success');
+      
+      const copySpan = copyBtn.querySelector('span');
+      const originalInner = copyBtn.innerHTML;
+      
+      copyBtn.innerHTML = `
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+        <span>Tersalin!</span>
+      `;
+      copyBtn.classList.add('bg-emerald-50', 'text-emerald-700', 'border-emerald-200');
+      
+      setTimeout(() => {
+        copyBtn.innerHTML = originalInner;
+        copyBtn.classList.remove('bg-emerald-50', 'text-emerald-700', 'border-emerald-200');
+      }, 2000);
+    } catch (err) {
+      showAIToast('Gagal menyalin teks.', 'error');
+    }
+  });
+
+  // Analyze Action
   aiSkillGapAnalyzeBtn?.addEventListener('click', async () => {
     const jobDesc = aiJobDescInput?.value?.trim();
     if (!jobDesc) {
@@ -294,13 +443,12 @@
     }
 
     const cvData = cvStore.get();
-
-    aiSkillGapAnalyzeBtn.classList.add('ai-btn--loading');
-    const originalLabel = aiSkillGapAnalyzeBtn.innerHTML;
-    aiSkillGapAnalyzeBtn.innerHTML = `<svg class="ai-btn__sparkle ai-btn__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4m0 12v4m-7.07-3.93l2.83-2.83m8.48-8.48l2.83-2.83M2 12h4m12 0h4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83"/></svg> Analyzing...`;
     
+    // Switch to loading pane
+    showPanel(loadingPanel);
+    startLoadingSteps();
+
     if (aiSkillGapResult) {
-      aiSkillGapResult.style.display = 'none';
       aiSkillGapResult.innerHTML = '';
       aiSkillGapResult.classList.remove('ai-fade-in');
     }
@@ -319,20 +467,20 @@
       const data = await res.json();
 
       if (data.error) {
+        showPanel(inputPanel);
         showAIToast(data.error, 'error');
       } else if (data.result && aiSkillGapResult) {
         aiSkillGapResult.innerHTML = formatMarkdown(data.result);
-        aiSkillGapResult.style.display = 'block';
-        // Trigger reflow to restart animation
+        showPanel(resultPanel);
+        
+        // Trigger reflow to restart animation on markdown
         void aiSkillGapResult.offsetWidth;
         aiSkillGapResult.classList.add('ai-fade-in');
         showAIToast('Skill gap analysis selesai! 🔍', 'success');
       }
     } catch (err) {
+      showPanel(inputPanel);
       showAIToast('Gagal menghubungi AI. Coba lagi nanti.', 'error');
-    } finally {
-      aiSkillGapAnalyzeBtn.classList.remove('ai-btn--loading');
-      aiSkillGapAnalyzeBtn.innerHTML = originalLabel;
     }
   });
 
@@ -373,15 +521,15 @@
         }
         
         const title = headerMatch[1].trim();
-        let headerClass = 'ai-result__header--info';
+        let headerClass = 'ai-result-header-info';
         if (title.includes('✅')) {
-          headerClass = 'ai-result__header--success';
+          headerClass = 'ai-result-header-success';
         } else if (title.includes('⚠️')) {
-          headerClass = 'ai-result__header--warning';
+          headerClass = 'ai-result-header-warning';
         }
         
-        html += `<div class="ai-result__section">`;
-        html += `<div class="ai-result__header ${headerClass}">${title}</div>`;
+        html += `<div class="ai-result-section">`;
+        html += `<div class="ai-result-header ${headerClass}">${title}</div>`;
         inSection = true;
         continue;
       }
@@ -390,18 +538,18 @@
       const listMatch = trimmed.match(/^[-*+]\s+(.*)$/);
       if (listMatch) {
         if (!inList) {
-          html += '<ul class="ai-result__list">';
+          html += '<ul class="ai-result-list">';
           inList = true;
         }
         const content = parseInlineMarkdown(listMatch[1]);
-        html += `<li class="ai-result__list-item">${content}</li>`;
+        html += `<li class="ai-result-list-item">${content}</li>`;
       } else {
         if (inList) {
           html += '</ul>';
           inList = false;
         }
         const content = parseInlineMarkdown(trimmed);
-        html += `<p class="ai-result__paragraph">${content}</p>`;
+        html += `<p class="ai-result-paragraph">${content}</p>`;
       }
     }
 
@@ -417,18 +565,18 @@
 
   function parseInlineMarkdown(text: string): string {
     // Bold-Italic ***text***
-    text = text.replace(/\*\*\*(.*?)\*\*\*/g, '<strong class="ai-result__strong"><em class="ai-result__em">$1</em></strong>');
+    text = text.replace(/\*\*\*(.*?)\*\*\*/g, '<strong class="ai-result-strong"><em class="ai-result-em">$1</em></strong>');
     
     // Bold **text** or __text__
-    text = text.replace(/\*\*(.*?)\*\*/g, '<strong class="ai-result__strong">$1</strong>');
-    text = text.replace(/__(.*?)__/g, '<strong class="ai-result__strong">$1</strong>');
+    text = text.replace(/\*\*(.*?)\*\*/g, '<strong class="ai-result-strong">$1</strong>');
+    text = text.replace(/__(.*?)__/g, '<strong class="ai-result-strong">$1</strong>');
     
     // Italic *text* or _text_
-    text = text.replace(/\*(.*?)\*/g, '<em class="ai-result__em">$1</em>');
-    text = text.replace(/_(.*?)_/g, '<em class="ai-result__em">$1</em>');
+    text = text.replace(/\*(.*?)\*/g, '<em class="ai-result-em">$1</em>');
+    text = text.replace(/_(.*?)_/g, '<em class="ai-result-em">$1</em>');
     
     // Inline code `code`
-    text = text.replace(/`(.*?)`/g, '<code class="ai-result__code">$1</code>');
+    text = text.replace(/`(.*?)`/g, '<code class="ai-result-code">$1</code>');
     
     return text;
   }
