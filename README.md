@@ -4,7 +4,7 @@ An AI-powered, premium CV builder designed to create professional, ATS-friendly 
 
 ## ✨ Features
 
-- **🤖 AI-Powered Assistant** — Integrated with Google Gemini 2.5 Flash for:
+- **🤖 AI-Powered Assistant** — Integrated with Google Gemini 3.5 Flash for:
   - **Bullet Optimization** — Rewrite work experience bullets for maximum impact.
   - **Summary Generation** — Create compelling professional summaries.
   - **Skill Gap Analysis** — Analyze your profile against job descriptions.
@@ -19,7 +19,7 @@ An AI-powered, premium CV builder designed to create professional, ATS-friendly 
 
 - **Framework:** [Astro v6](https://astro.build/) (Server-side rendering + Static site generation)
 - **UI Logic:** [React 19](https://react.dev/) (via `@astrojs/react`)
-- **AI Engine:** [Google Gemini 2.5 Flash](https://aistudio.google.com/)
+- **AI Engine:** [Google Gemini 3.5 Flash](https://aistudio.google.com/)
 - **PDF Engine:** [`@react-pdf/renderer`](https://react-pdf.org/)
 - **Styling:** [Tailwind CSS v4](https://tailwindcss.com/)
 - **State Management:** [Nanostores](https://github.com/nanostores/nanostores) (Persistent & React integrations)
